@@ -20,3 +20,7 @@ github "junpluse/Tuka" "master"
 ### Manually
 
 You can also manually install the framework by dragging and dropping the `Tuka.xcodeproj` into your project or workspace.
+
+## License
+
+Tuka is released under the MIT license. See LICENSE for details.
