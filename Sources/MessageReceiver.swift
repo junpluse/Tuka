@@ -41,7 +41,7 @@ extension MessageReceiverProtocol {
 				if error.code == 4864 {
 					// ignore unknown classes in the data
 				} else {
-					print("[Tuka.MessageReceiverProtocol] failed to unarchive \(T.self) with error: \(error)")
+					print("[Tuka.MessageReceiverProtocol] failed to unarchive data as \(T.self) with error: \(error)")
 				}
 			}
 		}
