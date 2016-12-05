@@ -16,7 +16,7 @@ extension MessageSenderProtocol {
 	///   - peers: An array of peers that should receive the request.
 	/// - Returns: A receipt of the submission.
 	/// - Throws: An `Error` if sending the request could not be completed.
-	/// - Note: Pass returned receipt to MessageReceiptProtocol.observeResponses()
+	/// - Note: Pass returned receipt to MessageReceiverProtocol.observeResponses()
 	///         to observe responses of the request.
 	@discardableResult
 	public func submit<T: RequestProtocol>(_ request: T, to peers: [Peer]) throws -> RequestReceipt<T, Self.Peer> {
