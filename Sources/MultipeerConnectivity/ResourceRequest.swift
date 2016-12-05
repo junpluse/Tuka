@@ -37,16 +37,16 @@ public struct ResourceRequest: ResourceRequestProtocol, KeyedCoding {
 	}
 
 	public func encode(with encoder: KeyedCoder<CodingKey>) {
-		encoder.encode(requestID as NSString, for: .requestID)
-		encoder.encode(resourceName as NSString, for: .resourceName)
-		encoder.encode(preferredFilename as NSString, for: .preferredFilename)
+		encoder.encode(requestID, for: .requestID)
+		encoder.encode(resourceName, for: .resourceName)
+		encoder.encode(preferredFilename, for: .preferredFilename)
 	}
 
 	public static func decode(with decoder: KeyedCoder<CodingKey>) -> ResourceRequest? {
 		guard
-			let requestID = decoder.decodeObject(of: NSString.self, for: .requestID) as? String,
-			let resourceName = decoder.decodeObject(of: NSString.self, for: .resourceName) as? String,
-			let preferredFilename = decoder.decodeObject(of: NSString.self, for: .preferredFilename) as? String else {
+			let requestID = decoder.decodeString(for: .requestID),
+			let resourceName = decoder.decodeString(for: .resourceName),
+			let preferredFilename = decoder.decodeString(for: .preferredFilename) else {
 				return nil
 		}
 		return ResourceRequest(requestID: requestID, resourceName: resourceName, preferredFilename: preferredFilename)

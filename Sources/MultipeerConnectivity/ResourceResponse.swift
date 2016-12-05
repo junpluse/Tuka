@@ -36,15 +36,14 @@ public struct ResourceResponse: ResourceResponseProtocol, KeyedCoding {
 	}
 
 	public func encode(with encoder: KeyedCoder<ResourceResponse.CodingKey>) {
-		encoder.encode(requestID as NSString, for: .requestID)
-		encoder.encode(result.rawValue as NSString, for: .result)
+		encoder.encode(requestID, for: .requestID)
+		encoder.encode(result, for: .result)
 	}
 
 	public static func decode(with decoder: KeyedCoder<ResourceResponse.CodingKey>) -> ResourceResponse? {
 		guard
-			let requestID = decoder.decodeObject(of: [NSString.self], for: .requestID) as? String,
-			let resultString = decoder.decodeObject(of: [NSString.self], for: .result) as? String,
-			let result = ResourceRequestResult(rawValue: resultString) else {
+			let requestID = decoder.decodeString(for: .requestID),
+			let result = decoder.decodeValue(of: ResourceRequestResult.self, for: .result) else {
 				return nil
 		}
 		return ResourceResponse(requestID: requestID, result: result)
