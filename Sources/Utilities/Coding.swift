@@ -168,6 +168,16 @@ public struct KeyedCoder<Key: CodingKeyPresentable> {
 	}
 }
 
+extension KeyedCoder {
+	public func encode(_ value: String, for key: Key) {
+		encode(value as NSString, for: key)
+	}
+
+	public func decodeString(for key: Key) -> String? {
+		return decodeObject(of: NSString.self, for: key) as? String
+	}
+}
+
 public struct Archiver {
 	public func archive<T: Coding>(_ value: T) -> Data {
 		let data = NSMutableData()
