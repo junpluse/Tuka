@@ -178,6 +178,57 @@ extension KeyedCoder {
 	}
 }
 
+extension KeyedCoder {
+	public func encode<T: RawRepresentable>(_ value: T, for key: Key) where T.RawValue == Int {
+		encode(value.rawValue, for: key)
+	}
+
+	public func encode<T: RawRepresentable>(_ value: T, for key: Key) where T.RawValue == Int32 {
+		encode(value.rawValue, for: key)
+	}
+
+	public func encode<T: RawRepresentable>(_ value: T, for key: Key) where T.RawValue == Int64 {
+		encode(value.rawValue, for: key)
+	}
+
+	public func encode<T: RawRepresentable>(_ value: T, for key: Key) where T.RawValue == Float {
+		encode(value.rawValue, for: key)
+	}
+
+	public func encode<T: RawRepresentable>(_ value: T, for key: Key) where T.RawValue == Double {
+		encode(value.rawValue, for: key)
+	}
+
+	public func encode<T: RawRepresentable>(_ value: T, for key: Key) where T.RawValue == String {
+		encode(value.rawValue, for: key)
+	}
+
+	public func decodeValue<T: RawRepresentable>(of type: T.Type, for key: Key) -> T? where T.RawValue == Int {
+		return T(rawValue: decodeInt(for: key))
+	}
+
+	public func decodeValue<T: RawRepresentable>(of type: T.Type, for key: Key) -> T? where T.RawValue == Int32 {
+		return T(rawValue: decodeInt32(for: key))
+	}
+
+	public func decodeValue<T: RawRepresentable>(of type: T.Type, for key: Key) -> T? where T.RawValue == Int64 {
+		return T(rawValue: decodeInt64(for: key))
+	}
+
+	public func decodeValue<T: RawRepresentable>(of type: T.Type, for key: Key) -> T? where T.RawValue == Float {
+		return T(rawValue: decodeFloat(for: key))
+	}
+
+	public func decodeValue<T: RawRepresentable>(of type: T.Type, for key: Key) -> T? where T.RawValue == Double {
+		return T(rawValue: decodeDouble(for: key))
+	}
+
+	public func decodeValue<T: RawRepresentable>(of type: T.Type, for key: Key) -> T? where T.RawValue == String {
+		guard let raw = decodeString(for: key) else { return nil }
+		return T(rawValue: raw)
+	}
+}
+
 public struct Archiver {
 	public func archive<T: Coding>(_ value: T) -> Data {
 		let data = NSMutableData()
