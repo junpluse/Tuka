@@ -12,7 +12,7 @@ import Foundation
 public protocol MessageSenderProtocol {
 	associatedtype Peer: PeerProtocol
 
-	/// Send an archived data of message to peers.
+	/// Sends an archived data of message to peers.
 	///
 	/// - Parameters:
 	///   - data: An archived data of message.
@@ -41,7 +41,7 @@ public struct MessageSender<Peer: PeerProtocol>: MessageSenderProtocol {
 		_action = { try sender.send($0, of: $1, to: $2) }
 	}
 
-	/// Send an archived data of message to peers.
+	/// Sends an archived data of message to peers.
 	///
 	/// - Parameters:
 	///   - data: An archived data of message.
@@ -54,7 +54,7 @@ public struct MessageSender<Peer: PeerProtocol>: MessageSenderProtocol {
 }
 
 extension MessageSenderProtocol {
-	/// Send a message to peers.
+	/// Sends a message to peers.
 	///
 	/// - Parameters:
 	///   - message: A message to be sent.
