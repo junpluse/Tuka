@@ -19,7 +19,6 @@
 		BFA2141A1DF018790054A13F /* RequestResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA2140F1DF018790054A13F /* RequestResponder.swift */; };
 		BFA2141B1DF018790054A13F /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA214101DF018790054A13F /* Response.swift */; };
 		BFA214251DF018830054A13F /* MCPeerID+Tuka.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA2141D1DF018830054A13F /* MCPeerID+Tuka.swift */; };
-		BFA214261DF018830054A13F /* ResourceEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA2141E1DF018830054A13F /* ResourceEvent.swift */; };
 		BFA214271DF018830054A13F /* ResourceRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA2141F1DF018830054A13F /* ResourceRequest.swift */; };
 		BFA214281DF018830054A13F /* ResourceResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA214201DF018830054A13F /* ResourceResponse.swift */; };
 		BFA214291DF018830054A13F /* ResourceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA214211DF018830054A13F /* ResourceStore.swift */; };
@@ -47,7 +46,6 @@
 		BFA2140F1DF018790054A13F /* RequestResponder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestResponder.swift; sourceTree = "<group>"; };
 		BFA214101DF018790054A13F /* Response.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		BFA2141D1DF018830054A13F /* MCPeerID+Tuka.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MCPeerID+Tuka.swift"; sourceTree = "<group>"; };
-		BFA2141E1DF018830054A13F /* ResourceEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceEvent.swift; sourceTree = "<group>"; };
 		BFA2141F1DF018830054A13F /* ResourceRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceRequest.swift; sourceTree = "<group>"; };
 		BFA214201DF018830054A13F /* ResourceResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceResponse.swift; sourceTree = "<group>"; };
 		BFA214211DF018830054A13F /* ResourceStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceStore.swift; sourceTree = "<group>"; };
@@ -112,7 +110,6 @@
 			isa = PBXGroup;
 			children = (
 				BFA2141D1DF018830054A13F /* MCPeerID+Tuka.swift */,
-				BFA2141E1DF018830054A13F /* ResourceEvent.swift */,
 				BFA2141F1DF018830054A13F /* ResourceRequest.swift */,
 				BFA214201DF018830054A13F /* ResourceResponse.swift */,
 				BFA214211DF018830054A13F /* ResourceStore.swift */,
@@ -223,7 +220,6 @@
 				BFA214161DF018790054A13F /* Peer.swift in Sources */,
 				BFA2142C1DF018830054A13F /* SessionMessage.swift in Sources */,
 				BFA214321DF0188C0054A13F /* Atomic.swift in Sources */,
-				BFA214261DF018830054A13F /* ResourceEvent.swift in Sources */,
 				BFA2141B1DF018790054A13F /* Response.swift in Sources */,
 				BFA214271DF018830054A13F /* ResourceRequest.swift in Sources */,
 				BFA2142A1DF018830054A13F /* Session+Resource.swift in Sources */,

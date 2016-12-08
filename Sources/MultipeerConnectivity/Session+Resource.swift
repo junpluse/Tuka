@@ -9,6 +9,12 @@
 import Foundation
 import MultipeerConnectivity
 
+public enum ResourceEvent<Request: ResourceRequestProtocol> {
+	case transferStarted(Request, Session.Peer, Progress?)
+	case transferFinished(Request, Session.Peer)
+	case transferFailed(Request, Session.Peer, Error)
+}
+
 public final class ResourceRequestReceipt<Request: ResourceRequestProtocol>: RequestReceiptProtocol, Disposable {
 	public typealias Peer = Session.Peer
 
