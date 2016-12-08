@@ -113,6 +113,6 @@ extension Session {
 			return response
 		}
 
-		return add(responder)
+		return addResponder(responder)
 	}
 }
