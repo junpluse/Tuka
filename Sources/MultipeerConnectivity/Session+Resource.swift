@@ -21,19 +21,20 @@ public final class ResourceRequestReceipt<Request: ResourceRequestProtocol>: Req
 	public let request: Request
 	public let peers: [Peer]
 
-	let disposable = CompositeDisposable()
+	private let transferDisposable: Disposable
 
-	init(request: Request, peers: [Peer]) {
+	init(request: Request, peers: [Peer], transferDisposable: Disposable) {
 		self.request = request
 		self.peers = peers
+		self.transferDisposable = transferDisposable
 	}
 
 	public var isDisposed: Bool {
-		return disposable.isDisposed
+		return transferDisposable.isDisposed
 	}
 
 	public func dispose() {
-		disposable.dispose()
+		transferDisposable.dispose()
 	}
 }
 
@@ -43,9 +44,8 @@ extension Session {
 
 		try send(resourceRequest, to: peers)
 
-		let receipt = ResourceRequestReceipt(request: resourceRequest, peers: peers)
-		let transferQueue = DispatchQueue(label: "com.junpluse.Tuka.Session.sendResource.transferQueue")
-		let disposable = CompositeDisposable()
+		let transferQueue = DispatchQueue(label: "com.junpluse.Tuka.Session.ResourceTransferQueue")
+		let transferDisposable = CompositeDisposable()
 
 		peers.forEach { peer in
 			let item = DispatchWorkItem { [mcSession] in
@@ -58,17 +58,15 @@ extension Session {
 					}
 					semaphore.signal()
 				}
-				disposable += { progress?.cancel() }
+				transferDisposable += { progress?.cancel() }
 				eventObserver.observe(.transferStarted(resourceRequest, peer, progress))
 				semaphore.wait()
 			}
-			disposable += { item.cancel() }
+			transferDisposable += { item.cancel() }
 			transferQueue.async(execute: item)
 		}
 
-		receipt.disposable += disposable
-
-		return receipt
+		return ResourceRequestReceipt(request: resourceRequest, peers: peers, transferDisposable: transferDisposable)
 	}
 
 	public func submitResourceRequest(withName resourceName: String, at localURL: URL, to peers: [MCPeerID], eventHandler: @escaping (ResourceEvent<ResourceRequest>) -> Void = { _ in }) throws -> ResourceRequestReceipt<ResourceRequest> {
