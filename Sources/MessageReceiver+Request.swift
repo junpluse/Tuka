@@ -30,7 +30,7 @@ extension MessageReceiverProtocol {
 	///   - queue: A dispatch queue to which closure should be added.
 	///   - handler: A closure to be executed when an observation event produced by the receiver.
 	/// - Returns: A `Disposable` which can be used to stop the invocation of the closure.
-	public func addObserver<T: RequestProtocol>(forResponsesTo request: T, from peers: [Peer], timeoutAfter interval: TimeInterval, on queue: DispatchQueue, handler: @escaping (ResponseObservationEvent<T, Peer>) -> Void) -> Disposable {
+	public func addResponseObserver<T: RequestProtocol>(for request: T, from peers: [Peer], timeoutAfter interval: TimeInterval, on queue: DispatchQueue, handler: @escaping (ResponseObservationEvent<T, Peer>) -> Void) -> Disposable {
 		let disposable = CompositeDisposable()
 		if interval != .infinity {
 			let timeout = DispatchWorkItem {
@@ -64,8 +64,8 @@ extension MessageReceiverProtocol {
 	///   - queue: A dispatch queue to which closure should be added.
 	///   - handler: A closure to be executed when the observation is completed or timed out.
 	/// - Returns: A `Disposable` which can be used to stop the invocation of the closure.
-	public func addObserver<T: RequestReceiptProtocol>(forResponsesToRequestOn receipt: T, timeoutAfter interval: TimeInterval, on queue: DispatchQueue, handler: @escaping (ResponseObservationEvent<T.Request, Peer>) -> Void) -> Disposable where T.Peer == Peer {
-		return addObserver(forResponsesTo: receipt.request, from: receipt.peers, timeoutAfter: interval, on: queue, handler: handler)
+	public func addResponseObserver<T: RequestReceiptProtocol>(for receipt: T, timeoutAfter interval: TimeInterval, on queue: DispatchQueue, handler: @escaping (ResponseObservationEvent<T.Request, Peer>) -> Void) -> Disposable where T.Peer == Peer {
+		return addResponseObserver(for: receipt.request, from: receipt.peers, timeoutAfter: interval, on: queue, handler: handler)
 	}
 }
 
