@@ -36,7 +36,7 @@ public final class Session: NSObject, MessageSenderProtocol, MessageReceiverProt
 		self.init(mcSession: MCSession(peer: MCPeerID.Tuka.defaultPeer))
 	}
 
-	public func observeSessionEvent(on queue: DispatchQueue? = nil, handler: @escaping (Event) -> Void) -> Disposable {
+	public func addSessionEventObserver(on queue: DispatchQueue? = nil, handler: @escaping (Event) -> Void) -> Disposable {
 		let observer = DispatchObserver(queue: queue, action: handler)
 		return _sessionEventObserver.add(observer)
 	}
@@ -59,7 +59,7 @@ public final class Session: NSObject, MessageSenderProtocol, MessageReceiverProt
 
 	// MARK: MessageReceiverProtocol
 
-	public func observeReceivedData(on queue: DispatchQueue, handler: @escaping (Data, MCPeerID) -> Void) -> Disposable {
+	public func addDataObserver(on queue: DispatchQueue, handler: @escaping (Data, MCPeerID) -> Void) -> Disposable {
 		let observer = DispatchObserver(queue: queue, action: handler)
 		return _sessionEventObserver.add { event in
 			switch event {

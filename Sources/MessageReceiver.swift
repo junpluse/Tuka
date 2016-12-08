@@ -11,7 +11,7 @@ import Foundation
 public protocol MessageReceiverProtocol {
 	associatedtype Peer: PeerProtocol
 
-	func observeReceivedData(on queue: DispatchQueue, handler: @escaping (Data, Peer) -> Void) -> Disposable
+	func addDataObserver(on queue: DispatchQueue, handler: @escaping (Data, Peer) -> Void) -> Disposable
 }
 
 public struct MessageReceiver<Peer: PeerProtocol>: MessageReceiverProtocol {
@@ -22,17 +22,17 @@ public struct MessageReceiver<Peer: PeerProtocol>: MessageReceiverProtocol {
 	}
 
 	public init<T: MessageReceiverProtocol>(_ base: T) where T.Peer == Peer {
-		_action = { base.observeReceivedData(on: $0, handler: $1) }
+		_action = { base.addDataObserver(on: $0, handler: $1) }
 	}
 
-	public func observeReceivedData(on queue: DispatchQueue, handler: @escaping (Data, Peer) -> Void) -> Disposable {
+	public func addDataObserver(on queue: DispatchQueue, handler: @escaping (Data, Peer) -> Void) -> Disposable {
 		return _action(queue, handler)
 	}
 }
 
 extension MessageReceiverProtocol {
-	public func observeMessages<T: MessageProtocol>(_ type: T.Type, on queue: DispatchQueue, handler: @escaping (T, Peer) -> Void) -> Disposable {
-		return observeReceivedData(on: queue) { data, peer in
+	public func addObserver<T: MessageProtocol>(for messageType: T.Type, on queue: DispatchQueue, handler: @escaping (T, Peer) -> Void) -> Disposable {
+		return addDataObserver(on: queue) { data, peer in
 			do {
 				if let message = try Unarchiver().unarchive(data, of: T.self) {
 					handler(message, peer)
