@@ -76,14 +76,14 @@ extension Session {
 }
 
 extension Session {
-	public func add<T: ResourceStoreProtocol>(_ resourceStore: T, eventQueue: DispatchQueue? = nil, eventHandler: @escaping (ResourceEvent<T.Request>) -> Void = { _ in }) -> Disposable where T.Peer == MCPeerID {
+	public func addResponder<T: ResourceStoreProtocol>(forResourceRequestTo store: T, eventQueue: DispatchQueue? = nil, eventHandler: @escaping (ResourceEvent<T.Request>) -> Void = { _ in }) -> Disposable where T.Peer == MCPeerID {
 		let eventObserver = DispatchObserver(queue: eventQueue, action: eventHandler)
 
 		let responderQueue = DispatchQueue(label: "com.junpluse.Tuka.Session.ResourceRequestResponderQueue")
 		let responder = RequestResponder<T.Request, MCPeerID>(queue: responderQueue) { request, peer in
 			var response: T.Request.Response!
 			let semaphore = DispatchSemaphore(value: 0)
-			let disposable = self.addSessionEventObserver(on: resourceStore.storeQueue) { event in
+			let disposable = self.addSessionEventObserver(on: store.storeQueue) { event in
 				switch event {
 				case .didStartReceivingResource(let name, let from, let progress):
 					guard name == request.requestID, from == peer else { return }
@@ -95,7 +95,7 @@ extension Session {
 						eventObserver.observe(.transferFailed(request, peer, error))
 					} else {
 						do {
-							try resourceStore.storeResource(at: localURL, with: request, from: peer)
+							try store.storeResource(at: localURL, with: request, from: peer)
 							response = T.Request.Response(requestID: request.requestID, result: .success)
 						} catch let error {
 							print("[Tuka.Session] failed to store resource named \"\(name)\" with error: \(error)")
