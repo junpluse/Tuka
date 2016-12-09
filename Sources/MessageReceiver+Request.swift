@@ -70,12 +70,12 @@ extension MessageReceiverProtocol {
 }
 
 extension MessageReceiverProtocol where Self: MessageSenderProtocol {
-	/// Adds a responder for the request.
+	/// Responds to requests with a responder.
 	///
 	/// - Parameters:
 	///   - responder: A responder for the request.
 	/// - Returns: A `Disposable` which can be used to remove the responder from the receiver.
-	public func addResponder<T: RequestResponderProtocol>(_ responder: T) -> Disposable where T.Peer == Peer {
+	public func respond<T: RequestResponderProtocol>(with responder: T) -> Disposable where T.Peer == Peer {
 		return subscribe(to: T.Request.self, on: responder.responseQueue) { request, peer in
 			let response = responder.response(to: request, from: peer)
 			do {
@@ -86,17 +86,17 @@ extension MessageReceiverProtocol where Self: MessageSenderProtocol {
 		}
 	}
 
-	/// Adds a handler that respond to requests of the given type.
+	/// Responds to request of the given type on a dispatch queue and a closure to add to the queue.
 	///
 	/// - Parameters:
 	///   - requestType: A type of request which should be responded to.
-	///   - queue: A dispatch queue to which closure should be added.
+	///   - queue: A dispatch queue which closure should be added to.
 	///   - handler: A closure to be executed when the request is received.
 	/// - Returns: A `Disposable` which can be used to stop the invocation of the closure.
-	public func addResponder<T: RequestProtocol>(for requestType: T.Type, on queue: DispatchQueue, handler: @escaping (T, Peer) -> T.Response) -> Disposable {
+	public func respond<T: RequestProtocol>(to requestType: T, on queue: DispatchQueue, handler: @escaping (T, Peer) -> T.Response) -> Disposable {
 		let responder = RequestResponder(queue: queue) { request, peer in
 			return handler(request, peer)
 		}
-		return addResponder(responder)
+		return respond(with: responder)
 	}
 }
