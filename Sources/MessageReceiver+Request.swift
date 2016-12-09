@@ -93,7 +93,7 @@ extension MessageReceiverProtocol where Self: MessageSenderProtocol {
 	///   - queue: A dispatch queue which closure should be added to.
 	///   - handler: A closure to be executed when the request is received.
 	/// - Returns: A `Disposable` which can be used to stop the invocation of the closure.
-	public func respond<T: RequestProtocol>(to requestType: T, on queue: DispatchQueue, handler: @escaping (T, Peer) -> T.Response) -> Disposable {
+	public func respond<T: RequestProtocol>(to requestType: T.Type, on queue: DispatchQueue, handler: @escaping (T, Peer) -> T.Response) -> Disposable {
 		let responder = RequestResponder(queue: queue) { request, peer in
 			return handler(request, peer)
 		}
