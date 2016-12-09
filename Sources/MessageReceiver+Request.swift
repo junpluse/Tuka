@@ -76,8 +76,8 @@ extension MessageReceiverProtocol where Self: MessageSenderProtocol {
 	///   - responder: A responder for the request.
 	/// - Returns: A `Disposable` which can be used to remove the responder from the receiver.
 	public func addResponder<T: RequestResponderProtocol>(_ responder: T) -> Disposable where T.Peer == Peer {
-			let response = responder.respond(to: request, from: peer)
 		return subscribe(to: T.Request.self, on: responder.responseQueue) { request, peer in
+			let response = responder.response(to: request, from: peer)
 			do {
 				try self.send(response, to: [peer])
 			} catch let error {

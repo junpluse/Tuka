@@ -14,7 +14,7 @@ public protocol RequestResponderProtocol {
 
 	var responseQueue: DispatchQueue { get }
 
-	func respond(to request: Request, from peer: Peer) -> Request.Response
+	func response(to request: Request, from peer: Peer) -> Request.Response
 }
 
 public struct RequestResponder<Request: RequestProtocol, Peer: PeerProtocol>: RequestResponderProtocol {
@@ -29,7 +29,7 @@ public struct RequestResponder<Request: RequestProtocol, Peer: PeerProtocol>: Re
 	public init<T: RequestResponderProtocol>(_ responder: T) where T.Request == Request, T.Peer == Peer {
 		_queue = responder.responseQueue
 		_action = { request, peer in
-			return responder.respond(to: request, from: peer)
+			return responder.response(to: request, from: peer)
 		}
 	}
 
@@ -37,7 +37,7 @@ public struct RequestResponder<Request: RequestProtocol, Peer: PeerProtocol>: Re
 		return _queue
 	}
 
-	public func respond(to request: Request, from peer: Peer) -> Request.Response {
+	public func response(to request: Request, from peer: Peer) -> Request.Response {
 		return _action(request, peer)
 	}
 }
