@@ -86,7 +86,7 @@ extension MessageReceiverProtocol where Self: MessageSenderProtocol {
 		}
 	}
 
-	/// Responds to requests of the given type on a dispatch queue and a closure to add to the queue.
+	/// Responds to requests of the given type with a dispatch queue and a closure to add to the queue.
 	///
 	/// - Parameters:
 	///   - requestType: A type of request which should be responded to.

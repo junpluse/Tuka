@@ -52,7 +52,7 @@ public struct MessageReceiver<Peer: PeerProtocol>: MessageReceiverProtocol {
 }
 
 extension MessageReceiverProtocol {
-	/// Subscribes messages of the given type on a dispatch queue and a closure to add to the queue.
+	/// Subscribes messages of the given type with a dispatch queue and a closure to add to the queue.
 	///
 	/// - Parameters:
 	///   - messageType: A type of message to which should be subsribed.
