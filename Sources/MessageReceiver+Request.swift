@@ -8,29 +8,29 @@
 
 import Foundation
 
-/// A `ResponseObservationEvent` value represents a event of response observation
-/// that produced by the message receiver.
+/// A `ResponseCollectionEvent` value represents a event of response collection
+/// that produced by a message receiver.
 ///
 /// - received: Indicates that the response from a peer has been received.
 /// - completed: Indicates that all responses from the peers has beed received.
-/// - timedOut: Indicates that the receiver timed out the observation of responses.
-public enum ResponseObservationEvent<Request: RequestProtocol, Peer: PeerProtocol> {
+/// - timedOut: Indicates that the receiver timed out the collection.
+public enum ResponseCollectionEvent<Request: RequestProtocol, Peer: PeerProtocol> {
 	case received(Request.Response, from: Peer)
 	case completed([Peer: Request.Response])
 	case timedOut
 }
 
 extension MessageReceiverProtocol {
-	/// Adds a handler that observe responses to the request.
+	/// Collects responses to a request from peers.
 	///
 	/// - Parameters:
-	///   - request: A request for responses which should be observed.
-	///   - peers: An array of peers who should respond the request.
-	///   - interval: An number of seconds to wait for the observation to complete.
-	///   - queue: A dispatch queue to which closure should be added.
-	///   - handler: A closure to be executed when an observation event produced by the receiver.
+	///   - request: A request which the peers should be responded to.
+	///   - peers: An array of peers who should respond to the request.
+	///   - interval: An number of seconds to wait for the collection to complete.
+	///   - queue: A dispatch queue which the closure should be added to.
+	///   - handler: A closure to be executed when an event produced by the receiver.
 	/// - Returns: A `Disposable` which can be used to stop the invocation of the closure.
-	public func addResponseObserver<T: RequestProtocol>(for request: T, from peers: [Peer], timeoutAfter interval: TimeInterval, on queue: DispatchQueue, handler: @escaping (ResponseObservationEvent<T, Peer>) -> Void) -> Disposable {
+	public func collectResponses<T: RequestProtocol>(to request: T, from peers: [Peer], timeoutAfter interval: TimeInterval, on queue: DispatchQueue, handler: @escaping (ResponseCollectionEvent<T, Peer>) -> Void) -> Disposable {
 		let disposable = CompositeDisposable()
 		if interval != .infinity {
 			let timeout = DispatchWorkItem {
@@ -56,16 +56,16 @@ extension MessageReceiverProtocol {
 		return disposable
 	}
 
-	/// Adds a handler that observe responses to the request on the given receipt.
+	/// Collects responses to the request on a receipt.
 	///
 	/// - Parameters:
-	///   - receipt: A receipt of the request for the responses which should be observed.
-	///   - interval: An number of seconds to wait for the observation to complete.
-	///   - queue: A dispatch queue to which closure should be added.
-	///   - handler: A closure to be executed when the observation is completed or timed out.
+	///   - receipt: A receipt of the request which the peers should be responded to.
+	///   - interval: An number of seconds to wait for the collection to complete.
+	///   - queue: A dispatch queue which the closure should be added to.
+	///   - handler: A closure to be executed when an event produced by the receiver.
 	/// - Returns: A `Disposable` which can be used to stop the invocation of the closure.
-	public func addResponseObserver<T: RequestReceiptProtocol>(for receipt: T, timeoutAfter interval: TimeInterval, on queue: DispatchQueue, handler: @escaping (ResponseObservationEvent<T.Request, Peer>) -> Void) -> Disposable where T.Peer == Peer {
-		return addResponseObserver(for: receipt.request, from: receipt.peers, timeoutAfter: interval, on: queue, handler: handler)
+	public func collectResponses<T: RequestReceiptProtocol>(with receipt: T, timeoutAfter interval: TimeInterval, on queue: DispatchQueue, handler: @escaping (ResponseCollectionEvent<T.Request, Peer>) -> Void) -> Disposable where T.Peer == Peer {
+		return collectResponses(to: receipt.request, from: receipt.peers, timeoutAfter: interval, on: queue, handler: handler)
 	}
 }
 
