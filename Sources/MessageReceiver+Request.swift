@@ -43,7 +43,7 @@ extension MessageReceiverProtocol {
 
 		let responses = DispatchAtomic(Dictionary<Peer, T.Response>())
 
-		disposable += addObserver(for: T.Response.self, on: queue) { response, peer in
+		disposable += subscribe(to: T.Response.self, on: queue) { response, peer in
 			guard peers.contains(peer), response.requestID == request.requestID else { return }
 			responses.modify { $0[peer] = response }
 			handler(.received(response, from: peer))
@@ -76,8 +76,8 @@ extension MessageReceiverProtocol where Self: MessageSenderProtocol {
 	///   - responder: A responder for the request.
 	/// - Returns: A `Disposable` which can be used to remove the responder from the receiver.
 	public func addResponder<T: RequestResponderProtocol>(_ responder: T) -> Disposable where T.Peer == Peer {
-		return addObserver(for: T.Request.self, on: responder.responseQueue) { request, peer in
 			let response = responder.respond(to: request, from: peer)
+		return subscribe(to: T.Request.self, on: responder.responseQueue) { request, peer in
 			do {
 				try self.send(response, to: [peer])
 			} catch let error {

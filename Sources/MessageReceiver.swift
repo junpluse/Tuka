@@ -52,14 +52,14 @@ public struct MessageReceiver<Peer: PeerProtocol>: MessageReceiverProtocol {
 }
 
 extension MessageReceiverProtocol {
-	/// Adds a received message handler with a dispatch queue and a closure to add to the queue.
+	/// Subscribes messages of the given type on a dispatch queue and a closure to add to the queue.
 	///
 	/// - Parameters:
-	///   - messageType: A type of message which should be observed.
+	///   - messageType: A type of message to which should be subsribed.
 	///   - queue: A dispatch queue to which closure should be added.
 	///   - handler: A closure to be executed when a message is received.
 	/// - Returns: A `Disposable` which can be used to stop the invocation of the closure.
-	public func addObserver<T: MessageProtocol>(for messageType: T.Type, on queue: DispatchQueue, handler: @escaping (T, Peer) -> Void) -> Disposable {
+	public func subscribe<T: MessageProtocol>(to messageType: T.Type, on queue: DispatchQueue, handler: @escaping (T, Peer) -> Void) -> Disposable {
 		return addDataObserver(on: queue) { data, peer in
 			do {
 				if let message = try Unarchiver().unarchive(data, of: T.self) {
