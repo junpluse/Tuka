@@ -169,8 +169,8 @@ public struct KeyedCoder<Key: CodingKeyPresentable> {
 }
 
 extension KeyedCoder {
-	public func encode(_ value: String, for key: Key) {
-		encode(value as NSString, for: key)
+	public func encode(_ value: String?, for key: Key) {
+		encode(value as NSString?, for: key)
 	}
 
 	public func decodeString(for key: Key) -> String? {
