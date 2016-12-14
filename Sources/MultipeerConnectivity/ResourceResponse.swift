@@ -8,28 +8,45 @@
 
 import Foundation
 
+/// Represents either a failure or a success of a resource request.
 public enum ResourceRequestResult: String {
 	case success
 	case failure
 }
 
+/// Represents a response to a resource request.
 public protocol ResourceResponseProtocol: ResponseProtocol, SessionMessageProtocol {
+	/// A result of the request.
 	var result: ResourceRequestResult { get }
 
+	/// Initializes a response to a request and a result.
+	///
+	/// - Parameters:
+	///   - requestID: A string which identifies the original request.
+	///   - result: A result of the request.
 	init(requestID: String, result: ResourceRequestResult)
 }
 
-public final class ResourceResponse: ResourceResponseProtocol, KeyedCoding {
+/// A basic class which implements 'ResourceResponseProtocol'.
+public final class ResourceResponse: ResourceResponseProtocol {
+	/// A string which identifies the request between peers.
 	public let requestID: String
+
+	/// A result of the request.
 	public let result: ResourceRequestResult
 
+	/// Initializes a response to a request and a result.
+	///
+	/// - Parameters:
+	///   - requestID: A string which identifies the original request.
+	///   - result: A result of the request.
 	public init(requestID: String, result: ResourceRequestResult) {
 		self.requestID = requestID
 		self.result = result
 	}
+}
 
-	// MARK: KeyedCoding
-
+extension ResourceResponse: KeyedCoding {
 	public enum CodingKey: String, CodingKeyPresentable {
 		case requestID
 		case result
