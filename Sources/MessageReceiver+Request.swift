@@ -8,29 +8,28 @@
 
 import Foundation
 
-/// A `ResponseCollectionEvent` value represents a event of response collection
-/// that produced by a message receiver.
+/// A `ResponseEvent` value represents a event while waiting responses.
 ///
 /// - received: Indicates that the response from a peer has been received.
 /// - completed: Indicates that all responses from the peers has beed received.
 /// - timedOut: Indicates that the receiver timed out the collection.
-public enum ResponseCollectionEvent<Request: RequestProtocol, Peer: PeerProtocol> {
+public enum ResponseEvent<Request: RequestProtocol, Peer: PeerProtocol> {
 	case received(Request.Response, from: Peer)
 	case completed([Peer: Request.Response])
 	case timedOut
 }
 
 extension MessageReceiverProtocol {
-	/// Collects responses to a request from peers.
+	/// Waits responses to a request from peers.
 	///
 	/// - Parameters:
 	///   - request: A request which the peers should be responded to.
 	///   - peers: An array of peers who should respond to the request.
-	///   - interval: An number of seconds to wait for the collection to complete.
+	///   - interval: An number of seconds for waiting to complete.
 	///   - queue: A dispatch queue which the closure should be added to.
 	///   - handler: A closure to be executed when an event produced by the receiver.
 	/// - Returns: A `Disposable` which can be used to stop the invocation of the closure.
-	public func collectResponses<T: RequestProtocol>(to request: T, from peers: [Peer], timeoutAfter interval: TimeInterval, on queue: DispatchQueue, handler: @escaping (ResponseCollectionEvent<T, Peer>) -> Void) -> Disposable {
+	public func waitResponses<T: RequestProtocol>(to request: T, from peers: [Peer], timeoutAfter interval: TimeInterval, on queue: DispatchQueue, handler: @escaping (ResponseEvent<T, Peer>) -> Void) -> Disposable {
 		let disposable = CompositeDisposable()
 		if interval != .infinity {
 			let timeout = DispatchWorkItem {
@@ -56,16 +55,16 @@ extension MessageReceiverProtocol {
 		return disposable
 	}
 
-	/// Collects responses to the request on a receipt.
+	/// Waits responses to the request on a receipt.
 	///
 	/// - Parameters:
 	///   - receipt: A receipt of the request which the peers should be responded to.
-	///   - interval: An number of seconds to wait for the collection to complete.
+	///   - interval: An number of seconds for waiting to complete.
 	///   - queue: A dispatch queue which the closure should be added to.
 	///   - handler: A closure to be executed when an event produced by the receiver.
 	/// - Returns: A `Disposable` which can be used to stop the invocation of the closure.
-	public func collectResponses<T: RequestReceiptProtocol>(with receipt: T, timeoutAfter interval: TimeInterval, on queue: DispatchQueue, handler: @escaping (ResponseCollectionEvent<T.Request, Peer>) -> Void) -> Disposable where T.Peer == Peer {
-		return collectResponses(to: receipt.request, from: receipt.peers, timeoutAfter: interval, on: queue, handler: handler)
+	public func waitResponses<T: RequestReceiptProtocol>(with receipt: T, timeoutAfter interval: TimeInterval, on queue: DispatchQueue, handler: @escaping (ResponseEvent<T.Request, Peer>) -> Void) -> Disposable where T.Peer == Peer {
+		return waitResponses(to: receipt.request, from: receipt.peers, timeoutAfter: interval, on: queue, handler: handler)
 	}
 }
 
