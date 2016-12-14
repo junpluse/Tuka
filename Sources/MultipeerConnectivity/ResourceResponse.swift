@@ -19,7 +19,7 @@ public protocol ResourceResponseProtocol: ResponseProtocol, SessionMessageProtoc
 	init(requestID: String, result: ResourceRequestResult)
 }
 
-public struct ResourceResponse: ResourceResponseProtocol, KeyedCoding {
+public final class ResourceResponse: ResourceResponseProtocol, KeyedCoding {
 	public let requestID: String
 	public let result: ResourceRequestResult
 

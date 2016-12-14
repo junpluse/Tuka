@@ -15,7 +15,7 @@ public protocol ResourceRequestProtocol: RequestProtocol, SessionMessageProtocol
 	var preferredFilename: String { get }
 }
 
-public struct ResourceRequest: ResourceRequestProtocol, KeyedCoding {
+public final class ResourceRequest: ResourceRequestProtocol, KeyedCoding {
 	public typealias Response = ResourceResponse
 
 	public let requestID: String
