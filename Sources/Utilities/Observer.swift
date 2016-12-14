@@ -49,7 +49,7 @@ public final class DispatchObserver<Value>: ObserverProtocol {
 }
 
 public final class CompositeObserver<Value>: ObserverProtocol {
-	private let _observers = DispatchAtomic(Dictionary<UUID, Observer<Value>>())
+	private let _observers = DispatchAtomic<[UUID: Observer<Value>]>([:])
 
 	public init() {}
 

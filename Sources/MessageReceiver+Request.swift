@@ -41,7 +41,7 @@ extension MessageReceiverProtocol {
 			disposable += { timeout.cancel() }
 		}
 
-		let responses = DispatchAtomic(Dictionary<Peer, T.Request.Response>())
+		let responses = DispatchAtomic<[Peer: T.Request.Response]>([:])
 
 		disposable += addObserver(for: T.Request.Response.self, on: queue) { response, peer in
 			guard

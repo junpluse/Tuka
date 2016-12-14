@@ -32,7 +32,7 @@ public final class ActionDisposable: Disposable {
 }
 
 public final class CompositeDisposable: Disposable {
-	private let _disposables = DispatchAtomic<Array<Disposable>?>(nil)
+	private let _disposables = DispatchAtomic<[Disposable]?>(nil)
 
 	public init() {
 		_disposables.value = []
