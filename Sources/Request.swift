@@ -8,8 +8,10 @@
 
 import Foundation
 
+/// Represents a request message.
 public protocol RequestProtocol: MessageProtocol {
 	associatedtype Response: ResponseProtocol
 
+	/// A string which identifies the request between peers.
 	var requestID: String { get }
 }

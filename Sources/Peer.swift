@@ -8,4 +8,5 @@
 
 import Foundation
 
+/// Represents a peer on a network.
 public protocol PeerProtocol: Hashable {}

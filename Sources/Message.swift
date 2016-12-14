@@ -8,4 +8,5 @@
 
 import Foundation
 
+/// Represents a message.
 public protocol MessageProtocol: Coding {}

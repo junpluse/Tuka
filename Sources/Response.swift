@@ -8,6 +8,8 @@
 
 import Foundation
 
+/// Represents a response message to a request.
 public protocol ResponseProtocol: MessageProtocol {
+	/// A string which identifies the original request.
 	var requestID: String { get }
 }
