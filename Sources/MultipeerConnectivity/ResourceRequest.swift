@@ -12,7 +12,7 @@ public protocol ResourceRequestProtocol: RequestProtocol, SessionMessageProtocol
 	associatedtype Response: ResourceResponseProtocol
 
 	var resourceName: String { get }
-	var preferredFilename: String { get }
+	var mimeType: String? { get }
 }
 
 public final class ResourceRequest: ResourceRequestProtocol, KeyedCoding {
@@ -20,12 +20,12 @@ public final class ResourceRequest: ResourceRequestProtocol, KeyedCoding {
 
 	public let requestID: String
 	public let resourceName: String
-	public let preferredFilename: String
+	public let mimeType: String?
 
-	public init(requestID: String = UUID().uuidString, resourceName: String, preferredFilename: String) {
+	public init(requestID: String = UUID().uuidString, resourceName: String, mimeType: String? = nil) {
 		self.requestID = requestID
 		self.resourceName = resourceName
-		self.preferredFilename = preferredFilename
+		self.mimeType = mimeType
 	}
 
 	// MARK: KeyedCoding
@@ -33,22 +33,22 @@ public final class ResourceRequest: ResourceRequestProtocol, KeyedCoding {
 	public enum CodingKey: String, CodingKeyPresentable {
 		case requestID
 		case resourceName
-		case preferredFilename
+		case mimeType
 	}
 
 	public func encode(with encoder: KeyedCoder<CodingKey>) {
 		encoder.encode(requestID, for: .requestID)
 		encoder.encode(resourceName, for: .resourceName)
-		encoder.encode(preferredFilename, for: .preferredFilename)
+		encoder.encode(mimeType, for: .mimeType)
 	}
 
 	public static func decode(with decoder: KeyedCoder<CodingKey>) -> ResourceRequest? {
 		guard
 			let requestID = decoder.decodeString(for: .requestID),
-			let resourceName = decoder.decodeString(for: .resourceName),
-			let preferredFilename = decoder.decodeString(for: .preferredFilename) else {
+			let resourceName = decoder.decodeString(for: .resourceName) else {
 				return nil
 		}
-		return ResourceRequest(requestID: requestID, resourceName: resourceName, preferredFilename: preferredFilename)
+		let mimeType = decoder.decodeString(for: .mimeType)
+		return ResourceRequest(requestID: requestID, resourceName: resourceName, mimeType: mimeType)
 	}
 }
