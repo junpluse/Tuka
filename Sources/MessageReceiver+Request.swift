@@ -8,11 +8,11 @@
 
 import Foundation
 
-/// A `ResponseEvent` value represents a event while waiting responses.
+/// A `ResponseEvent` value represents a event while observing responses.
 ///
 /// - received: Indicates that the response from a peer has been received.
 /// - completed: Indicates that all responses from the peers has beed received.
-/// - timedOut: Indicates that the receiver timed out the collection.
+/// - timedOut: Indicates that the receiver timed out the observation.
 public enum ResponseEvent<Request: RequestProtocol, Peer: PeerProtocol> {
 	case received(Request.Response, from: Peer)
 	case completed([Peer: Request.Response])
@@ -20,62 +20,55 @@ public enum ResponseEvent<Request: RequestProtocol, Peer: PeerProtocol> {
 }
 
 extension MessageReceiverProtocol {
-	/// Waits responses to a request from peers.
+	/// Adds an observer for responses to the request on a receipt.
 	///
 	/// - Parameters:
 	///   - request: A request which the peers should be responded to.
 	///   - peers: An array of peers who should respond to the request.
 	///   - interval: An number of seconds for waiting to complete.
 	///   - queue: A dispatch queue which the closure should be added to.
-	///   - handler: A closure to be executed when an event produced by the receiver.
+	///   - action: A closure to be executed when an event produced by the receiver.
 	/// - Returns: A `Disposable` which can be used to stop the invocation of the closure.
-	public func waitResponses<T: RequestProtocol>(to request: T, from peers: [Peer], timeoutAfter interval: TimeInterval, on queue: DispatchQueue, handler: @escaping (ResponseEvent<T, Peer>) -> Void) -> Disposable {
+	public func addObserver<T: RequestReceiptProtocol>(for receipt: T, timeoutAfter interval: TimeInterval, on queue: DispatchQueue, action: @escaping (ResponseEvent<T.Request, Peer>) -> Void) -> Disposable where T.Peer == Peer {
 		let disposable = CompositeDisposable()
+
 		if interval != .infinity {
 			let timeout = DispatchWorkItem {
-				handler(.timedOut)
+				action(.timedOut)
 				disposable.dispose()
 			}
 			queue.asyncAfter(deadline: .now() + interval, execute: timeout)
 			disposable += { timeout.cancel() }
 		}
 
-		let responses = DispatchAtomic(Dictionary<Peer, T.Response>())
+		let responses = DispatchAtomic(Dictionary<Peer, T.Request.Response>())
 
-		disposable += subscribe(to: T.Response.self, on: queue) { response, peer in
-			guard peers.contains(peer), response.requestID == request.requestID else { return }
+		disposable += addObserver(for: T.Request.Response.self, on: queue) { response, peer in
+			guard
+				receipt.peers.contains(peer),
+				response.requestID == receipt.request.requestID else {
+					return
+			}
 			responses.modify { $0[peer] = response }
-			handler(.received(response, from: peer))
-			if responses.value.count == peers.count {
-				handler(.completed(responses.value))
+			action(.received(response, from: peer))
+			if responses.value.count == receipt.peers.count {
+				action(.completed(responses.value))
 				disposable.dispose()
 			}
 		}
 
 		return disposable
 	}
-
-	/// Waits responses to the request on a receipt.
-	///
-	/// - Parameters:
-	///   - receipt: A receipt of the request which the peers should be responded to.
-	///   - interval: An number of seconds for waiting to complete.
-	///   - queue: A dispatch queue which the closure should be added to.
-	///   - handler: A closure to be executed when an event produced by the receiver.
-	/// - Returns: A `Disposable` which can be used to stop the invocation of the closure.
-	public func waitResponses<T: RequestReceiptProtocol>(with receipt: T, timeoutAfter interval: TimeInterval, on queue: DispatchQueue, handler: @escaping (ResponseEvent<T.Request, Peer>) -> Void) -> Disposable where T.Peer == Peer {
-		return waitResponses(to: receipt.request, from: receipt.peers, timeoutAfter: interval, on: queue, handler: handler)
-	}
 }
 
 extension MessageReceiverProtocol where Self: MessageSenderProtocol {
-	/// Responds to requests with a responder.
+	/// Adds a responder for requests received by the receiver.
 	///
 	/// - Parameters:
-	///   - responder: A responder for the request.
+	///   - responder: A responder that responds to requests received by the receiver.
 	/// - Returns: A `Disposable` which can be used to remove the responder from the receiver.
-	public func respond<T: RequestResponderProtocol>(with responder: T) -> Disposable where T.Peer == Peer {
-		return subscribe(to: T.Request.self, on: responder.responseQueue) { request, peer in
+	public func addResponder<T: RequestResponderProtocol>(_ responder: T) -> Disposable where T.Peer == Peer {
+		return addObserver(for: T.Request.self, on: responder.responseQueue) { request, peer in
 			let response = responder.response(to: request, from: peer)
 			do {
 				try self.send(response, to: [peer])
@@ -85,17 +78,17 @@ extension MessageReceiverProtocol where Self: MessageSenderProtocol {
 		}
 	}
 
-	/// Responds to requests of the given type with a dispatch queue and a closure to add to the queue.
+	/// Adds a responder for requests of the given type with a dispatch queue and a closure to add to the queue.
 	///
 	/// - Parameters:
 	///   - requestType: A type of request which should be responded to.
 	///   - queue: A dispatch queue which closure should be added to.
-	///   - handler: A closure to be executed when the request is received.
+	///   - action: A closure to be executed when the request is received.
 	/// - Returns: A `Disposable` which can be used to stop the invocation of the closure.
-	public func respond<T: RequestProtocol>(to requestType: T.Type, on queue: DispatchQueue, handler: @escaping (T, Peer) -> T.Response) -> Disposable {
+	public func addResponder<T: RequestProtocol>(for requestType: T.Type, on queue: DispatchQueue, action: @escaping (T, Peer) -> T.Response) -> Disposable {
 		let responder = RequestResponder(queue: queue) { request, peer in
-			return handler(request, peer)
+			return action(request, peer)
 		}
-		return respond(with: responder)
+		return addResponder(responder)
 	}
 }

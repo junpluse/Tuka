@@ -76,7 +76,7 @@ extension Session {
 }
 
 extension Session {
-	public func respond<T: ResourceStoreProtocol>(toResourceRequestWith store: T, eventQueue: DispatchQueue? = nil, eventHandler: @escaping (ResourceEvent<T.Request>) -> Void = { _ in }) -> Disposable where T.Peer == MCPeerID {
+	public func addResourceStore<T: ResourceStoreProtocol>(_ store: T, eventQueue: DispatchQueue? = nil, eventHandler: @escaping (ResourceEvent<T.Request>) -> Void = { _ in }) -> Disposable where T.Peer == MCPeerID {
 		let eventObserver = DispatchObserver(queue: eventQueue, action: eventHandler)
 
 		let responderQueue = DispatchQueue(label: "com.junpluse.Tuka.Session.ResourceRequestResponderQueue")
@@ -113,6 +113,6 @@ extension Session {
 			return response
 		}
 
-		return respond(with: responder)
+		return addResponder(responder)
 	}
 }

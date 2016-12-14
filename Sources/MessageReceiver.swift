@@ -16,9 +16,9 @@ public protocol MessageReceiverProtocol {
 	///
 	/// - Parameters:
 	///   - queue: A dispatch queue to which closure should be added.
-	///   - handler: A closure to be executed when the data is received.
+	///   - action: A closure to be executed when the data is received.
 	/// - Returns: A `Disposable` which can be used to stop the invocation of the closure.
-	func addDataObserver(on queue: DispatchQueue, handler: @escaping (Data, Peer) -> Void) -> Disposable
+	func addDataObserver(on queue: DispatchQueue, action: @escaping (Data, Peer) -> Void) -> Disposable
 }
 
 /// A struct that implements `MessageReceiverProtocol` using a closure or
@@ -37,33 +37,33 @@ public struct MessageReceiver<Peer: PeerProtocol>: MessageReceiverProtocol {
 	///
 	/// - Parameter receiver: A receiver to be wrapped.
 	public init<T: MessageReceiverProtocol>(_ base: T) where T.Peer == Peer {
-		_action = { base.addDataObserver(on: $0, handler: $1) }
+		_action = { base.addDataObserver(on: $0, action: $1) }
 	}
 
 	/// Adds a received data handler with a dispatch queue and a closure to add to the queue.
 	///
 	/// - Parameters:
 	///   - queue: A dispatch queue to which closure should be added.
-	///   - handler: A closure to be executed when the data is received.
+	///   - action: A closure to be executed when the data is received.
 	/// - Returns: A `Disposable` which can be used to stop the invocation of the closure.
-	public func addDataObserver(on queue: DispatchQueue, handler: @escaping (Data, Peer) -> Void) -> Disposable {
-		return _action(queue, handler)
+	public func addDataObserver(on queue: DispatchQueue, action: @escaping (Data, Peer) -> Void) -> Disposable {
+		return _action(queue, action)
 	}
 }
 
 extension MessageReceiverProtocol {
-	/// Subscribes messages of the given type with a dispatch queue and a closure to add to the queue.
+	/// Adds an observer for messages of the given type with a dispatch queue and a closure to add to the queue.
 	///
 	/// - Parameters:
 	///   - messageType: A type of message to which should be subsribed.
 	///   - queue: A dispatch queue to which closure should be added.
-	///   - handler: A closure to be executed when a message is received.
+	///   - action: A closure to be executed when a message is received.
 	/// - Returns: A `Disposable` which can be used to stop the invocation of the closure.
-	public func subscribe<T: MessageProtocol>(to messageType: T.Type, on queue: DispatchQueue, handler: @escaping (T, Peer) -> Void) -> Disposable {
+	public func addObserver<T: MessageProtocol>(for messageType: T.Type, on queue: DispatchQueue, action: @escaping (T, Peer) -> Void) -> Disposable {
 		return addDataObserver(on: queue) { data, peer in
 			do {
 				if let message = try Unarchiver().unarchive(data, of: T.self) {
-					handler(message, peer)
+					action(message, peer)
 				}
 			} catch let error as NSError {
 				if error.code == 4864 {

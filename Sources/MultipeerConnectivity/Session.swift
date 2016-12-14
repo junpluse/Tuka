@@ -59,8 +59,8 @@ public final class Session: NSObject, MessageSenderProtocol, MessageReceiverProt
 
 	// MARK: MessageReceiverProtocol
 
-	public func addDataObserver(on queue: DispatchQueue, handler: @escaping (Data, MCPeerID) -> Void) -> Disposable {
-		let observer = DispatchObserver(queue: queue, action: handler)
+	public func addDataObserver(on queue: DispatchQueue, action: @escaping (Data, MCPeerID) -> Void) -> Disposable {
+		let observer = DispatchObserver(queue: queue, action: action)
 		return _sessionEventObserver.add { event in
 			switch event {
 			case .didReceiveData(let data, let peer):
