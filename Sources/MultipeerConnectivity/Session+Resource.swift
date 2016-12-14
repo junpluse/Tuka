@@ -70,7 +70,7 @@ extension Session {
 	}
 
 	public func submit(resourceRequestWithName resourceName: String, at localURL: URL, to peers: [MCPeerID], eventHandler: @escaping (ResourceEvent<ResourceRequest>) -> Void = { _ in }) throws -> ResourceRequestReceipt<ResourceRequest> {
-		let request = ResourceRequest(resourceName: resourceName, preferredFilename: localURL.lastPathComponent)
+		let request = ResourceRequest(resourceName: resourceName)
 		return try submit(request, withResourceAt: localURL, to: peers, eventHandler: eventHandler)
 	}
 }
