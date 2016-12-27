@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BF0EEB4D1E12496A00174E23 /* PeerInvitationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0EEB4C1E12496A00174E23 /* PeerInvitationManager.swift */; };
 		BFA214001DF018000054A13F /* Tuka.h in Headers */ = {isa = PBXBuildFile; fileRef = BFA213FE1DF018000054A13F /* Tuka.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BFA214111DF018790054A13F /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA214061DF018790054A13F /* Message.swift */; };
 		BFA214121DF018790054A13F /* MessageReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA214071DF018790054A13F /* MessageReceiver.swift */; };
@@ -32,6 +33,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BF0EEB4C1E12496A00174E23 /* PeerInvitationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeerInvitationManager.swift; sourceTree = "<group>"; };
 		BFA213FB1DF018000054A13F /* Tuka.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Tuka.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFA213FE1DF018000054A13F /* Tuka.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Tuka.h; sourceTree = "<group>"; };
 		BFA213FF1DF018000054A13F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -116,6 +118,7 @@
 				BFA214221DF018830054A13F /* Session+Resource.swift */,
 				BFA214231DF018830054A13F /* Session.swift */,
 				BFA214241DF018830054A13F /* SessionMessage.swift */,
+				BF0EEB4C1E12496A00174E23 /* PeerInvitationManager.swift */,
 			);
 			path = MultipeerConnectivity;
 			sourceTree = "<group>";
@@ -218,6 +221,7 @@
 				BFA214291DF018830054A13F /* ResourceStore.swift in Sources */,
 				BFA214121DF018790054A13F /* MessageReceiver.swift in Sources */,
 				BFA214161DF018790054A13F /* Peer.swift in Sources */,
+				BF0EEB4D1E12496A00174E23 /* PeerInvitationManager.swift in Sources */,
 				BFA2142C1DF018830054A13F /* SessionMessage.swift in Sources */,
 				BFA214321DF0188C0054A13F /* Atomic.swift in Sources */,
 				BFA2141B1DF018790054A13F /* Response.swift in Sources */,
