@@ -28,7 +28,7 @@ public protocol ResourceResponseProtocol: ResponseProtocol, SessionMessageProtoc
 }
 
 /// A basic class which implements 'ResourceResponseProtocol'.
-public final class ResourceResponse: ResourceResponseProtocol {
+public final class ResourceResponse: NSObject, ResourceResponseProtocol {
 	/// A string which identifies the request between peers.
 	public let requestID: String
 
@@ -46,23 +46,23 @@ public final class ResourceResponse: ResourceResponseProtocol {
 	}
 }
 
-extension ResourceResponse: KeyedCoding {
-	public enum CodingKey: String, CodingKeyPresentable {
-		case requestID
-		case result
-	}
-
-	public func encode(with encoder: KeyedCoder<ResourceResponse.CodingKey>) {
-		encoder.encode(requestID, for: .requestID)
-		encoder.encode(result, for: .result)
-	}
-
-	public static func decode(with decoder: KeyedCoder<ResourceResponse.CodingKey>) -> ResourceResponse? {
+extension ResourceResponse: NSSecureCoding {
+	public convenience init?(coder aDecoder: NSCoder) {
 		guard
-			let requestID = decoder.decodeString(for: .requestID),
-			let result = decoder.decodeValue(of: ResourceRequestResult.self, for: .result) else {
-				return nil
+			let requestID = aDecoder.decodeObject(of: NSString.self, forKey: "requestID") as? String,
+			let rawResult = aDecoder.decodeObject(of: NSString.self, forKey: "result") as? String,
+			let result = ResourceRequestResult(rawValue: rawResult) else {
+			return nil
 		}
-		return ResourceResponse(requestID: requestID, result: result)
+		self.init(requestID: requestID, result: result)
+	}
+
+	public func encode(with aCoder: NSCoder) {
+		aCoder.encode(requestID, forKey: "requestID")
+		aCoder.encode(result.rawValue, forKey: "result")
+	}
+
+	public static var supportsSecureCoding: Bool {
+		return true
 	}
 }

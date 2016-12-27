@@ -25,7 +25,7 @@ extension ResourceRequestProtocol {
 }
 
 /// A basic class which implements 'ResourceRequestProtocol'.
-public final class ResourceRequest: ResourceRequestProtocol {
+public final class ResourceRequest: NSObject, ResourceRequestProtocol {
 	public typealias Response = ResourceResponse
 
 	/// A string which identifies the request between peers.
@@ -37,23 +37,23 @@ public final class ResourceRequest: ResourceRequestProtocol {
 	///   - requestID: A string which identifies the request between peers.
 	public init(requestID: String = UUID().uuidString) {
 		self.requestID = requestID
+		super.init()
 	}
 }
 
-extension ResourceRequest: KeyedCoding {
-	public enum CodingKey: String, CodingKeyPresentable {
-		case requestID
-		case resourceName
-	}
-
-	public func encode(with encoder: KeyedCoder<CodingKey>) {
-		encoder.encode(requestID, for: .requestID)
-	}
-
-	public static func decode(with decoder: KeyedCoder<CodingKey>) -> ResourceRequest? {
-		guard let requestID = decoder.decodeString(for: .requestID) else {
+extension ResourceRequest: NSSecureCoding {
+	public convenience init?(coder aDecoder: NSCoder) {
+		guard let requestID = aDecoder.decodeObject(of: NSString.self, forKey: "requestID") as? String else {
 			return nil
 		}
-		return ResourceRequest(requestID: requestID)
+		self.init(requestID: requestID)
+	}
+
+	public func encode(with aCoder: NSCoder) {
+		aCoder.encode(requestID, forKey: "requestID")
+	}
+
+	public static var supportsSecureCoding: Bool {
+		return true
 	}
 }
