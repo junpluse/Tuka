@@ -12,7 +12,7 @@ import Foundation
 public protocol MessageProtocol {
 	/// Serialize the receiver to data.
 	///
-	/// - Returns: A serialized message data of the receiver
+	/// - Returns: A serialized message data of the receiver.
 	func serializedMessage() -> Data
 
 	/// Deserialize a message of the receiver type from data.
@@ -24,16 +24,27 @@ public protocol MessageProtocol {
 }
 
 extension MessageProtocol where Self: Coding {
+	/// Serialize the receiver to data using `Archiver`.
+	///
+	/// - Returns: A serialized message data of the receiver.
 	public func serializedMessage() -> Data {
 		return Archiver().archive(self)
 	}
 
+	/// Deserialize a message of the receiver type from data using `Unarchiver`.
+	///
+	/// - Parameter data: A serialized data.
+	/// - Returns: A deserialize message.
+	/// - Throws: An `Error` if the operation could not be completed.
 	public static func deserializeMessage(from data: Data) throws -> Self? {
 		return try Unarchiver().unarchive(data, of: Self.self)
 	}
 }
 
 extension MessageProtocol where Self: NSCoding {
+	/// Serialize the receiver to data using `NSKeyedUnarchiver`.
+	///
+	/// - Returns: A serialized message data of the receiver.
 	public func serializedMessage() -> Data {
 		let data = NSMutableData()
 		let archiver = NSKeyedArchiver(forWritingWith: data)
@@ -42,6 +53,11 @@ extension MessageProtocol where Self: NSCoding {
 		return data as Data
 	}
 
+	/// Deserialize a message of the receiver type from data using `NSKeyedUnarchiver`.
+	///
+	/// - Parameter data: A serialized data.
+	/// - Returns: A deserialize message.
+	/// - Throws: An `Error` if the operation could not be completed.
 	public static func deserializeMessage(from data: Data) throws -> Self? {
 		let unarchiver = NSKeyedUnarchiver(forReadingWith: data)
 		defer { unarchiver.finishDecoding() }
