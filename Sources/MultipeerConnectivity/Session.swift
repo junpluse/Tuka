@@ -16,6 +16,10 @@ public final class Session: NSObject, MessageSenderProtocol, MessageReceiverProt
 
 	public weak var mcSessionDelegate: MCSessionDelegate?
 
+	public var connectedPeers: [MCPeerID] {
+		return mcSession.connectedPeers
+	}
+
 	public enum Event {
 		case peerDidChangeState(MCPeerID, MCSessionState)
 		case didReceiveData(Data, from: MCPeerID)
