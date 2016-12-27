@@ -31,17 +31,12 @@ public final class ResourceRequest: ResourceRequestProtocol {
 	/// A string which identifies the request between peers.
 	public let requestID: String
 
-	/// A name for the resource.
-	public let resourceName: String
-
-	/// Initializes a resource request with values for requestID and resourceName
+	/// Initializes a resource request with requestID
 	///
 	/// - Parameters:
 	///   - requestID: A string which identifies the request between peers.
-	///   - resourceName: A name for the resource.
-	public init(requestID: String = UUID().uuidString, resourceName: String) {
+	public init(requestID: String = UUID().uuidString) {
 		self.requestID = requestID
-		self.resourceName = resourceName
 	}
 }
 
@@ -53,15 +48,13 @@ extension ResourceRequest: KeyedCoding {
 
 	public func encode(with encoder: KeyedCoder<CodingKey>) {
 		encoder.encode(requestID, for: .requestID)
-		encoder.encode(resourceName, for: .resourceName)
 	}
 
 	public static func decode(with decoder: KeyedCoder<CodingKey>) -> ResourceRequest? {
 		guard
-			let requestID = decoder.decodeString(for: .requestID),
-			let resourceName = decoder.decodeString(for: .resourceName) else {
+			let requestID = decoder.decodeString(for: .requestID) else {
 				return nil
 		}
-		return ResourceRequest(requestID: requestID, resourceName: resourceName)
+		return ResourceRequest(requestID: requestID)
 	}
 }

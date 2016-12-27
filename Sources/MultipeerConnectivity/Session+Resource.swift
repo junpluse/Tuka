@@ -69,8 +69,8 @@ extension Session {
 		return ResourceRequestReceipt(request: resourceRequest, peers: peers, transferDisposable: transferDisposable)
 	}
 
-	public func submit(resourceRequestWithName resourceName: String, at localURL: URL, to peers: [MCPeerID], eventHandler: @escaping (ResourceEvent<ResourceRequest>) -> Void = { _ in }) throws -> ResourceRequestReceipt<ResourceRequest> {
-		let request = ResourceRequest(resourceName: resourceName)
+	public func submit(resourceAt localURL: URL, to peers: [MCPeerID], eventHandler: @escaping (ResourceEvent<ResourceRequest>) -> Void = { _ in }) throws -> ResourceRequestReceipt<ResourceRequest> {
+		let request = ResourceRequest()
 		return try submit(request, withResourceAt: localURL, to: peers, eventHandler: eventHandler)
 	}
 }
