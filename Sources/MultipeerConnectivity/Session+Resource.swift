@@ -50,7 +50,7 @@ extension Session {
 		peers.forEach { peer in
 			let item = DispatchWorkItem { [mcSession] in
 				let semaphore = DispatchSemaphore(value: 0)
-				let progress = mcSession.sendResource(at: localURL, withName: resourceRequest.requestID, toPeer: peer) { error in
+				let progress = mcSession.sendResource(at: localURL, withName: resourceRequest.resourceName, toPeer: peer) { error in
 					if let error = error {
 						eventObserver.observe(.transferFailed(resourceRequest, peer, error))
 					} else {
@@ -86,10 +86,10 @@ extension Session {
 			let disposable = self.addSessionEventObserver(on: store.storeQueue) { event in
 				switch event {
 				case .didStartReceivingResource(let name, let from, let progress):
-					guard name == request.requestID, from == peer else { return }
+					guard name == request.resourceName, from == peer else { return }
 					eventObserver.observe(.transferStarted(request, peer, progress))
 				case .didFinishReceivingResource(let name, let from, let localURL, let error):
-					guard name == request.requestID, from == peer else { return }
+					guard name == request.resourceName, from == peer else { return }
 					if let error = error {
 						response = T.Request.Response(requestID: request.requestID, result: .failure)
 						eventObserver.observe(.transferFailed(request, peer, error))
