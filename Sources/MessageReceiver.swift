@@ -62,15 +62,11 @@ extension MessageReceiverProtocol {
 	public func addObserver<T: MessageProtocol>(for messageType: T.Type, on queue: DispatchQueue, action: @escaping (T, Peer) -> Void) -> Disposable {
 		return addDataObserver(on: queue) { data, peer in
 			do {
-				if let message = try Unarchiver().unarchive(data, of: T.self) {
+				if let message = try T.deserializeMessage(from: data) {
 					action(message, peer)
 				}
-			} catch let error as NSError {
-				if error.code == 4864 {
-					// ignore unknown classes in the data
-				} else {
-					print("[Tuka.MessageReceiverProtocol] failed to unarchive data as \(T.self) with error: \(error)")
-				}
+			} catch let error {
+				print("[Tuka.MessageReceiverProtocol] failed to unarchive data as \(T.self) with error: \(error)")
 			}
 		}
 	}

@@ -50,7 +50,7 @@ public final class Session: NSObject, MessageSenderProtocol, MessageReceiverProt
 	}
 
 	public func send<T: MessageProtocol>(_ message: T, to peers: [MCPeerID], with mode: MCSessionSendDataMode) throws {
-		let data = Archiver().archive(message)
+		let data = message.serializedMessage()
 		try send(data, of: message, to: peers, with: mode)
 	}
 

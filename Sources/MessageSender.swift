@@ -61,7 +61,7 @@ extension MessageSenderProtocol {
 	///   - peers: An array of peers that should receive the message.
 	/// - Throws: An `Error` if sending the message could not be completed.
 	public func send<T: MessageProtocol>(_ message: T, to peers: [Peer]) throws {
-		let data = Archiver().archive(message)
+		let data = message.serializedMessage()
 		try send(data, of: message, to: peers)
 	}
 }
