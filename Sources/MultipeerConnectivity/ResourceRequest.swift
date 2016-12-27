@@ -51,9 +51,8 @@ extension ResourceRequest: KeyedCoding {
 	}
 
 	public static func decode(with decoder: KeyedCoder<CodingKey>) -> ResourceRequest? {
-		guard
-			let requestID = decoder.decodeString(for: .requestID) else {
-				return nil
+		guard let requestID = decoder.decodeString(for: .requestID) else {
+			return nil
 		}
 		return ResourceRequest(requestID: requestID)
 	}
