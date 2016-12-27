@@ -33,7 +33,7 @@ public final class PeerInvitationManager: NSObject {
 	private var _advertiser: MCNearbyServiceAdvertiser?
 	private var _browser: MCNearbyServiceBrowser?
 
-	init(session: MCSession, serviceType: String, maximumNumberOfPeers: Int = kMCSessionMaximumNumberOfPeers, invitationTimeoutInterval: TimeInterval = 30) {
+	public init(session: MCSession, serviceType: String, maximumNumberOfPeers: Int = kMCSessionMaximumNumberOfPeers, invitationTimeoutInterval: TimeInterval = 30) {
 		self.session = session
 		self.serviceType = serviceType
 		self.maximumNumberOfPeers = maximumNumberOfPeers
