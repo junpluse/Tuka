@@ -17,6 +17,13 @@ public protocol ResourceRequestProtocol: RequestProtocol, SessionMessageProtocol
 	var resourceName: String { get }
 }
 
+extension ResourceRequestProtocol {
+	/// A name for the resource. Uses requestID as default.
+	public var resourceName: String {
+		return requestID
+	}
+}
+
 /// A basic class which implements 'ResourceRequestProtocol'.
 public final class ResourceRequest: ResourceRequestProtocol {
 	public typealias Response = ResourceResponse
