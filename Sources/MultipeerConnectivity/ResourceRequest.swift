@@ -11,8 +11,6 @@ import Foundation
 /// Represents a request message which be sent before transferring a resource
 /// to another peer in a session.
 public protocol ResourceRequestProtocol: RequestProtocol, SessionMessageProtocol {
-	associatedtype Response: ResourceResponseProtocol
-
 	/// A name for the resource.
 	var resourceName: String { get }
 }

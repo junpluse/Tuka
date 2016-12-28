@@ -14,21 +14,8 @@ public enum ResourceRequestResult: String {
 	case failure
 }
 
-/// Represents a response to a resource request.
-public protocol ResourceResponseProtocol: ResponseProtocol, SessionMessageProtocol {
-	/// A result of the request.
-	var result: ResourceRequestResult { get }
-
-	/// Initializes a response to a request and a result.
-	///
-	/// - Parameters:
-	///   - requestID: A string which identifies the original request.
-	///   - result: A result of the request.
-	init(requestID: String, result: ResourceRequestResult)
-}
-
-/// A basic class which implements 'ResourceResponseProtocol'.
-public final class ResourceResponse: NSObject, ResourceResponseProtocol {
+/// A counterpart of 'ResourceRequest'.
+public final class ResourceResponse: NSObject, ResponseProtocol, SessionMessageProtocol {
 	/// A string which identifies the request between peers.
 	public let requestID: String
 
