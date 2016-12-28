@@ -13,30 +13,30 @@ public protocol RequestResponderProtocol {
 	associatedtype Request: RequestProtocol
 	associatedtype Peer: PeerProtocol
 
-	/// A dispatch queue to which `response()` method should be invoked on.
+	/// A dispatch queue to which `respond()` method should be invoked on.
 	var responseQueue: DispatchQueue { get }
 
-	/// Returns a response to a request from a peer.
+	/// Responds to a request from a peer asynchronously.
 	///
 	/// - Parameters:
 	///   - request: A request which should be responded to.
 	///   - peer: A peer which sent the request.
-	/// - Returns: A response to the request.
-	func response(to request: Request, from peer: Peer) -> Request.Response
+	///   - send: A closure to send a response to the request.
+	func respond(to request: Request, from peer: Peer, send: @escaping (Request.Response) throws -> Void)
 }
 
 /// A struct that implements `RequestResponderProtocol` using a queue and a closure,
 /// or another one that conforms `RequestResponderProtocol` to be wrapped.
 public struct RequestResponder<Request: RequestProtocol, Peer: PeerProtocol>: RequestResponderProtocol {
 	private let _queue: DispatchQueue
-	private let _action: (Request, Peer) -> Request.Response
+	private let _action: (Request, Peer, @escaping (Request.Response) throws -> Void) -> Void
 
 	/// Initializes a request responder which respond to requests using the given closure.
 	///
 	/// - Parameters:
-	///   - queue: A dispatch queue to which `response()` method should be invoked on.
+	///   - queue: A dispatch queue to which `respond()` method should be invoked on.
 	///   - action: A closure to which be executed to generate a response to a request.
-	public init(queue: DispatchQueue, action: @escaping (Request, Peer) -> Request.Response) {
+	public init(queue: DispatchQueue, action: @escaping (Request, Peer, @escaping (Request.Response) throws -> Void) -> Void) {
 		_queue = queue
 		_action = action
 	}
@@ -46,23 +46,23 @@ public struct RequestResponder<Request: RequestProtocol, Peer: PeerProtocol>: Re
 	/// - Parameter sender: A sender to be wrapped.
 	public init<T: RequestResponderProtocol>(_ responder: T) where T.Request == Request, T.Peer == Peer {
 		_queue = responder.responseQueue
-		_action = { request, peer in
-			return responder.response(to: request, from: peer)
+		_action = { request, peer, send in
+			return responder.respond(to: request, from: peer, send: send)
 		}
 	}
 
-	/// A dispatch queue to which `response()` method should be invoked on.
+	/// A dispatch queue to which `respond()` method should be invoked on.
 	public var responseQueue: DispatchQueue {
 		return _queue
 	}
 
-	/// Returns a response to a request from a peer.
+	/// Responds to a request from a peer asynchronously.
 	///
 	/// - Parameters:
 	///   - request: A request which should be responded to.
 	///   - peer: A peer which sent the request.
-	/// - Returns: A response to the request.
-	public func response(to request: Request, from peer: Peer) -> Request.Response {
-		return _action(request, peer)
+	///   - send: A closure to send a response to the request.
+	public func respond(to request: Request, from peer: Peer, send: @escaping (Request.Response) throws -> Void) {
+		return _action(request, peer, send)
 	}
 }

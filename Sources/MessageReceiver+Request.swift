@@ -69,11 +69,8 @@ extension MessageReceiverProtocol where Self: MessageSenderProtocol {
 	/// - Returns: A `Disposable` which can be used to remove the responder from the receiver.
 	public func addResponder<T: RequestResponderProtocol>(_ responder: T) -> Disposable where T.Peer == Peer {
 		return addObserver(for: T.Request.self, on: responder.responseQueue) { request, peer in
-			let response = responder.response(to: request, from: peer)
-			do {
+			responder.respond(to: request, from: peer) { response in
 				try self.send(response, to: [peer])
-			} catch let error {
-				print("[Tuka.MessageReceiverProtocol] failed to send response with error: \(error)")
 			}
 		}
 	}
@@ -85,10 +82,8 @@ extension MessageReceiverProtocol where Self: MessageSenderProtocol {
 	///   - queue: A dispatch queue to which closure should be added.
 	///   - action: A closure to be executed when the request is received.
 	/// - Returns: A `Disposable` which can be used to stop the invocation of the closure.
-	public func addResponder<T: RequestProtocol>(for requestType: T.Type, on queue: DispatchQueue, action: @escaping (T, Peer) -> T.Response) -> Disposable {
-		let responder = RequestResponder(queue: queue) { request, peer in
-			return action(request, peer)
-		}
+	public func addResponder<T: RequestProtocol>(for requestType: T.Type, on queue: DispatchQueue, action: @escaping (T, Peer, @escaping (T.Response) throws -> Void) -> Void) -> Disposable {
+		let responder = RequestResponder(queue: queue, action: action)
 		return addResponder(responder)
 	}
 }
