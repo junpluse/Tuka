@@ -18,7 +18,7 @@ public protocol MessageReceiverProtocol {
 	///   - queue: A dispatch queue to which closure should be added.
 	///   - action: A closure to be executed when the data is received.
 	/// - Returns: A `Disposable` which can be used to stop the invocation of the closure.
-	func addDataObserver(on queue: DispatchQueue, action: @escaping (Data, Peer) -> Void) -> Disposable
+	func addDataObserver(on queue: DispatchQueue, action: @escaping (_ data: Data, _ peer: Peer) -> Void) -> Disposable
 }
 
 /// A struct that implements `MessageReceiverProtocol` using a closure or
