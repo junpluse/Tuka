@@ -79,89 +79,41 @@ extension Session {
 	}
 }
 
-public final class ResourceStoreRegistration<Store: ResourceStoreProtocol> {
-	public typealias Request = Store.Request
-	public typealias Event = ResourceEvent<Store.Request>
-
-	public let store: Store
-
-	fileprivate let disposable = CompositeDisposable()
-	fileprivate let eventObserver = CompositeObserver<Event>()
-
-	fileprivate init(store: Store) {
-		self.store = store
-	}
-}
-
-extension ResourceStoreRegistration: ResourceEventProducerProtocol {
-	public func addEventObserver(on queue: DispatchQueue, action: @escaping (ResourceEvent<Store.Request>) -> Void) -> Disposable {
-		let observer = DispatchObserver(queue: queue, action: action)
-		let disposable = eventObserver.add(observer)
-		self.disposable += disposable
-		return disposable
-	}
-}
-
-extension ResourceStoreRegistration: Disposable {
-	public var isDisposed: Bool {
-		return disposable.isDisposed
-	}
-
-	public func dispose() {
-		disposable.dispose()
-	}
-}
-
 extension Session {
-	public func addResourceStore<T: ResourceStoreProtocol>(_ store: T) -> ResourceStoreRegistration<T> where T.Peer == MCPeerID {
-		let registration = ResourceStoreRegistration(store: store)
+	public func addResponder<T: ResourceRequestProtocol>(for resourceRequestType: T.Type, on queue: DispatchQueue, action: @escaping (_ event: ResourceEvent<T>, _ send: @escaping (_ response: T.Response) throws -> Void) -> Void) -> Disposable {
+		let disposable = CompositeDisposable()
 
 		let responderQueue = DispatchQueue(label: "com.junpluse.Tuka.Session.ResourceRequestResponderQueue")
-		let responder = RequestResponder<T.Request, MCPeerID>(queue: responderQueue) { request, peer in
-			var response: T.Request.Response?
-			let semaphore = DispatchSemaphore(value: 0)
-			let disposable = self.addSessionEventObserver(on: store.storeQueue) { event in
+		let responder = RequestResponder<T, MCPeerID>(queue: responderQueue) { request, peer, send in
+			let sessionEventDisposable = CompositeDisposable()
+
+			let sendAndDispose: (T.Response) throws -> Void = { response in
+				try send(response)
+				sessionEventDisposable.dispose()
+			}
+
+			sessionEventDisposable += self.addSessionEventObserver(on: queue) { event in
 				switch event {
 				case .didStartReceivingResource(let name, let from, let progress):
 					guard name == request.resourceName, from == peer else { return }
-					registration.eventObserver.observe(.transferStarted(request, peer, progress))
+					action(.transferStarted(request, peer, progress), sendAndDispose)
 				case .didFinishReceivingResource(let name, let from, let localURL, let error):
 					guard name == request.resourceName, from == peer else { return }
 					if let error = error {
-						response = T.Request.Response(requestID: request.requestID, result: .failure)
-						registration.eventObserver.observe(.transferFailed(request, peer, error))
+						action(.transferFailed(request, peer, error), sendAndDispose)
 					} else {
-						do {
-							try store.storeResource(at: localURL, with: request, from: peer)
-							response = T.Request.Response(requestID: request.requestID, result: .success)
-						} catch let error {
-							print("[Tuka.Session] failed to store resource named \"\(name)\" with error: \(error)")
-							response = T.Request.Response(requestID: request.requestID, result: .failure)
-						}
-						registration.eventObserver.observe(.transferFinished(request, peer))
+						action(.transferFinished(request, peer, localURL), sendAndDispose)
 					}
-					semaphore.signal()
+					sessionEventDisposable.dispose()
 				default:
 					break
 				}
 			}
-			registration.disposable += { semaphore.signal() }
-			semaphore.wait()
-			disposable.dispose()
-			if let response = response {
-				return response
-			} else {
-				return T.Request.Response(requestID: request.requestID, result: .failure)
-			}
+			disposable += sessionEventDisposable
 		}
 
-		registration.disposable += addResponder(responder)
+		disposable += addResponder(responder)
 
-		return registration
-	}
-
-	public func addResourceStore<T: ResourceRequestProtocol>(for requestType: T.Type, on queue: DispatchQueue, action: @escaping (_ fileURL: URL, _ request: T, _ peer: Peer) throws -> Void) -> ResourceStoreRegistration<ResourceStore<T, Peer>> {
-		let store = ResourceStore(queue: queue, action: action)
-		return addResourceStore(store)
+		return disposable
 	}
 }
