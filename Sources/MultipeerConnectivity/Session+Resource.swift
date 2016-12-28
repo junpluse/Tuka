@@ -75,9 +75,24 @@ extension Session {
 		return receipt
 	}
 
+	public func submit<T: ResourceRequestProtocol>(resourceAt localURL: URL, with request: T, to peers: [MCPeerID], timeoutAfter interval: TimeInterval, on queue: DispatchQueue, transferEventObserver: @escaping (_ event: ResourceTransferEvent<T>) -> Void, responseEventObserver: @escaping (_ event: ResponseEvent<T, Peer>) -> Void) throws -> Disposable {
+		let operation = try submit(resourceAt: localURL, with: request, to: peers)
+
+		let disposable = CompositeDisposable()
+		disposable += operation
+		disposable += operation.addEventObserver(on: queue, action: transferEventObserver)
+		disposable += addObserver(for: operation, timeoutAfter: interval, on: queue, action: responseEventObserver)
+		return disposable
+	}
+
 	public func submit(resourceAt localURL: URL, to peers: [MCPeerID]) throws -> ResourceTransferOperation<ResourceRequest> {
 		let request = ResourceRequest()
 		return try submit(resourceAt: localURL, with: request, to: peers)
+	}
+
+	public func submit(resourceAt localURL: URL, to peers: [MCPeerID], timeoutAfter interval: TimeInterval, on queue: DispatchQueue, transferEventObserver: @escaping (_ event: ResourceTransferEvent<ResourceRequest>) -> Void, responseEventObserver: @escaping (_ event: ResponseEvent<ResourceRequest, Peer>) -> Void) throws -> Disposable {
+		let request = ResourceRequest()
+		return try submit(resourceAt: localURL, with: request, to: peers, timeoutAfter: interval, on: queue, transferEventObserver: transferEventObserver, responseEventObserver: responseEventObserver)
 	}
 }
 
