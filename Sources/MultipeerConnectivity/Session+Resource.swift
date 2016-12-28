@@ -58,7 +58,7 @@ extension Session {
 					if let error = error {
 						receipt.eventObserver.observe(.transferFailed(resourceRequest, peer, error))
 					} else {
-						receipt.eventObserver.observe(.transferFinished(resourceRequest, peer))
+						receipt.eventObserver.observe(.transferFinished(resourceRequest, peer, localURL))
 					}
 					semaphore.signal()
 				}

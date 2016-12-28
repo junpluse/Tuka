@@ -10,6 +10,6 @@ import Foundation
 
 public enum ResourceEvent<Request: ResourceRequestProtocol> {
 	case transferStarted(Request, Session.Peer, Progress?)
-	case transferFinished(Request, Session.Peer)
+	case transferFinished(Request, Session.Peer, URL)
 	case transferFailed(Request, Session.Peer, Error)
 }
