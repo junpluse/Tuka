@@ -63,7 +63,7 @@ extension MessageProtocol where Self: NSCoding {
 		defer { unarchiver.finishDecoding() }
 		do {
 			return try unarchiver.decodeTopLevelObject() as? Self
-		} catch let error as NSError where error.code == 4864 {
+		} catch let error as NSError where error.domain == NSCocoaErrorDomain && error.code == 4864 {
 			// ignore unknown classes in the data
 		}
 		return nil
