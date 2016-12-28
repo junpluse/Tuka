@@ -61,11 +61,6 @@ extension MessageProtocol where Self: NSCoding {
 	public static func deserializeMessage(from data: Data) throws -> Self? {
 		let unarchiver = NSKeyedUnarchiver(forReadingWith: data)
 		defer { unarchiver.finishDecoding() }
-		do {
-			return try unarchiver.decodeTopLevelObject() as? Self
-		} catch let error as NSError where error.domain == NSCocoaErrorDomain && error.code == 4864 {
-			// ignore unknown classes in the data
-		}
-		return nil
+		return try unarchiver.decodeTopLevelObject() as? Self
 	}
 }

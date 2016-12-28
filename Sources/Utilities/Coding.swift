@@ -252,10 +252,13 @@ public struct Unarchiver {
 		let containerType = CodingContainer<T>.self
 		unarchiver.setClass(containerType, forClassName: containerType.codedClassName)
 
-		guard let object = try unarchiver.decodeTopLevelObject(), let container = object as? CodingContainer<T> else {
-			return nil
+		do {
+			if let object = try unarchiver.decodeTopLevelObject(), let container = object as? CodingContainer<T> {
+				return container.value
+			}
+		} catch let error as NSError where error.domain == NSCocoaErrorDomain && error.code == 4864 {
+			// ignore unknown classes in the data
 		}
-
-		return container.value
+		return nil
 	}
 }
