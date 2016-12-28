@@ -30,7 +30,7 @@ public struct MessageSender<Peer: PeerProtocol>: MessageSenderProtocol {
 	/// Initializes a sender which sends data of messages using the given closure.
 	///
 	/// - Parameter action: A closure to send data of messages.
-	public init(_ action: @escaping (Data, MessageProtocol, [Peer]) throws -> Void) {
+	public init(_ action: @escaping (_ data: Data, _ message: MessageProtocol, _ peers: [Peer]) throws -> Void) {
 		_action = action
 	}
 

@@ -30,7 +30,7 @@ public final class ResourceTransferOperation<Request: ResourceRequestProtocol>: 
 		self.peers = peers
 	}
 
-	public func addEventObserver(on queue: DispatchQueue, action: @escaping (ResourceTransferEvent<Request>) -> Void) -> Disposable {
+	public func addEventObserver(on queue: DispatchQueue, action: @escaping (_ transferEvent: ResourceTransferEvent<Request>) -> Void) -> Disposable {
 		let observer = DispatchObserver(queue: queue, action: action)
 		return eventObserver.add(observer)
 	}

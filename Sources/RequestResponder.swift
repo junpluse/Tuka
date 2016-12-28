@@ -22,7 +22,7 @@ public protocol RequestResponderProtocol {
 	///   - request: A request which should be responded to.
 	///   - peer: A peer which sent the request.
 	///   - send: A closure to send a response to the request.
-	func respond(to request: Request, from peer: Peer, send: @escaping (Request.Response) throws -> Void)
+	func respond(to request: Request, from peer: Peer, send: @escaping (_ response: Request.Response) throws -> Void)
 }
 
 /// A struct that implements `RequestResponderProtocol` using a queue and a closure,
@@ -36,7 +36,7 @@ public struct RequestResponder<Request: RequestProtocol, Peer: PeerProtocol>: Re
 	/// - Parameters:
 	///   - queue: A dispatch queue to which `respond()` method should be invoked on.
 	///   - action: A closure to which be executed to generate a response to a request.
-	public init(queue: DispatchQueue, action: @escaping (Request, Peer, @escaping (Request.Response) throws -> Void) -> Void) {
+	public init(queue: DispatchQueue, action: @escaping (_ request: Request, _ peer: Peer, _ send: @escaping (_ response: Request.Response) throws -> Void) -> Void) {
 		_queue = queue
 		_action = action
 	}
@@ -62,7 +62,7 @@ public struct RequestResponder<Request: RequestProtocol, Peer: PeerProtocol>: Re
 	///   - request: A request which should be responded to.
 	///   - peer: A peer which sent the request.
 	///   - send: A closure to send a response to the request.
-	public func respond(to request: Request, from peer: Peer, send: @escaping (Request.Response) throws -> Void) {
+	public func respond(to request: Request, from peer: Peer, send: @escaping (_ response: Request.Response) throws -> Void) {
 		return _action(request, peer, send)
 	}
 }

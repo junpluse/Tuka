@@ -29,7 +29,7 @@ extension MessageReceiverProtocol {
 	///   - queue: A dispatch queue which the closure should be added to.
 	///   - action: A closure to be executed when an event produced by the receiver.
 	/// - Returns: A `Disposable` which can be used to stop the invocation of the closure.
-	public func addObserver<T: RequestReceiptProtocol>(for receipt: T, timeoutAfter interval: TimeInterval, on queue: DispatchQueue, action: @escaping (ResponseEvent<T.Request, Peer>) -> Void) -> Disposable where T.Peer == Peer {
+	public func addObserver<T: RequestReceiptProtocol>(for receipt: T, timeoutAfter interval: TimeInterval, on queue: DispatchQueue, action: @escaping (_ event: ResponseEvent<T.Request, Peer>) -> Void) -> Disposable where T.Peer == Peer {
 		let disposable = CompositeDisposable()
 
 		if interval != .infinity {
@@ -82,7 +82,7 @@ extension MessageReceiverProtocol where Self: MessageSenderProtocol {
 	///   - queue: A dispatch queue to which closure should be added.
 	///   - action: A closure to be executed when the request is received.
 	/// - Returns: A `Disposable` which can be used to stop the invocation of the closure.
-	public func addResponder<T: RequestProtocol>(for requestType: T.Type, on queue: DispatchQueue, action: @escaping (T, Peer, @escaping (T.Response) throws -> Void) -> Void) -> Disposable {
+	public func addResponder<T: RequestProtocol>(for requestType: T.Type, on queue: DispatchQueue, action: @escaping (_ request: T, _ peer: Peer, _ send: @escaping (_ response: T.Response) throws -> Void) -> Void) -> Disposable {
 		let responder = RequestResponder(queue: queue, action: action)
 		return addResponder(responder)
 	}
