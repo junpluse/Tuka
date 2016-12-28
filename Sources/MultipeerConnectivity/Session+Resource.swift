@@ -82,7 +82,7 @@ extension Session {
 }
 
 extension Session {
-	public func addResponder<T: ResourceRequestProtocol>(for resourceRequestType: T.Type, on queue: DispatchQueue, action: @escaping (_ event: ResourceTransferEvent<T>, _ send: @escaping (_ response: T.Response) throws -> Void) -> Void) -> Disposable {
+	public func addResponder<T: ResourceRequestProtocol>(for resourceRequestType: T.Type, on queue: DispatchQueue, action: @escaping (_ request: T, _ transferEvent: ResourceTransferEvent<T>, _ send: @escaping (_ response: T.Response) throws -> Void) -> Void) -> Disposable {
 		let disposable = CompositeDisposable()
 
 		let responseQueue = DispatchQueue(label: "com.junpluse.Tuka.Session.ResourceRequestResponderQueue")
@@ -98,13 +98,13 @@ extension Session {
 				switch event {
 				case .didStartReceivingResource(let name, let from, let progress):
 					guard name == request.resourceName, from == peer else { return }
-					action(.started(request, peer, progress), sendAndDispose)
+					action(request, .started(request, peer, progress), sendAndDispose)
 				case .didFinishReceivingResource(let name, let from, let localURL, let error):
 					guard name == request.resourceName, from == peer else { return }
 					if let error = error {
-						action(.failed(request, peer, error), sendAndDispose)
+						action(request, .failed(request, peer, error), sendAndDispose)
 					} else {
-						action(.finished(request, peer, localURL), sendAndDispose)
+						action(request, .finished(request, peer, localURL), sendAndDispose)
 					}
 					sessionEventDisposable.dispose()
 				default:
@@ -117,5 +117,14 @@ extension Session {
 		disposable += addResponder(responder)
 
 		return disposable
+	}
+
+	public func addResponderForResourceRequest(on queue: DispatchQueue, action: @escaping (_ request: ResourceRequest, _ transferEvent: ResourceTransferEvent<ResourceRequest>, _ send: @escaping (_ result: ResourceRequestResult) throws -> Void) -> Void) -> Disposable {
+		return addResponder(for: ResourceRequest.self, on: queue) { request, event, send in
+			action(request, event) { result in
+				let response = ResourceResponse(requestID: request.requestID, result: result)
+				try send(response)
+			}
+		}
 	}
 }
