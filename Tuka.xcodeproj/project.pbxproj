@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		BF0EEB4D1E12496A00174E23 /* PeerInvitationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0EEB4C1E12496A00174E23 /* PeerInvitationManager.swift */; };
-		BF0EEB551E127FFD00174E23 /* ResourceEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0EEB541E127FFD00174E23 /* ResourceEvent.swift */; };
-		BF0EEB571E12802100174E23 /* ResourceEventProducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0EEB561E12802100174E23 /* ResourceEventProducer.swift */; };
 		BFA214001DF018000054A13F /* Tuka.h in Headers */ = {isa = PBXBuildFile; fileRef = BFA213FE1DF018000054A13F /* Tuka.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BFA214111DF018790054A13F /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA214061DF018790054A13F /* Message.swift */; };
 		BFA214121DF018790054A13F /* MessageReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA214071DF018790054A13F /* MessageReceiver.swift */; };
@@ -35,8 +33,6 @@
 
 /* Begin PBXFileReference section */
 		BF0EEB4C1E12496A00174E23 /* PeerInvitationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeerInvitationManager.swift; sourceTree = "<group>"; };
-		BF0EEB541E127FFD00174E23 /* ResourceEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceEvent.swift; sourceTree = "<group>"; };
-		BF0EEB561E12802100174E23 /* ResourceEventProducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceEventProducer.swift; sourceTree = "<group>"; };
 		BFA213FB1DF018000054A13F /* Tuka.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Tuka.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFA213FE1DF018000054A13F /* Tuka.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Tuka.h; sourceTree = "<group>"; };
 		BFA213FF1DF018000054A13F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -114,8 +110,6 @@
 			isa = PBXGroup;
 			children = (
 				BFA2141D1DF018830054A13F /* MCPeerID+Tuka.swift */,
-				BF0EEB541E127FFD00174E23 /* ResourceEvent.swift */,
-				BF0EEB561E12802100174E23 /* ResourceEventProducer.swift */,
 				BFA2141F1DF018830054A13F /* ResourceRequest.swift */,
 				BFA214201DF018830054A13F /* ResourceResponse.swift */,
 				BFA214221DF018830054A13F /* Session+Resource.swift */,
@@ -228,8 +222,6 @@
 				BFA214321DF0188C0054A13F /* Atomic.swift in Sources */,
 				BFA2141B1DF018790054A13F /* Response.swift in Sources */,
 				BFA214271DF018830054A13F /* ResourceRequest.swift in Sources */,
-				BF0EEB571E12802100174E23 /* ResourceEventProducer.swift in Sources */,
-				BF0EEB551E127FFD00174E23 /* ResourceEvent.swift in Sources */,
 				BFA2142A1DF018830054A13F /* Session+Resource.swift in Sources */,
 				BFA214191DF018790054A13F /* RequestReceipt.swift in Sources */,
 				BFA214251DF018830054A13F /* MCPeerID+Tuka.swift in Sources */,
