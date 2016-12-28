@@ -112,8 +112,8 @@
 				BFA2141D1DF018830054A13F /* MCPeerID+Tuka.swift */,
 				BFA2141F1DF018830054A13F /* ResourceRequest.swift */,
 				BFA214201DF018830054A13F /* ResourceResponse.swift */,
-				BFA214221DF018830054A13F /* Session+Resource.swift */,
 				BFA214231DF018830054A13F /* Session.swift */,
+				BFA214221DF018830054A13F /* Session+Resource.swift */,
 				BFA214241DF018830054A13F /* SessionMessage.swift */,
 				BF0EEB4C1E12496A00174E23 /* PeerInvitationManager.swift */,
 			);
