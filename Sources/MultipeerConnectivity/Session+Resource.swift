@@ -16,7 +16,7 @@ public final class ResourceRequestReceipt<Request: ResourceRequestProtocol>: Req
 	public let request: Request
 	public let peers: [Peer]
 
-	fileprivate let transferDisposable = CompositeDisposable()
+	fileprivate let disposable = CompositeDisposable()
 	fileprivate let eventObserver = CompositeObserver<Event>()
 
 	fileprivate init(request: Request, peers: [Peer]) {
@@ -28,17 +28,19 @@ public final class ResourceRequestReceipt<Request: ResourceRequestProtocol>: Req
 extension ResourceRequestReceipt: ResourceEventProducerProtocol {
 	public func addEventObserver(on queue: DispatchQueue, action: @escaping (ResourceEvent<Request>) -> Void) -> Disposable {
 		let observer = DispatchObserver(queue: queue, action: action)
-		return eventObserver.add(observer)
+		let disposable = eventObserver.add(observer)
+		self.disposable += disposable
+		return disposable
 	}
 }
 
 extension ResourceRequestReceipt: Disposable {
 	public var isDisposed: Bool {
-		return transferDisposable.isDisposed
+		return disposable.isDisposed
 	}
 
 	public func dispose() {
-		transferDisposable.dispose()
+		disposable.dispose()
 	}
 }
 
@@ -60,11 +62,11 @@ extension Session {
 					}
 					semaphore.signal()
 				}
-				receipt.transferDisposable += { progress?.cancel() }
+				receipt.disposable += { progress?.cancel() }
 				receipt.eventObserver.observe(.transferStarted(resourceRequest, peer, progress))
 				semaphore.wait()
 			}
-			receipt.transferDisposable += { item.cancel() }
+			receipt.disposable += { item.cancel() }
 			transferQueue.async(execute: item)
 		}
 
@@ -94,7 +96,9 @@ public final class ResourceStoreRegistration<Store: ResourceStoreProtocol> {
 extension ResourceStoreRegistration: ResourceEventProducerProtocol {
 	public func addEventObserver(on queue: DispatchQueue, action: @escaping (ResourceEvent<Store.Request>) -> Void) -> Disposable {
 		let observer = DispatchObserver(queue: queue, action: action)
-		return eventObserver.add(observer)
+		let disposable = eventObserver.add(observer)
+		self.disposable += disposable
+		return disposable
 	}
 }
 
