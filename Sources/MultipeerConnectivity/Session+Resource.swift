@@ -47,25 +47,25 @@ extension ResourceTransferOperation: Disposable {
 }
 
 extension Session {
-	public func submit<T: ResourceRequestProtocol>(_ resourceRequest: T, withResourceAt localURL: URL, to peers: [MCPeerID]) throws -> ResourceTransferOperation<T> {
-		try send(resourceRequest, to: peers)
+	public func submit<T: ResourceRequestProtocol>(resourceAt localURL: URL, with request: T, to peers: [MCPeerID]) throws -> ResourceTransferOperation<T> {
+		try send(request, to: peers)
 
-		let receipt = ResourceTransferOperation(request: resourceRequest, peers: peers)
+		let receipt = ResourceTransferOperation(request: request, peers: peers)
 		let transferQueue = DispatchQueue(label: "com.junpluse.Tuka.Session.ResourceTransferQueue")
 
 		peers.forEach { peer in
 			let item = DispatchWorkItem { [mcSession] in
 				let semaphore = DispatchSemaphore(value: 0)
-				let progress = mcSession.sendResource(at: localURL, withName: resourceRequest.resourceName, toPeer: peer) { error in
+				let progress = mcSession.sendResource(at: localURL, withName: request.resourceName, toPeer: peer) { error in
 					if let error = error {
-						receipt.eventObserver.observe(.failed(resourceRequest, peer, error))
+						receipt.eventObserver.observe(.failed(request, peer, error))
 					} else {
-						receipt.eventObserver.observe(.finished(resourceRequest, peer, localURL))
+						receipt.eventObserver.observe(.finished(request, peer, localURL))
 					}
 					semaphore.signal()
 				}
 				receipt.disposable += { progress?.cancel() }
-				receipt.eventObserver.observe(.started(resourceRequest, peer, progress))
+				receipt.eventObserver.observe(.started(request, peer, progress))
 				semaphore.wait()
 			}
 			receipt.disposable += { item.cancel() }
@@ -77,7 +77,7 @@ extension Session {
 
 	public func submit(resourceAt localURL: URL, to peers: [MCPeerID]) throws -> ResourceTransferOperation<ResourceRequest> {
 		let request = ResourceRequest()
-		return try submit(request, withResourceAt: localURL, to: peers)
+		return try submit(resourceAt: localURL, with: request, to: peers)
 	}
 }
 
