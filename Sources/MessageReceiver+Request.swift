@@ -16,7 +16,7 @@ import Foundation
 public enum ResponseEvent<Request: RequestProtocol, Peer: PeerProtocol> {
 	case received(Request.Response, from: Peer)
 	case completed([Peer: Request.Response])
-	case timedOut
+	case timedOut([Peer: Request.Response])
 }
 
 extension MessageReceiverProtocol {
@@ -31,17 +31,16 @@ extension MessageReceiverProtocol {
 	/// - Returns: A `Disposable` which can be used to stop the invocation of the closure.
 	public func addObserver<T: RequestReceiptProtocol>(for receipt: T, timeoutAfter interval: TimeInterval, on queue: DispatchQueue, action: @escaping (_ event: ResponseEvent<T.Request, Peer>) -> Void) -> Disposable where T.Peer == Peer {
 		let disposable = CompositeDisposable()
+		let responses = DispatchAtomic<[Peer: T.Request.Response]>([:])
 
 		if interval != .infinity {
 			let timeout = DispatchWorkItem {
-				action(.timedOut)
+				action(.timedOut(responses.value))
 				disposable.dispose()
 			}
 			queue.asyncAfter(deadline: .now() + interval, execute: timeout)
 			disposable += { timeout.cancel() }
 		}
-
-		let responses = DispatchAtomic<[Peer: T.Request.Response]>([:])
 
 		disposable += addObserver(for: T.Request.Response.self, on: queue) { response, peer in
 			guard
