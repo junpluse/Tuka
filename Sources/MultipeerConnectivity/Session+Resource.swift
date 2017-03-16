@@ -78,7 +78,7 @@ extension Session {
                     return .completed(name: name, peer: peer, localURL: url)
                 }
             }
-            ])
+        ])
     }
     
     public var incomingResources: Signal<(name: String, peer: Peer, localURL: URL), NoError> {
