@@ -8,27 +8,27 @@
 
 /// Represents a message sender.
 public protocol MessageSender {
-	associatedtype Peer: Tuka.Peer
+    associatedtype Peer: Tuka.Peer
 
-	/// Sends a message to peers.
-	///
-	/// - Parameters:
-	///   - message: A message to be sent.
-	///   - peers: An array of peers that should receive the message.
-	/// - Throws: An `Error` if sending the message could not be completed.
-	func send<Message: Tuka.Message>(_ message: Message, to peers: [Peer]) throws
+    /// Sends a message to peers.
+    ///
+    /// - Parameters:
+    ///   - message: A message to be sent.
+    ///   - peers: An array of peers that should receive the message.
+    /// - Throws: An `Error` if sending the message could not be completed.
+    func send<Message: Tuka.Message>(_ message: Message, to peers: [Peer]) throws
 }
 
 extension MessageSender where Self: DataSender {
-	/// Sends a message to peers.
-	///
-	/// - Parameters:
-	///   - message: A message to be sent.
-	///   - peers: An array of peers that should receive the message.
-	/// - Throws: An `Error` if sending the message could not be completed.
-	public func send<Message: Tuka.Message>(_ message: Message, to peers: [Peer]) throws {
-		let context = MessageSerializationContext()
-		let data = try message.serializedData(with: context)
-		try send(data, to: peers)
-	}
+    /// Sends a message to peers.
+    ///
+    /// - Parameters:
+    ///   - message: A message to be sent.
+    ///   - peers: An array of peers that should receive the message.
+    /// - Throws: An `Error` if sending the message could not be completed.
+    public func send<Message: Tuka.Message>(_ message: Message, to peers: [Peer]) throws {
+        let context = MessageSerializationContext()
+        let data = try message.serializedData(with: context)
+        try send(data, to: peers)
+    }
 }

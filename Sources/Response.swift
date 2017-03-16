@@ -8,8 +8,8 @@
 
 /// Represents a response message to a request.
 public protocol Response: Message {
-	associatedtype RequestID: Hashable
+    associatedtype RequestID: Hashable
 
-	/// A value which identifies the original request.
-	var requestID: RequestID { get }
+    /// A value which identifies the original request.
+    var requestID: RequestID { get }
 }

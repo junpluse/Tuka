@@ -8,13 +8,13 @@
 
 /// Represents a data sender.
 public protocol DataSender {
-	associatedtype Peer: Tuka.Peer
+    associatedtype Peer: Tuka.Peer
 
-	/// Sends a serialized data to peers.
-	///
-	/// - Parameters:
-	///   - data: An serialized data to send.
-	///   - peers: An array of peers that should receive the data.
-	/// - Throws: An `Error` if sending the data could not be completed.
-	func send(_ data: Data, to peers: [Peer]) throws
+    /// Sends a serialized data to peers.
+    ///
+    /// - Parameters:
+    ///   - data: An serialized data to send.
+    ///   - peers: An array of peers that should receive the data.
+    /// - Throws: An `Error` if sending the data could not be completed.
+    func send(_ data: Data, to peers: [Peer]) throws
 }

@@ -100,7 +100,10 @@
 				BFA213FC1DF018000054A13F /* Products */,
 				BF2F4C8A1E797BC2006F83F9 /* Frameworks */,
 			);
+			indentWidth = 4;
 			sourceTree = "<group>";
+			tabWidth = 4;
+			usesTabs = 0;
 		};
 		BFA213FC1DF018000054A13F /* Products */ = {
 			isa = PBXGroup;

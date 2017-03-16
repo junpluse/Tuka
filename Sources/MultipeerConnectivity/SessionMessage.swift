@@ -9,11 +9,11 @@
 import MultipeerConnectivity
 
 public protocol SessionMessage: Message {
-	var preferredSendDataMode: MCSessionSendDataMode { get }
+    var preferredSendDataMode: MCSessionSendDataMode { get }
 }
 
 extension SessionMessage {
-	public var preferredSendDataMode: MCSessionSendDataMode {
-		return .reliable
-	}
+    public var preferredSendDataMode: MCSessionSendDataMode {
+        return .reliable
+    }
 }

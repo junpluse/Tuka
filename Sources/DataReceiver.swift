@@ -11,8 +11,8 @@ import Result
 
 /// Represents a data receiver.
 public protocol DataReceiver {
-	associatedtype Peer: Tuka.Peer
+    associatedtype Peer: Tuka.Peer
 
-	/// Stream of incoming data.
-	var incomingData: Signal<(Data, Peer), NoError> { get }
+    /// Stream of incoming data.
+    var incomingData: Signal<(Data, Peer), NoError> { get }
 }
