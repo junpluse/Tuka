@@ -29,11 +29,11 @@ public final class Session: NSObject {
     public let startReceivingResourceEvents: Signal<StartReceivingResourceEvent, NoError>
     public let finishReceivingResourceEvents: Signal<FinishReceivingResourceEvent, NoError>
 
-    fileprivate let changeStateEventsObserver: ReactiveSwift.Observer<ChangeStateEvent, NoError>
-    fileprivate let receiveDataEventsObserver: ReactiveSwift.Observer<ReceiveDataEvent, NoError>
-    fileprivate let receiveStreamEventsObserver: ReactiveSwift.Observer<ReceiveStreamEvent, NoError>
-    fileprivate let startReceivingResourceEventsObserver: ReactiveSwift.Observer<StartReceivingResourceEvent, NoError>
-    fileprivate let finishReceivingResourceEventsObserver: ReactiveSwift.Observer<FinishReceivingResourceEvent, NoError>
+    fileprivate let changeStateEventsObserver: Observer<ChangeStateEvent, NoError>
+    fileprivate let receiveDataEventsObserver: Observer<ReceiveDataEvent, NoError>
+    fileprivate let receiveStreamEventsObserver: Observer<ReceiveStreamEvent, NoError>
+    fileprivate let startReceivingResourceEventsObserver: Observer<StartReceivingResourceEvent, NoError>
+    fileprivate let finishReceivingResourceEventsObserver: Observer<FinishReceivingResourceEvent, NoError>
 
     public init(mcSession: MCSession) {
         self.mcSession = mcSession
