@@ -31,12 +31,12 @@ public extension Message where Self: NSObject, Self: NSCoding {
         let unarchiver = NSKeyedUnarchiver(forReadingWith: context.data)
         defer { unarchiver.finishDecoding() }
         guard let message = unarchiver.decodeObject(of: Self.self, forKey: NSKeyedArchiveRootObjectKey) else {
-            throw MessageDeserializationNSCodingError.nilObjectDecoded
+            throw MessageDeserializationNSCodingError.nilRootObject
         }
         self = message
     }
 }
 
 public enum MessageDeserializationNSCodingError: Error {
-    case nilObjectDecoded
+    case nilRootObject
 }
