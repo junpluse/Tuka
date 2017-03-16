@@ -30,8 +30,11 @@ public final class PeerInvitationManager: NSObject {
 
 	public static let defaultLogic: PeerInvitationManagerLogicDelegate = HashBasedInvitationLogic()
 
-	private var _advertiser: MCNearbyServiceAdvertiser?
-	private var _browser: MCNearbyServiceBrowser?
+	private var advertiser: MCNearbyServiceAdvertiser?
+	private var browser: MCNearbyServiceBrowser?
+	private var logic: PeerInvitationManagerLogicDelegate {
+		return logicDelegate ?? PeerInvitationManager.defaultLogic
+	}
 
 	public init(session: MCSession, serviceType: String, maximumNumberOfPeers: Int = kMCSessionMaximumNumberOfPeers, invitationTimeoutInterval: TimeInterval = 30) {
 		self.session = session
@@ -44,27 +47,26 @@ public final class PeerInvitationManager: NSObject {
 	public func start() {
 		let peer = session.myPeerID
 
-		_advertiser = MCNearbyServiceAdvertiser(peer: peer, discoveryInfo: discoveryInfo(for: peer), serviceType: serviceType)
-		_advertiser?.delegate = self
-		_advertiser?.startAdvertisingPeer()
+		advertiser = MCNearbyServiceAdvertiser(peer: peer, discoveryInfo: discoveryInfo(for: peer), serviceType: serviceType)
+		advertiser?.delegate = self
+		advertiser?.startAdvertisingPeer()
 
-		_browser = MCNearbyServiceBrowser(peer: peer, serviceType: serviceType)
-		_browser?.delegate = self
-		_browser?.startBrowsingForPeers()
+		browser = MCNearbyServiceBrowser(peer: peer, serviceType: serviceType)
+		browser?.delegate = self
+		browser?.startBrowsingForPeers()
 	}
 
 	public func stop() {
-		_advertiser?.delegate = nil
-		_advertiser?.stopAdvertisingPeer()
-		_advertiser = nil
+		advertiser?.delegate = nil
+		advertiser?.stopAdvertisingPeer()
+		advertiser = nil
 
-		_browser?.delegate = nil
-		_browser?.stopBrowsingForPeers()
-		_browser = nil
+		browser?.delegate = nil
+		browser?.stopBrowsingForPeers()
+		browser = nil
 	}
 
 	public func discoveryInfo(for peer: MCPeerID) -> [String: String]? {
-		let logic = logicDelegate ?? PeerInvitationManager.defaultLogic
 		return logic.peerInvitationManager(self, discoveryInfoFor: peer)
 	}
 
@@ -72,7 +74,6 @@ public final class PeerInvitationManager: NSObject {
 		guard session.connectedPeers.count < maximumNumberOfPeers - 1 else {
 			return false
 		}
-		let logic = logicDelegate ?? PeerInvitationManager.defaultLogic
 		return logic.peerInvitationManager(self, shouldInvite: peer, withDiscoveryInfo: discoveryInfo)
 	}
 
@@ -80,7 +81,6 @@ public final class PeerInvitationManager: NSObject {
 		guard session.connectedPeers.count < maximumNumberOfPeers - 1 else {
 			return false
 		}
-		let logic = logicDelegate ?? PeerInvitationManager.defaultLogic
 		return logic.peerInvitationManager(self, shouldAcceptInvitationFrom: peer)
 	}
 }

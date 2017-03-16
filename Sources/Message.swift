@@ -6,61 +6,26 @@
 //  Copyright © 2016 Jun Tanaka. All rights reserved.
 //
 
-import Foundation
-
 /// Represents a message.
-public protocol MessageProtocol {
+public protocol Message {
 	/// Serialize the receiver to data.
 	///
-	/// - Returns: A serialized message data of the receiver.
-	func serializedMessage() -> Data
-
-	/// Deserialize a message of the receiver type from data.
-	///
-	/// - Parameter data: A serialized data.
-	/// - Returns: A deserialize message.
+	/// - Parameter context: A context used for serialization.
+	/// - Returns: A serialized data of the receiver.
 	/// - Throws: An `Error` if the operation could not be completed.
-	static func deserializeMessage(from data: Data) throws -> Self?
+	func serializedData(with context: MessageSerializationContext) throws -> Data
+
+	/// Creates an instance of the message with the given deserialization context.
+	///
+	/// - Parameter context: A context used for deserialization.
+	/// - Returns: A deserialized message.
+	/// - Throws: An `Error` if the operation could not be completed.
+	init(context: MessageDeserializationContext) throws
 }
 
-extension MessageProtocol where Self: Coding {
-	/// Serialize the receiver to data using `Archiver`.
-	///
-	/// - Returns: A serialized message data of the receiver.
-	public func serializedMessage() -> Data {
-		return Archiver().archive(self)
-	}
+public struct MessageSerializationContext {}
 
-	/// Deserialize a message of the receiver type from data using `Unarchiver`.
-	///
-	/// - Parameter data: A serialized data.
-	/// - Returns: A deserialize message.
-	/// - Throws: An `Error` if the operation could not be completed.
-	public static func deserializeMessage(from data: Data) throws -> Self? {
-		return try Unarchiver().unarchive(data, of: Self.self)
-	}
-}
-
-extension MessageProtocol where Self: NSCoding {
-	/// Serialize the receiver to data using `NSKeyedUnarchiver`.
-	///
-	/// - Returns: A serialized message data of the receiver.
-	public func serializedMessage() -> Data {
-		let data = NSMutableData()
-		let archiver = NSKeyedArchiver(forWritingWith: data)
-		archiver.encodeRootObject(self)
-		archiver.finishEncoding()
-		return data as Data
-	}
-
-	/// Deserialize a message of the receiver type from data using `NSKeyedUnarchiver`.
-	///
-	/// - Parameter data: A serialized data.
-	/// - Returns: A deserialize message.
-	/// - Throws: An `Error` if the operation could not be completed.
-	public static func deserializeMessage(from data: Data) throws -> Self? {
-		let unarchiver = NSKeyedUnarchiver(forReadingWith: data)
-		defer { unarchiver.finishDecoding() }
-		return try unarchiver.decodeTopLevelObject() as? Self
-	}
+public struct MessageDeserializationContext {
+	/// A serialized data for deserialization.
+	public var data: Data
 }

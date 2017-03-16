@@ -6,139 +6,88 @@
 //  Copyright © 2016 Jun Tanaka. All rights reserved.
 //
 
-import Foundation
 import MultipeerConnectivity
-
-public enum ResourceTransferEvent<Request: ResourceRequestProtocol> {
-	case started(Request, Session.Peer, Progress?)
-	case finished(Request, Session.Peer, URL)
-	case failed(Request, Session.Peer, Error)
-}
-
-public final class ResourceTransferOperation<Request: ResourceRequestProtocol>: RequestReceiptProtocol {
-	public typealias Peer = Session.Peer
-	public typealias Event = ResourceTransferEvent<Request>
-
-	public let request: Request
-	public let peers: [Peer]
-
-	fileprivate let disposable = CompositeDisposable()
-	fileprivate let eventObserver = CompositeObserver<Event>()
-
-	fileprivate init(request: Request, peers: [Peer]) {
-		self.request = request
-		self.peers = peers
-	}
-
-	public func addEventObserver(on queue: DispatchQueue, action: @escaping (_ transferEvent: ResourceTransferEvent<Request>) -> Void) -> Disposable {
-		let observer = DispatchObserver(queue: queue, action: action)
-		return eventObserver.add(observer)
-	}
-}
-
-extension ResourceTransferOperation: Disposable {
-	public var isDisposed: Bool {
-		return disposable.isDisposed
-	}
-
-	public func dispose() {
-		disposable.dispose()
-	}
-}
+import ReactiveSwift
+import Result
 
 extension Session {
-	public func submit<T: ResourceRequestProtocol>(resourceAt localURL: URL, with request: T, to peers: [MCPeerID]) throws -> ResourceTransferOperation<T> {
-		try send(request, to: peers)
-
-		let receipt = ResourceTransferOperation(request: request, peers: peers)
-		let transferQueue = DispatchQueue(label: "com.junpluse.Tuka.Session.ResourceTransferQueue")
-
-		peers.forEach { peer in
-			let item = DispatchWorkItem { [mcSession] in
-				let semaphore = DispatchSemaphore(value: 0)
-				let progress = mcSession.sendResource(at: localURL, withName: request.resourceName, toPeer: peer) { error in
-					if let error = error {
-						receipt.eventObserver.observe(.failed(request, peer, error))
-					} else {
-						receipt.eventObserver.observe(.finished(request, peer, localURL))
-					}
-					semaphore.signal()
-				}
-				receipt.disposable += { progress?.cancel() }
-				receipt.eventObserver.observe(.started(request, peer, progress))
-				semaphore.wait()
-			}
-			receipt.disposable += { item.cancel() }
-			transferQueue.async(execute: item)
-		}
-
-		return receipt
+	public enum ResourceTransferEvent {
+		case started(name: String, peer: Peer, progress: Progress?)
+		case completed(name: String, peer: Peer, localURL: URL)
+		case failed(name: String, peer: Peer, error: Error)
 	}
 
-	public func submit<T: ResourceRequestProtocol>(resourceAt localURL: URL, with request: T, to peers: [MCPeerID], timeoutAfter interval: TimeInterval, on queue: DispatchQueue, transferEventObserver: @escaping (_ event: ResourceTransferEvent<T>) -> Void, responseEventObserver: @escaping (_ event: ResponseEvent<T, Peer>) -> Void) throws -> Disposable {
-		let operation = try submit(resourceAt: localURL, with: request, to: peers)
-
-		let disposable = CompositeDisposable()
-		disposable += operation
-		disposable += operation.addEventObserver(on: queue, action: transferEventObserver)
-		disposable += addObserver(for: operation, timeoutAfter: interval, on: queue, action: responseEventObserver)
-		return disposable
-	}
-
-	public func submit(resourceAt localURL: URL, to peers: [MCPeerID]) throws -> ResourceTransferOperation<ResourceRequest> {
-		let request = ResourceRequest()
-		return try submit(resourceAt: localURL, with: request, to: peers)
-	}
-
-	public func submit(resourceAt localURL: URL, to peers: [MCPeerID], timeoutAfter interval: TimeInterval, on queue: DispatchQueue, transferEventObserver: @escaping (_ event: ResourceTransferEvent<ResourceRequest>) -> Void, responseEventObserver: @escaping (_ event: ResponseEvent<ResourceRequest, Peer>) -> Void) throws -> Disposable {
-		let request = ResourceRequest()
-		return try submit(resourceAt: localURL, with: request, to: peers, timeoutAfter: interval, on: queue, transferEventObserver: transferEventObserver, responseEventObserver: responseEventObserver)
-	}
-}
-
-extension Session {
-	public func addResponder<T: ResourceRequestProtocol>(for resourceRequestType: T.Type, on queue: DispatchQueue, action: @escaping (_ request: T, _ transferEvent: ResourceTransferEvent<T>, _ send: @escaping (_ response: T.Response) throws -> Void) -> Void) -> Disposable {
-		let disposable = CompositeDisposable()
-
-		let responseQueue = DispatchQueue(label: "com.junpluse.Tuka.Session.ResourceRequestResponderQueue")
-		let responder = RequestResponder<T, MCPeerID>(queue: responseQueue) { request, peer, send in
-			let sessionEventDisposable = CompositeDisposable()
-
-			let sendAndDispose: (T.Response) throws -> Void = { response in
-				try send(response)
-				sessionEventDisposable.dispose()
-			}
-
-			sessionEventDisposable += self.addSessionEventObserver(on: queue) { event in
-				switch event {
-				case .didStartReceivingResource(let name, let from, let progress):
-					guard name == request.resourceName, from == peer else { return }
-					action(request, .started(request, peer, progress), sendAndDispose)
-				case .didFinishReceivingResource(let name, let from, let localURL, let error):
-					guard name == request.resourceName, from == peer else { return }
-					if let error = error {
-						action(request, .failed(request, peer, error), sendAndDispose)
-					} else {
-						action(request, .finished(request, peer, localURL), sendAndDispose)
-					}
-					sessionEventDisposable.dispose()
-				default:
-					break
+	public func sendResource(at url: URL, withName name: String, to peer: Peer) -> SignalProducer<ResourceTransferEvent, AnyError> {
+		return SignalProducer<ResourceTransferEvent, AnyError> { [mcSession] observer, disposable in
+			let progress = mcSession.sendResource(at: url, withName: name, toPeer: peer) { error in
+				if let error = error {
+					observer.send(value: .failed(name: name, peer: peer, error: error))
+					observer.send(error: AnyError(error))
+				} else {
+					observer.send(value: .completed(name: name, peer: peer, localURL: url))
+					observer.sendCompleted()
 				}
 			}
-			disposable += sessionEventDisposable
+			if let progress = progress {
+				progress.cancellationHandler = {
+					if disposable.isDisposed == false {
+						observer.sendInterrupted()
+					}
+				}
+				disposable += {
+					if progress.isCancelled == false {
+						progress.cancel()
+					}
+				}
+			}
+			observer.send(value: .started(name: name, peer: peer, progress: progress))
 		}
-
-		disposable += addResponder(responder)
-
-		return disposable
 	}
 
-	public func addResponderForResourceRequest(on queue: DispatchQueue, action: @escaping (_ request: ResourceRequest, _ transferEvent: ResourceTransferEvent<ResourceRequest>, _ send: @escaping (_ result: ResourceRequestResult) throws -> Void) -> Void) -> Disposable {
-		return addResponder(for: ResourceRequest.self, on: queue) { request, event, send in
-			action(request, event) { result in
-				let response = ResourceResponse(requestID: request.requestID, result: result)
-				try send(response)
+	public func sendResource(at url: URL, withName name: String, to peers: [Peer], concurrently: Bool = false) -> SignalProducer<ResourceTransferEvent, AnyError> {
+		let childProducers = peers.map { peer in
+			return sendResource(at: url, withName: name, to: peer)
+		}
+
+		return SignalProducer { observer, disposable in
+			disposable += childProducers
+				.map { childProducer in
+					return childProducer.on(value: { event in observer.send(value: event) })
+				}
+				.reduce(SignalProducer<ResourceTransferEvent, AnyError>.empty) { previous, current in
+					if concurrently {
+						return previous.concat(current)
+					} else {
+						return previous.then(current)
+					}
+				}
+				.filter { _ in false }
+				.start(observer)
+		}
+	}
+
+	public var incomingResourceEvents: Signal<ResourceTransferEvent, NoError> {
+		return Signal.merge([
+			startReceivingResourceEvents.map { name, peer, progress in
+				return .started(name: name, peer: peer, progress: progress)
+			},
+			finishReceivingResourceEvents.map { name, peer, url, error in
+				if let error = error {
+					return .failed(name: name, peer: peer, error: error)
+				} else {
+					return .completed(name: name, peer: peer, localURL: url)
+				}
+			}
+		])
+	}
+
+	public var incomingResources: Signal<(name: String, peer: Peer, localURL: URL), NoError> {
+		return incomingResourceEvents.filterMap { event in
+			switch event {
+			case .completed(let name, let peer, let localURL):
+				return (name, peer, localURL)
+			default:
+				return nil
 			}
 		}
 	}

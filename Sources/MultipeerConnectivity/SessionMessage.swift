@@ -8,12 +8,12 @@
 
 import MultipeerConnectivity
 
-public protocol SessionMessageProtocol: MessageProtocol {
+public protocol SessionMessage: Message {
 	var preferredSendDataMode: MCSessionSendDataMode { get }
 }
 
-public extension SessionMessageProtocol {
-	var preferredSendDataMode: MCSessionSendDataMode {
+extension SessionMessage {
+	public var preferredSendDataMode: MCSessionSendDataMode {
 		return .reliable
 	}
 }

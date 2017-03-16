@@ -6,10 +6,9 @@
 //  Copyright © 2016 Jun Tanaka. All rights reserved.
 //
 
-import Foundation
 import MultipeerConnectivity
 
-extension MCPeerID: PeerProtocol {}
+extension MCPeerID: Tuka.Peer {}
 
 extension MCPeerID {
 	public struct Tuka {
@@ -18,8 +17,7 @@ extension MCPeerID {
 		public static var defaultPeer: MCPeerID {
 			let name = UIDevice.current.name
 
-			if
-				let data = UserDefaults.standard.data(forKey: defaultPeerKey),
+			if let data = UserDefaults.standard.data(forKey: defaultPeerKey),
 				let peer = NSKeyedUnarchiver.unarchiveObject(with: data) as? MCPeerID,
 				peer.displayName == name {
 				return peer
