@@ -8,6 +8,7 @@
 
 import Foundation
 
+@objc(TUKABasicRequest)
 open class BasicRequest: NSObject, NSCoding, Request {
     public typealias Response = BasicResponse
 

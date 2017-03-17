@@ -8,6 +8,7 @@
 
 import Foundation
 
+@objc(TUKABasicResponse)
 open class BasicResponse: NSObject, NSCoding, Response {
     public typealias RequestID = UUID
 

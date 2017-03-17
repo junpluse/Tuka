@@ -8,6 +8,7 @@
 
 import Foundation
 
+@objc(TUKABasicMessage)
 open class BasicMessage: NSObject, NSCoding, Message {
     public var userInfo: [String: Any]? = nil
 
