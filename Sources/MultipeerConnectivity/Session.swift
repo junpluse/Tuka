@@ -35,6 +35,8 @@ public final class Session: NSObject {
     fileprivate let startReceivingResourceEventsObserver: Observer<StartReceivingResourceEvent, NoError>
     fileprivate let finishReceivingResourceEventsObserver: Observer<FinishReceivingResourceEvent, NoError>
 
+    public let connectedPeers: Property<Set<Peer>>
+
     public init(mcSession: MCSession) {
         self.mcSession = mcSession
 
@@ -43,6 +45,9 @@ public final class Session: NSObject {
         (receiveStreamEvents, receiveStreamEventsObserver) = Signal.pipe()
         (startReceivingResourceEvents, startReceivingResourceEventsObserver) = Signal.pipe()
         (finishReceivingResourceEvents, finishReceivingResourceEventsObserver) = Signal.pipe()
+
+        let connectedPeersUpdates = changeStateEvents.map { _ in Set(mcSession.connectedPeers) }
+        connectedPeers = Property(initial: Set(mcSession.connectedPeers), then: connectedPeersUpdates).skipRepeats()
 
         super.init()
 
