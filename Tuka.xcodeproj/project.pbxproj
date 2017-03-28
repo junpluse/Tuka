@@ -9,13 +9,13 @@
 /* Begin PBXBuildFile section */
 		BF0EEB4D1E12496A00174E23 /* PeerInvitationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0EEB4C1E12496A00174E23 /* PeerInvitationManager.swift */; };
 		BF2F4C781E77D9A6006F83F9 /* Message+NSCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2F4C771E77D9A6006F83F9 /* Message+NSCoding.swift */; };
-		BF2F4C8D1E797BC2006F83F9 /* ReactiveSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF2F4C8B1E797BC2006F83F9 /* ReactiveSwift.framework */; };
-		BF2F4C8E1E797BC2006F83F9 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF2F4C8C1E797BC2006F83F9 /* Result.framework */; };
 		BF2F4C901E7A6256006F83F9 /* DataReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2F4C8F1E7A6256006F83F9 /* DataReceiver.swift */; };
 		BF2F4C921E7A6290006F83F9 /* DataSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2F4C911E7A6290006F83F9 /* DataSender.swift */; };
 		BF2F4CA41E7A8BCD006F83F9 /* BasicMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2F4CA31E7A8BCD006F83F9 /* BasicMessage.swift */; };
 		BF2F4CAA1E7A9566006F83F9 /* BasicRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2F4CA91E7A9566006F83F9 /* BasicRequest.swift */; };
 		BF2F4CAC1E7A956F006F83F9 /* BasicResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2F4CAB1E7A956F006F83F9 /* BasicResponse.swift */; };
+		BF7FD2301E8A676700DCD497 /* ReactiveSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF7FD22F1E8A676700DCD497 /* ReactiveSwift.framework */; };
+		BF7FD2321E8A676D00DCD497 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF7FD2311E8A676D00DCD497 /* Result.framework */; };
 		BFA214001DF018000054A13F /* Tuka.h in Headers */ = {isa = PBXBuildFile; fileRef = BFA213FE1DF018000054A13F /* Tuka.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BFA214111DF018790054A13F /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA214061DF018790054A13F /* Message.swift */; };
 		BFA214121DF018790054A13F /* MessageReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA214071DF018790054A13F /* MessageReceiver.swift */; };
@@ -35,13 +35,13 @@
 /* Begin PBXFileReference section */
 		BF0EEB4C1E12496A00174E23 /* PeerInvitationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeerInvitationManager.swift; sourceTree = "<group>"; };
 		BF2F4C771E77D9A6006F83F9 /* Message+NSCoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Message+NSCoding.swift"; sourceTree = "<group>"; };
-		BF2F4C8B1E797BC2006F83F9 /* ReactiveSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveSwift.framework; path = Carthage/Build/iOS/ReactiveSwift.framework; sourceTree = "<group>"; };
-		BF2F4C8C1E797BC2006F83F9 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/iOS/Result.framework; sourceTree = "<group>"; };
 		BF2F4C8F1E7A6256006F83F9 /* DataReceiver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataReceiver.swift; sourceTree = "<group>"; };
 		BF2F4C911E7A6290006F83F9 /* DataSender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSender.swift; sourceTree = "<group>"; };
 		BF2F4CA31E7A8BCD006F83F9 /* BasicMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicMessage.swift; sourceTree = "<group>"; };
 		BF2F4CA91E7A9566006F83F9 /* BasicRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicRequest.swift; sourceTree = "<group>"; };
 		BF2F4CAB1E7A956F006F83F9 /* BasicResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicResponse.swift; sourceTree = "<group>"; };
+		BF7FD22F1E8A676700DCD497 /* ReactiveSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveSwift.framework; path = "../../../Library/Developer/Xcode/DerivedData/Tuka-cvxgxqgdfknijscyucdqjomgpsvf/Build/Products/Debug-iphoneos/ReactiveSwift.framework"; sourceTree = "<group>"; };
+		BF7FD2311E8A676D00DCD497 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = "../../../Library/Developer/Xcode/DerivedData/Tuka-cvxgxqgdfknijscyucdqjomgpsvf/Build/Products/Debug-iphoneos/Result.framework"; sourceTree = "<group>"; };
 		BFA213FB1DF018000054A13F /* Tuka.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Tuka.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFA213FE1DF018000054A13F /* Tuka.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Tuka.h; sourceTree = "<group>"; };
 		BFA213FF1DF018000054A13F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -65,23 +65,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BF2F4C8D1E797BC2006F83F9 /* ReactiveSwift.framework in Frameworks */,
-				BF2F4C8E1E797BC2006F83F9 /* Result.framework in Frameworks */,
+				BF7FD2301E8A676700DCD497 /* ReactiveSwift.framework in Frameworks */,
+				BF7FD2321E8A676D00DCD497 /* Result.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		BF2F4C8A1E797BC2006F83F9 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				BF2F4C8B1E797BC2006F83F9 /* ReactiveSwift.framework */,
-				BF2F4C8C1E797BC2006F83F9 /* Result.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		BF2F4CA21E7A8BB8006F83F9 /* NSCoding */ = {
 			isa = PBXGroup;
 			children = (
@@ -93,12 +84,21 @@
 			path = NSCoding;
 			sourceTree = "<group>";
 		};
+		BF7FD22E1E8A676700DCD497 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BF7FD22F1E8A676700DCD497 /* ReactiveSwift.framework */,
+				BF7FD2311E8A676D00DCD497 /* Result.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		BFA213F11DF017FF0054A13F = {
 			isa = PBXGroup;
 			children = (
 				BFA213FD1DF018000054A13F /* Sources */,
 				BFA213FC1DF018000054A13F /* Products */,
-				BF2F4C8A1E797BC2006F83F9 /* Frameworks */,
+				BF7FD22E1E8A676700DCD497 /* Frameworks */,
 			);
 			indentWidth = 4;
 			sourceTree = "<group>";
@@ -364,10 +364,6 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -389,10 +385,6 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
