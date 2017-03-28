@@ -11,9 +11,8 @@
 		BF2F4C781E77D9A6006F83F9 /* Message+NSCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2F4C771E77D9A6006F83F9 /* Message+NSCoding.swift */; };
 		BF2F4C901E7A6256006F83F9 /* DataReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2F4C8F1E7A6256006F83F9 /* DataReceiver.swift */; };
 		BF2F4C921E7A6290006F83F9 /* DataSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2F4C911E7A6290006F83F9 /* DataSender.swift */; };
-		BF2F4CA41E7A8BCD006F83F9 /* BasicMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2F4CA31E7A8BCD006F83F9 /* BasicMessage.swift */; };
-		BF2F4CAA1E7A9566006F83F9 /* BasicRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2F4CA91E7A9566006F83F9 /* BasicRequest.swift */; };
-		BF2F4CAC1E7A956F006F83F9 /* BasicResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2F4CAB1E7A956F006F83F9 /* BasicResponse.swift */; };
+		BF3BD23B1E8A7682009E27EA /* MessagePacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3BD23A1E8A7682009E27EA /* MessagePacket.swift */; };
+		BF3BD2471E8A8DB0009E27EA /* MessageSender+JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3BD2461E8A8DB0009E27EA /* MessageSender+JSON.swift */; };
 		BF7FD2301E8A676700DCD497 /* ReactiveSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF7FD22F1E8A676700DCD497 /* ReactiveSwift.framework */; };
 		BF7FD2321E8A676D00DCD497 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF7FD2311E8A676D00DCD497 /* Result.framework */; };
 		BFA214001DF018000054A13F /* Tuka.h in Headers */ = {isa = PBXBuildFile; fileRef = BFA213FE1DF018000054A13F /* Tuka.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -34,12 +33,11 @@
 
 /* Begin PBXFileReference section */
 		BF0EEB4C1E12496A00174E23 /* PeerInvitationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeerInvitationManager.swift; sourceTree = "<group>"; };
-		BF2F4C771E77D9A6006F83F9 /* Message+NSCoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Message+NSCoding.swift"; sourceTree = "<group>"; };
+		BF2F4C771E77D9A6006F83F9 /* Message+NSCoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Message+NSCoding.swift"; path = "NSCoding/Message+NSCoding.swift"; sourceTree = "<group>"; };
 		BF2F4C8F1E7A6256006F83F9 /* DataReceiver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataReceiver.swift; sourceTree = "<group>"; };
 		BF2F4C911E7A6290006F83F9 /* DataSender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSender.swift; sourceTree = "<group>"; };
-		BF2F4CA31E7A8BCD006F83F9 /* BasicMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicMessage.swift; sourceTree = "<group>"; };
-		BF2F4CA91E7A9566006F83F9 /* BasicRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicRequest.swift; sourceTree = "<group>"; };
-		BF2F4CAB1E7A956F006F83F9 /* BasicResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicResponse.swift; sourceTree = "<group>"; };
+		BF3BD23A1E8A7682009E27EA /* MessagePacket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagePacket.swift; sourceTree = "<group>"; };
+		BF3BD2461E8A8DB0009E27EA /* MessageSender+JSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MessageSender+JSON.swift"; sourceTree = "<group>"; };
 		BF7FD22F1E8A676700DCD497 /* ReactiveSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveSwift.framework; path = "../../../Library/Developer/Xcode/DerivedData/Tuka-cvxgxqgdfknijscyucdqjomgpsvf/Build/Products/Debug-iphoneos/ReactiveSwift.framework"; sourceTree = "<group>"; };
 		BF7FD2311E8A676D00DCD497 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = "../../../Library/Developer/Xcode/DerivedData/Tuka-cvxgxqgdfknijscyucdqjomgpsvf/Build/Products/Debug-iphoneos/Result.framework"; sourceTree = "<group>"; };
 		BFA213FB1DF018000054A13F /* Tuka.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Tuka.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -73,17 +71,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		BF2F4CA21E7A8BB8006F83F9 /* NSCoding */ = {
-			isa = PBXGroup;
-			children = (
-				BF2F4C771E77D9A6006F83F9 /* Message+NSCoding.swift */,
-				BF2F4CA31E7A8BCD006F83F9 /* BasicMessage.swift */,
-				BF2F4CA91E7A9566006F83F9 /* BasicRequest.swift */,
-				BF2F4CAB1E7A956F006F83F9 /* BasicResponse.swift */,
-			);
-			path = NSCoding;
-			sourceTree = "<group>";
-		};
 		BF7FD22E1E8A676700DCD497 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -121,14 +108,16 @@
 				BF2F4C8F1E7A6256006F83F9 /* DataReceiver.swift */,
 				BF2F4C911E7A6290006F83F9 /* DataSender.swift */,
 				BFA214061DF018790054A13F /* Message.swift */,
+				BF2F4C771E77D9A6006F83F9 /* Message+NSCoding.swift */,
+				BF3BD23A1E8A7682009E27EA /* MessagePacket.swift */,
 				BFA214071DF018790054A13F /* MessageReceiver.swift */,
 				BFA214081DF018790054A13F /* MessageReceiver+Request.swift */,
 				BFA214091DF018790054A13F /* MessageSender.swift */,
+				BF3BD2461E8A8DB0009E27EA /* MessageSender+JSON.swift */,
 				BFA2140A1DF018790054A13F /* MessageSender+Request.swift */,
 				BFA2140D1DF018790054A13F /* Request.swift */,
 				BFA2140E1DF018790054A13F /* RequestReceipt.swift */,
 				BFA214101DF018790054A13F /* Response.swift */,
-				BF2F4CA21E7A8BB8006F83F9 /* NSCoding */,
 				BFA2141C1DF018830054A13F /* MultipeerConnectivity */,
 				BFA213FF1DF018000054A13F /* Info.plist */,
 			);
@@ -235,16 +224,15 @@
 				BF0EEB4D1E12496A00174E23 /* PeerInvitationManager.swift in Sources */,
 				BFA2142C1DF018830054A13F /* SessionMessage.swift in Sources */,
 				BF2F4C781E77D9A6006F83F9 /* Message+NSCoding.swift in Sources */,
+				BF3BD23B1E8A7682009E27EA /* MessagePacket.swift in Sources */,
 				BFA2141B1DF018790054A13F /* Response.swift in Sources */,
 				BFA2142A1DF018830054A13F /* Session+Resource.swift in Sources */,
 				BFA214191DF018790054A13F /* RequestReceipt.swift in Sources */,
 				BFA214251DF018830054A13F /* MCPeerID+Tuka.swift in Sources */,
-				BF2F4CA41E7A8BCD006F83F9 /* BasicMessage.swift in Sources */,
-				BF2F4CAA1E7A9566006F83F9 /* BasicRequest.swift in Sources */,
 				BFA214181DF018790054A13F /* Request.swift in Sources */,
 				BFA214111DF018790054A13F /* Message.swift in Sources */,
 				BF2F4C901E7A6256006F83F9 /* DataReceiver.swift in Sources */,
-				BF2F4CAC1E7A956F006F83F9 /* BasicResponse.swift in Sources */,
+				BF3BD2471E8A8DB0009E27EA /* MessageSender+JSON.swift in Sources */,
 				BF2F4C921E7A6290006F83F9 /* DataSender.swift in Sources */,
 				BFA214131DF018790054A13F /* MessageReceiver+Request.swift in Sources */,
 			);

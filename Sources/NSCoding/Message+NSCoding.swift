@@ -11,32 +11,25 @@ import Foundation
 extension Message where Self: NSObject, Self: NSCoding {
     /// Serialize the receiver to data using `NSKeyedUnarchiver`.
     ///
-    /// - Parameter context: A context used for serialization.
     /// - Returns: A serialized data of the receiver.
     /// - Throws: An `Error` if the operation could not be completed.
-    public func serializedData(with context: MessageSerializationContext) throws -> Data {
-        let data = NSMutableData()
-        let archiver = NSKeyedArchiver(forWritingWith: data)
-        archiver.encode(self, forKey: NSKeyedArchiveRootObjectKey)
-        archiver.finishEncoding()
-        return data as Data
+    public func serializedData() throws -> Data {
+        return NSKeyedArchiver.archivedData(withRootObject: self)
     }
 
     /// Creates an instance of the message with the given deserialization context.
     ///
-    /// - Parameter context: A context used for deserialization.
+    /// - Parameter serializedData: A serialized data.
     /// - Returns: A deserialized message.
     /// - Throws: An `Error` if the operation could not be completed.
-    public init(context: MessageDeserializationContext) throws {
-        let unarchiver = NSKeyedUnarchiver(forReadingWith: context.data)
-        defer { unarchiver.finishDecoding() }
-        guard let message = unarchiver.decodeObject(of: Self.self, forKey: NSKeyedArchiveRootObjectKey) else {
-            throw MessageDeserializationNSCodingError.nilRootObject
+    public init(serializedData: Data) throws {
+        guard let message = NSKeyedUnarchiver.unarchiveObject(with: serializedData) as? Self else {
+            throw MessageNSCodingError.nilObject
         }
         self = message
     }
 }
 
-public enum MessageDeserializationNSCodingError: Error {
-    case nilRootObject
+public enum MessageNSCodingError: Error {
+    case nilObject
 }

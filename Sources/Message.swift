@@ -6,26 +6,38 @@
 //  Copyright © 2016 Jun Tanaka. All rights reserved.
 //
 
+/// Represents name of a message type.
+public struct MessageName: RawRepresentable {
+    public typealias RawValue = String
+
+    public let rawValue: RawValue
+
+    public init(rawValue: RawValue) {
+        self.rawValue = rawValue
+    }
+}
+
 /// Represents a message.
 public protocol Message {
+    /// A name describing this messsage type.
+    static var messageName: MessageName { get }
+
     /// Serialize the receiver to data.
     ///
-    /// - Parameter context: A context used for serialization.
     /// - Returns: A serialized data of the receiver.
     /// - Throws: An `Error` if the operation could not be completed.
-    func serializedData(with context: MessageSerializationContext) throws -> Data
+    func serializedData() throws -> Data
 
     /// Creates an instance of the message with the given deserialization context.
     ///
-    /// - Parameter context: A context used for deserialization.
+    /// - Parameter serializedData: A serialized data.
     /// - Returns: A deserialized message.
     /// - Throws: An `Error` if the operation could not be completed.
-    init(context: MessageDeserializationContext) throws
+    init(serializedData: Data) throws
 }
 
-public struct MessageSerializationContext {}
-
-public struct MessageDeserializationContext {
-    /// A serialized data for deserialization.
-    public var data: Data
+extension Message {
+    public static var messageName: MessageName {
+        return MessageName(rawValue: String(describing: self))
+    }
 }

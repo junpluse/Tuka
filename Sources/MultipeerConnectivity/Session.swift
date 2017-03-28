@@ -104,10 +104,12 @@ extension Session: DataSender {
 
 extension Session: MessageSender {
     public func send<Message: Tuka.Message>(_ message: Message, to peers: Set<Peer>) throws {
-        let context = MessageSerializationContext()
-        let data = try message.serializedData(with: context)
+        let name = Message.messageName
+        let data = try message.serializedData()
+        let packet = MessagePacket(name: name.rawValue, data: data)
+        let packetData = NSKeyedArchiver.archivedData(withRootObject: packet)
         let mode = (message as? SessionMessage)?.preferredSendDataMode ?? .reliable
-        try send(data, to: peers, with: mode)
+        try send(packetData, to: peers, with: mode)
     }
 }
 
