@@ -18,7 +18,7 @@ public protocol MessageReceiver {
     ///
     /// - Parameter name: A name of message type which should be included into the stream.
     /// - Returns: A `Signal` sends incoming messages with sender peers.
-    func incomingMessages(withName name: MessageName) -> Signal<(Data, Peer), NoError>
+    func incomingMessages(forName name: MessageName) -> Signal<(Data?, Peer), NoError>
 
     /// Returns a stream of incoming messages of the given type.
     ///
@@ -32,15 +32,15 @@ extension MessageReceiver {
     ///
     /// - Parameter name: A raw name of message type which should be included into the stream.
     /// - Returns: A `Signal` sends incoming messages with sender peers.
-    public func incomingMessages(withName rawName: String) -> Signal<(Data, Peer), NoError> {
-        return incomingMessages(withName: MessageName(rawValue: rawName))
+    public func incomingMessages(forName rawName: String) -> Signal<(Data?, Peer), NoError> {
+        return incomingMessages(forName: MessageName(rawValue: rawName))
     }
 }
 
 extension MessageReceiver {
     public func incomingMessages<Message: Tuka.Message>(of type: Message.Type) -> Signal<(Message, Peer), NoError> {
-        return incomingMessages(withName: Message.messageName).filterMap { data, peer -> (Message, Peer)? in
-            guard let message = try? Message(serializedData: data) else {
+        return incomingMessages(forName: Message.messageName).filterMap { data, peer -> (Message, Peer)? in
+            guard let data = data, let message = try? Message(serializedData: data) else {
                 return nil
             }
             return (message, peer)
@@ -49,8 +49,8 @@ extension MessageReceiver {
 }
 
 extension MessageReceiver where Self: DataReceiver {
-    public func incomingMessages(withName name: MessageName) -> Signal<(Data, Peer), NoError> {
-        return incomingData.filterMap { data, peer -> (Data, Peer)? in
+    public func incomingMessages(forName name: MessageName) -> Signal<(Data?, Peer), NoError> {
+        return incomingData.filterMap { data, peer -> (Data?, Peer)? in
             guard let packet = NSKeyedUnarchiver.unarchiveObject(with: data) as? MessagePacket else {
                 return nil
             }

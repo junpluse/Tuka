@@ -11,9 +11,9 @@ import Foundation
 @objc(TUKAMessagePacket)
 internal final class MessagePacket: NSObject, NSSecureCoding {
     let name: String
-    let data: Data
+    let data: Data?
 
-    init(name: String, data: Data) {
+    init(name: String, data: Data? = nil) {
         self.name = name
         self.data = data
     }
@@ -27,10 +27,8 @@ internal final class MessagePacket: NSObject, NSSecureCoding {
         guard let name = aDecoder.decodeObject(of: NSString.self, forKey: CodingKey.name.rawValue) else {
             return nil
         }
-        guard let data = aDecoder.decodeObject(of: NSData.self, forKey: CodingKey.data.rawValue) else {
-            return nil
-        }
-        self.init(name: name as String, data: data as Data)
+        let data = aDecoder.decodeObject(of: NSData.self, forKey: CodingKey.data.rawValue)
+        self.init(name: name as String, data: data as Data?)
     }
 
     func encode(with aCoder: NSCoder) {

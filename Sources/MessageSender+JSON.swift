@@ -12,23 +12,23 @@ extension MessageSender {
     /// Sends a message with a JSON object to peers.
     ///
     /// - Parameters:
-    ///   - JSONObject: A JSON object to be sent.
     ///   - name: A name of message type.
+    ///   - jsonObject: A JSON object to be sent.
     ///   - peers: A set of peers that should receive the message.
     /// - Throws: An `Error` if sending the message could not be completed.
-    public func send(JSONObject: [String: Any], withName name: MessageName, to peers: Set<Peer>) throws {
-        let data = try JSONSerialization.data(withJSONObject: JSONObject, options: [])
-        try send(data, withName: name, to: peers)
+    public func send(name: MessageName, withJSONObject jsonObject: [String: Any], to peers: Set<Peer>) throws {
+        let data = try JSONSerialization.data(withJSONObject: jsonObject, options: [])
+        try send(name: name, with: data, to: peers)
     }
 
     /// Sends a message with a JSON object to peers.
     ///
     /// - Parameters:
-    ///   - JSONObject: A JSON object to be sent.
     ///   - name: A raw name of message type.
+    ///   - jsonObject: A JSON object to be sent.
     ///   - peers: A set of peers that should receive the message.
     /// - Throws: An `Error` if sending the message could not be completed.
-    public func send(JSONObject: [String: Any], withName rawName: String, to peers: Set<Peer>) throws {
-        try send(JSONObject: JSONObject, withName: MessageName(rawValue: rawName), to: peers)
+    public func send(name rawName: String, withJSONObject jsonObject: [String: Any], to peers: Set<Peer>) throws {
+        try send(name: MessageName(rawValue: rawName), withJSONObject: jsonObject, to: peers)
     }
 }

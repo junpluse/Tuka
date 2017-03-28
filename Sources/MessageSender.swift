@@ -15,11 +15,11 @@ public protocol MessageSender {
     /// Sends a message with data to peers.
     ///
     /// - Parameters:
-    ///   - data: A data to be sent.
     ///   - name: A name of message type.
+    ///   - data: A data to be sent.
     ///   - peers: A set of peers that should receive the message.
     /// - Throws: An `Error` if sending the message could not be completed.
-    func send(_ data: Data, withName name: MessageName, to peers: Set<Peer>) throws
+    func send(name: MessageName, with data: Data?, to peers: Set<Peer>) throws
 
     /// Sends a message to peers.
     ///
@@ -34,12 +34,12 @@ extension MessageSender {
     /// Sends a message with data to peers.
     ///
     /// - Parameters:
-    ///   - data: A data to be sent.
     ///   - name: A raw name of message type.
+    ///   - data: A data to be sent.
     ///   - peers: A set of peers that should receive the message.
     /// - Throws: An `Error` if sending the message could not be completed.
-    public func send(_ data: Data, withName rawName: String, to peers: Set<Peer>) throws {
-        return try send(data, withName: MessageName(rawValue: rawName), to: peers)
+    public func send(name rawName: String, with data: Data? = nil, to peers: Set<Peer>) throws {
+        return try send(name: MessageName(rawValue: rawName), with: data, to: peers)
     }
 }
 
@@ -47,12 +47,12 @@ extension MessageSender {
     public func send<Message: Tuka.Message>(_ message: Message, to peers: Set<Peer>) throws {
         let name = Message.messageName
         let data = try message.serializedData()
-        return try send(data, withName: name, to: peers)
+        return try send(name: name, with: data, to: peers)
     }
 }
 
 extension MessageSender where Self: DataSender {
-    public func send(_ data: Data, withName name: MessageName, to peers: Set<Peer>) throws {
+    public func send(name: MessageName, with data: Data? = nil, to peers: Set<Peer>) throws {
         let packet = MessagePacket(name: name.rawValue, data: data)
         let packetData = NSKeyedArchiver.archivedData(withRootObject: packet)
         try send(packetData, to: peers)
