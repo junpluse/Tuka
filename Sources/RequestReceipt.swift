@@ -15,8 +15,8 @@ public final class RequestReceipt<Request: Tuka.Request, Sender: Tuka.MessageSen
     /// The submitted request.
     public let request: Request
 
-    /// An array of peers that should receive the request.
-    public let peers: [Sender.Peer]
+    /// A set of peers that should receive the request.
+    public let peers: Set<Sender.Peer>
 
     /// The sender who sent the request.
     public let sender: Sender
@@ -29,7 +29,7 @@ public final class RequestReceipt<Request: Tuka.Request, Sender: Tuka.MessageSen
     /// - Parameters:
     ///   - request: A request to be sent.
     ///   - peers: An array of peers that should receive the request.
-    public init(request: Request, peers: [Sender.Peer], sender: Sender, uuid: UUID = UUID()) {
+    public init(request: Request, peers: Set<Sender.Peer>, sender: Sender, uuid: UUID = UUID()) {
         self.request = request
         self.peers = peers
         self.sender = sender

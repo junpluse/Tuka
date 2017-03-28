@@ -53,8 +53,8 @@ public final class Session: NSObject {
         self.init(mcSession: MCSession(peer: MCPeerID.Tuka.defaultPeer))
     }
 
-    public func send(_ data: Data, to peers: [Peer], with mode: MCSessionSendDataMode) throws {
-        try mcSession.send(data, toPeers: peers, with: mode)
+    public func send(_ data: Data, to peers: Set<Peer>, with mode: MCSessionSendDataMode) throws {
+        try mcSession.send(data, toPeers: Array(peers), with: mode)
     }
 }
 
@@ -92,13 +92,13 @@ extension Session: MCSessionDelegate {
 }
 
 extension Session: DataSender {
-    public func send(_ data: Data, to peers: [Peer]) throws {
+    public func send(_ data: Data, to peers: Set<Peer>) throws {
         try send(data, to: peers, with: .reliable)
     }
 }
 
 extension Session: MessageSender {
-    public func send<Message: Tuka.Message>(_ message: Message, to peers: [MCPeerID]) throws {
+    public func send<Message: Tuka.Message>(_ message: Message, to peers: Set<Peer>) throws {
         let context = MessageSerializationContext()
         let data = try message.serializedData(with: context)
         let mode = (message as? SessionMessage)?.preferredSendDataMode ?? .reliable

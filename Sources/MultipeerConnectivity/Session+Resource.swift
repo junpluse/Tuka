@@ -44,7 +44,7 @@ extension Session {
         }
     }
 
-    public func sendResource(at url: URL, withName name: String, to peers: [Peer], concurrently: Bool = false) -> SignalProducer<ResourceTransferEvent, AnyError> {
+    public func sendResource(at url: URL, withName name: String, to peers: Set<Peer>, concurrently: Bool = false) -> SignalProducer<ResourceTransferEvent, AnyError> {
         let childProducers = peers.map { peer in
             return sendResource(at: url, withName: name, to: peer)
         }
