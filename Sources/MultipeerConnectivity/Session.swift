@@ -35,6 +35,10 @@ public final class Session: NSObject {
     fileprivate let startReceivingResourceEventsObserver: Observer<StartReceivingResourceEvent, NoError>
     fileprivate let finishReceivingResourceEventsObserver: Observer<FinishReceivingResourceEvent, NoError>
 
+    public var myPeer: Peer {
+        return mcSession.myPeerID
+    }
+
     public let connectedPeers: Property<Set<Peer>>
 
     public init(mcSession: MCSession) {
