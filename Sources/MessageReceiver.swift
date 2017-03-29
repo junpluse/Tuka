@@ -28,16 +28,6 @@ public protocol MessageReceiver {
 }
 
 extension MessageReceiver {
-    /// Returns a stream of incoming message data with the given name.
-    ///
-    /// - Parameter name: A raw name of message type which should be included into the stream.
-    /// - Returns: A `Signal` sends incoming messages with sender peers.
-    public func incomingMessages(forName rawName: String) -> Signal<(Data?, Peer), NoError> {
-        return incomingMessages(forName: MessageName(rawValue: rawName))
-    }
-}
-
-extension MessageReceiver {
     public func incomingMessages<Message: Tuka.Message>(of type: Message.Type) -> Signal<(Message, Peer), NoError> {
         return incomingMessages(forName: Message.messageName).filterMap { data, peer -> (Message, Peer)? in
             guard let data = data, let message = try? Message(serializedData: data) else {

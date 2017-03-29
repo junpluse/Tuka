@@ -31,19 +31,6 @@ public protocol MessageSender {
 }
 
 extension MessageSender {
-    /// Sends a message with data to peers.
-    ///
-    /// - Parameters:
-    ///   - name: A raw name of message type.
-    ///   - data: A data to be sent.
-    ///   - peers: A set of peers that should receive the message.
-    /// - Throws: An `Error` if sending the message could not be completed.
-    public func send(name rawName: String, with data: Data? = nil, to peers: Set<Peer>) throws {
-        return try send(name: MessageName(rawValue: rawName), with: data, to: peers)
-    }
-}
-
-extension MessageSender {
     public func send<Message: Tuka.Message>(_ message: Message, to peers: Set<Peer>) throws {
         let name = Message.messageName
         let data = try message.serializedData()
