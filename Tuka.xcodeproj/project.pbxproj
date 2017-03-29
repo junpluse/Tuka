@@ -29,6 +29,7 @@
 		BFA2142A1DF018830054A13F /* Session+Resource.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA214221DF018830054A13F /* Session+Resource.swift */; };
 		BFA2142B1DF018830054A13F /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA214231DF018830054A13F /* Session.swift */; };
 		BFA2142C1DF018830054A13F /* SessionMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA214241DF018830054A13F /* SessionMessage.swift */; };
+		BFE16C7E1E8BB60000E07623 /* MessageSender+NSCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE16C7D1E8BB60000E07623 /* MessageSender+NSCoding.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +57,7 @@
 		BFA214221DF018830054A13F /* Session+Resource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Session+Resource.swift"; sourceTree = "<group>"; };
 		BFA214231DF018830054A13F /* Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		BFA214241DF018830054A13F /* SessionMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionMessage.swift; sourceTree = "<group>"; };
+		BFE16C7D1E8BB60000E07623 /* MessageSender+NSCoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MessageSender+NSCoding.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +115,7 @@
 				BFA214071DF018790054A13F /* MessageReceiver.swift */,
 				BFA214081DF018790054A13F /* MessageReceiver+Request.swift */,
 				BFA214091DF018790054A13F /* MessageSender.swift */,
+				BFE16C7D1E8BB60000E07623 /* MessageSender+NSCoding.swift */,
 				BF3BD2461E8A8DB0009E27EA /* MessageSender+JSON.swift */,
 				BFA2140A1DF018790054A13F /* MessageSender+Request.swift */,
 				BFA2140D1DF018790054A13F /* Request.swift */,
@@ -233,6 +236,7 @@
 				BFA214111DF018790054A13F /* Message.swift in Sources */,
 				BF2F4C901E7A6256006F83F9 /* DataReceiver.swift in Sources */,
 				BF3BD2471E8A8DB0009E27EA /* MessageSender+JSON.swift in Sources */,
+				BFE16C7E1E8BB60000E07623 /* MessageSender+NSCoding.swift in Sources */,
 				BF2F4C921E7A6290006F83F9 /* DataSender.swift in Sources */,
 				BFA214131DF018790054A13F /* MessageReceiver+Request.swift in Sources */,
 			);
