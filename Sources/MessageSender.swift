@@ -47,7 +47,7 @@ extension MessageSender {
     public func send<Message: Tuka.Message>(_ message: Message, to peers: Set<Peer>) throws {
         let name = Message.messageName
         let data = try message.serializedData()
-        return try send(name: name, with: data, to: peers)
+        try send(name: name, with: data, to: peers)
     }
 }
 
