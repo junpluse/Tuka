@@ -9,7 +9,6 @@
 import UIKit
 import Tuka
 import ReactiveSwift
-import Result
 
 final class ViewController: UIViewController {
     @IBOutlet weak var peerCountLabel: UILabel?
