@@ -5,6 +5,9 @@
       location = "container:Tuka.xcodeproj">
    </FileRef>
    <FileRef
+      location = "group:Examples/Touches/Touches.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:Carthage/Checkouts/ReactiveSwift/ReactiveSwift.xcodeproj">
    </FileRef>
    <FileRef
