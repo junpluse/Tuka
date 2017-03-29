@@ -1,5 +1,5 @@
 # Tuka
-Protocol-oriented peer-to-peer messaging in Swift
+Reactive P2P messaging in Swift
 
 ## Requirements
 
@@ -17,9 +17,12 @@ To integrate `Tuka` into your Xcode project using [Carthage](https://github.com/
 github "junpluse/Tuka" "master"
 ```
 
-### Manually
+### Git submodule
 
-You can also manually install the framework by dragging and dropping the `Tuka.xcodeproj` into your project or workspace.
+1. Add the Tuka repository as a submodule of your application’s repository.
+2. Run `git submodule update --init --recursive` from within the `Tuka` folder.
+3. Drag and drop `Tuka.xcodeproj`, `Carthage/Checkouts/ReactiveSwift/ReactiveSwift.xcodeproj` and `Carthage/Checkouts/Result/Result.xcodeproj` into your application’s Xcode project or workspace.
+4. On the **General** tab of your application target’s settings, add `Tuka.framework`, `ReactiveSwift.framework` and `Result.framework` to the “Embedded Binaries” section.
 
 ## License
 
