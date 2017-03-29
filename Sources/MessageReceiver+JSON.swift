@@ -10,7 +10,7 @@ import Foundation
 import ReactiveSwift
 import Result
 
-public enum MessageReceiverJSONSerializationError: Error {
+public enum MessageReceiverJSONError: Error {
     case nilObject
     case invalidJSONFormat(Error)
 }
@@ -20,9 +20,9 @@ extension MessageReceiver {
     ///
     /// - Parameter name: A name of message type which should be included into the stream.
     /// - Returns: A `Signal` sends JSON objects with sender peers.
-    public func incomingMessagesWithJSONObject(forName name: MessageName) -> Signal<(Any, Peer), MessageReceiverJSONSerializationError> {
+    public func incomingMessagesWithJSONObject(forName name: MessageName) -> Signal<(Any, Peer), MessageReceiverJSONError> {
         return incomingMessages(forName: name)
-            .promoteErrors(MessageReceiverJSONSerializationError.self)
+            .promoteErrors(MessageReceiverJSONError.self)
             .attemptMap { data, peer in
                 guard let data = data else {
                     return Result(error: .nilObject)
