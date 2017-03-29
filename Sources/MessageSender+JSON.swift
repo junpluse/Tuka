@@ -16,7 +16,7 @@ extension MessageSender {
     ///   - jsonObject: A JSON object to be sent.
     ///   - peers: A set of peers that should receive the message.
     /// - Throws: An `Error` if sending the message could not be completed.
-    public func send(name: MessageName, withJSONObject jsonObject: [String: Any], to peers: Set<Peer>) throws {
+    public func send(name: MessageName, withJSONObject jsonObject: Any, to peers: Set<Peer>) throws {
         let data = try JSONSerialization.data(withJSONObject: jsonObject, options: [])
         try send(name: name, with: data, to: peers)
     }
