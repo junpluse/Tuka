@@ -14,10 +14,10 @@ import Result
 public protocol MessageReceiver {
     associatedtype Peer: Tuka.Peer
 
-    /// Returns a stream of incoming message data with the given name.
+    /// Returns a stream of incoming message data for the given name.
     ///
     /// - Parameter name: A name of message type which should be included into the stream.
-    /// - Returns: A `Signal` sends incoming messages with sender peers.
+    /// - Returns: A `Signal` sends incoming message data with sender peers.
     func incomingMessages(forName name: MessageName) -> Signal<(Data?, Peer), NoError>
 
     /// Returns a stream of incoming messages of the given type.
