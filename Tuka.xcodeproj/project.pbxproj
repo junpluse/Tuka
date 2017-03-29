@@ -30,6 +30,7 @@
 		BFA2142B1DF018830054A13F /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA214231DF018830054A13F /* Session.swift */; };
 		BFA2142C1DF018830054A13F /* SessionMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA214241DF018830054A13F /* SessionMessage.swift */; };
 		BFE16C7E1E8BB60000E07623 /* MessageSender+NSCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE16C7D1E8BB60000E07623 /* MessageSender+NSCoding.swift */; };
+		BFE16C801E8BB9B000E07623 /* MessageReceiver+JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE16C7F1E8BB9B000E07623 /* MessageReceiver+JSON.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +59,7 @@
 		BFA214231DF018830054A13F /* Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		BFA214241DF018830054A13F /* SessionMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionMessage.swift; sourceTree = "<group>"; };
 		BFE16C7D1E8BB60000E07623 /* MessageSender+NSCoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MessageSender+NSCoding.swift"; sourceTree = "<group>"; };
+		BFE16C7F1E8BB9B000E07623 /* MessageReceiver+JSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MessageReceiver+JSON.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +115,7 @@
 				BF2F4C771E77D9A6006F83F9 /* Message+NSCoding.swift */,
 				BF3BD23A1E8A7682009E27EA /* MessagePacket.swift */,
 				BFA214071DF018790054A13F /* MessageReceiver.swift */,
+				BFE16C7F1E8BB9B000E07623 /* MessageReceiver+JSON.swift */,
 				BFA214081DF018790054A13F /* MessageReceiver+Request.swift */,
 				BFA214091DF018790054A13F /* MessageSender.swift */,
 				BFE16C7D1E8BB60000E07623 /* MessageSender+NSCoding.swift */,
@@ -219,6 +222,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BFE16C801E8BB9B000E07623 /* MessageReceiver+JSON.swift in Sources */,
 				BFA214141DF018790054A13F /* MessageSender.swift in Sources */,
 				BFA2142B1DF018830054A13F /* Session.swift in Sources */,
 				BFA214151DF018790054A13F /* MessageSender+Request.swift in Sources */,
