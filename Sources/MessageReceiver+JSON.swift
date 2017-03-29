@@ -12,7 +12,7 @@ import Result
 
 public enum MessageReceiverJSONSerializationError: Error {
     case nilObject
-    case invalidFormat(Error)
+    case invalidJSONFormat(Error)
 }
 
 extension MessageReceiver {
@@ -31,7 +31,7 @@ extension MessageReceiver {
                     let object = try JSONSerialization.jsonObject(with: data, options: [])
                     return Result(value: (object, peer))
                 } catch {
-                    return Result(error: .invalidFormat(error))
+                    return Result(error: .invalidJSONFormat(error))
                 }
             }
     }
