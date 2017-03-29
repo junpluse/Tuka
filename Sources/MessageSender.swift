@@ -8,60 +8,40 @@
 
 import Foundation
 
-/// Represents a message sender
-public protocol MessageSenderProtocol {
-	associatedtype Peer: PeerProtocol
+/// Represents a message sender.
+public protocol MessageSender {
+    associatedtype Peer: Tuka.Peer
 
-	/// Sends an archived data of message to peers.
-	///
-	/// - Parameters:
-	///   - data: An archived data of message.
-	///   - message: The orignal message of the data.
-	///   - peers: An array of peers that should receive the data.
-	/// - Throws: An `Error` if sending the message could not be completed.
-	func send(_ data: Data, of message: MessageProtocol, to peers: [Peer]) throws
+    /// Sends a message with data to peers.
+    ///
+    /// - Parameters:
+    ///   - name: A name of message type.
+    ///   - data: A data to be sent.
+    ///   - peers: A set of peers that should receive the message.
+    /// - Throws: An `Error` if sending the message could not be completed.
+    func send(name: MessageName, with data: Data?, to peers: Set<Peer>) throws
+
+    /// Sends a message to peers.
+    ///
+    /// - Parameters:
+    ///   - message: A message to be sent.
+    ///   - peers: A set of peers that should receive the message.
+    /// - Throws: An `Error` if sending the message could not be completed.
+    func send<Message: Tuka.Message>(_ message: Message, to peers: Set<Peer>) throws
 }
 
-/// A struct that implements `MessageSenderProtocol` using a closure or
-/// another one that conforms `MessageSenderProtocol` to be wrapped.
-public struct MessageSender<Peer: PeerProtocol>: MessageSenderProtocol {
-	private let _action: (Data, MessageProtocol, [Peer]) throws -> Void
-
-	/// Initializes a sender which sends data of messages using the given closure.
-	///
-	/// - Parameter action: A closure to send data of messages.
-	public init(_ action: @escaping (_ data: Data, _ message: MessageProtocol, _ peers: [Peer]) throws -> Void) {
-		_action = action
-	}
-
-	/// Initializes a sender which wraps the given sender.
-	///
-	/// - Parameter sender: A sender to be wrapped.
-	public init<T: MessageSenderProtocol>(_ sender: T) where T.Peer == Peer {
-		_action = { try sender.send($0, of: $1, to: $2) }
-	}
-
-	/// Sends an archived data of message to peers.
-	///
-	/// - Parameters:
-	///   - data: An archived data of message.
-	///   - message: The orignal message of the data.
-	///   - peers: An array of peers that should receive the data.
-	/// - Throws: An `Error` if sending the data could not be completed.
-	public func send(_ data: Data, of message: MessageProtocol, to peers: [Peer]) throws {
-		try _action(data, message, peers)
-	}
+extension MessageSender {
+    public func send<Message: Tuka.Message>(_ message: Message, to peers: Set<Peer>) throws {
+        let name = Message.messageName
+        let data = try message.serializedData()
+        try send(name: name, with: data, to: peers)
+    }
 }
 
-extension MessageSenderProtocol {
-	/// Sends a message to peers.
-	///
-	/// - Parameters:
-	///   - message: A message to be sent.
-	///   - peers: An array of peers that should receive the message.
-	/// - Throws: An `Error` if sending the message could not be completed.
-	public func send<T: MessageProtocol>(_ message: T, to peers: [Peer]) throws {
-		let data = message.serializedMessage()
-		try send(data, of: message, to: peers)
-	}
+extension MessageSender where Self: DataSender {
+    public func send(name: MessageName, with data: Data? = nil, to peers: Set<Peer>) throws {
+        let packet = MessagePacket(name: name.rawValue, data: data)
+        let packetData = NSKeyedArchiver.archivedData(withRootObject: packet)
+        try send(packetData, to: peers)
+    }
 }

@@ -6,41 +6,51 @@
 //  Copyright © 2016 Jun Tanaka. All rights reserved.
 //
 
+import ReactiveSwift
+import Result
 import Foundation
 
 /// Represents a receipt of request submission.
-public protocol RequestReceiptProtocol {
-	associatedtype Request: RequestProtocol
-	associatedtype Peer: PeerProtocol
+public final class RequestReceipt<Request: Tuka.Request, Sender: Tuka.MessageSender> {
+    /// The submitted request.
+    public let request: Request
 
-	/// The submitted request.
-	var request: Request { get }
+    /// A set of peers that should receive the request.
+    public let peers: Set<Sender.Peer>
 
-	/// An array of peers that should receive the request.
-	var peers: [Peer] { get }
+    /// The sender who sent the request.
+    public let sender: Sender
+
+    /// The UUID which identifies the receipt.
+    public let uuid: UUID
+
+    /// Initializes a receipt with a request and an array of peers.
+    ///
+    /// - Parameters:
+    ///   - request: A request to be sent.
+    ///   - peers: An array of peers that should receive the request.
+    public init(request: Request, peers: Set<Sender.Peer>, sender: Sender, uuid: UUID = UUID()) {
+        self.request = request
+        self.peers = peers
+        self.sender = sender
+        self.uuid = uuid
+    }
 }
 
-/// A simple class that implements `RequestReceiptProtocol`.
-public final class RequestReceipt<Request: RequestProtocol, Peer: PeerProtocol>: RequestReceiptProtocol {
-	public let request: Request
-	public let peers: [Peer]
+extension RequestReceipt where Sender: MessageReceiver {
+    public func responses() -> Signal<(Request.Response, Sender.Peer), NoError> {
+        return sender.responses(to: request, from: peers)
+    }
+}
 
-	/// Initializes a receipt with a request and an array of peers.
-	///
-	/// - Parameters:
-	///   - request: A request to be sent.
-	///   - peers: An array of peers that should receive the request.
-	public init(request: Request, peers: [Peer]) {
-		self.request = request
-		self.peers = peers
-	}
+extension RequestReceipt: Equatable {
+    public static func == (lhs: RequestReceipt, rhs: RequestReceipt) -> Bool {
+        return lhs.uuid == rhs.uuid
+    }
+}
 
-	/// Initializes a receipt which wraps the given receipt.
-	///
-	/// - Parameters:
-	///   - receipt: A receipt to be wrapped.
-	public init<T: RequestReceiptProtocol>(_ receipt: T) where T.Request == Request, T.Peer == Peer {
-		self.request = receipt.request
-		self.peers = receipt.peers
-	}
+extension RequestReceipt: Hashable {
+    public var hashValue: Int {
+        return uuid.hashValue
+    }
 }

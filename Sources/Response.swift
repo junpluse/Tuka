@@ -6,10 +6,10 @@
 //  Copyright © 2016 Jun Tanaka. All rights reserved.
 //
 
-import Foundation
-
 /// Represents a response message to a request.
-public protocol ResponseProtocol: MessageProtocol {
-	/// A string which identifies the original request.
-	var requestID: String { get }
+public protocol Response: Message {
+    associatedtype RequestID: Hashable
+
+    /// A value which identifies the original request.
+    var requestID: RequestID { get }
 }

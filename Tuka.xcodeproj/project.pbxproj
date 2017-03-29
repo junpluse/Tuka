@@ -8,6 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		BF0EEB4D1E12496A00174E23 /* PeerInvitationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0EEB4C1E12496A00174E23 /* PeerInvitationManager.swift */; };
+		BF2F4C781E77D9A6006F83F9 /* Message+NSCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2F4C771E77D9A6006F83F9 /* Message+NSCoding.swift */; };
+		BF2F4C901E7A6256006F83F9 /* DataReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2F4C8F1E7A6256006F83F9 /* DataReceiver.swift */; };
+		BF2F4C921E7A6290006F83F9 /* DataSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2F4C911E7A6290006F83F9 /* DataSender.swift */; };
+		BF3BD23B1E8A7682009E27EA /* MessagePacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3BD23A1E8A7682009E27EA /* MessagePacket.swift */; };
+		BF3BD2471E8A8DB0009E27EA /* MessageSender+JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3BD2461E8A8DB0009E27EA /* MessageSender+JSON.swift */; };
+		BF7FD2301E8A676700DCD497 /* ReactiveSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF7FD22F1E8A676700DCD497 /* ReactiveSwift.framework */; };
+		BF7FD2321E8A676D00DCD497 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF7FD2311E8A676D00DCD497 /* Result.framework */; };
 		BFA214001DF018000054A13F /* Tuka.h in Headers */ = {isa = PBXBuildFile; fileRef = BFA213FE1DF018000054A13F /* Tuka.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BFA214111DF018790054A13F /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA214061DF018790054A13F /* Message.swift */; };
 		BFA214121DF018790054A13F /* MessageReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA214071DF018790054A13F /* MessageReceiver.swift */; };
@@ -17,22 +24,25 @@
 		BFA214161DF018790054A13F /* Peer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA2140B1DF018790054A13F /* Peer.swift */; };
 		BFA214181DF018790054A13F /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA2140D1DF018790054A13F /* Request.swift */; };
 		BFA214191DF018790054A13F /* RequestReceipt.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA2140E1DF018790054A13F /* RequestReceipt.swift */; };
-		BFA2141A1DF018790054A13F /* RequestResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA2140F1DF018790054A13F /* RequestResponder.swift */; };
 		BFA2141B1DF018790054A13F /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA214101DF018790054A13F /* Response.swift */; };
 		BFA214251DF018830054A13F /* MCPeerID+Tuka.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA2141D1DF018830054A13F /* MCPeerID+Tuka.swift */; };
-		BFA214271DF018830054A13F /* ResourceRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA2141F1DF018830054A13F /* ResourceRequest.swift */; };
-		BFA214281DF018830054A13F /* ResourceResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA214201DF018830054A13F /* ResourceResponse.swift */; };
 		BFA2142A1DF018830054A13F /* Session+Resource.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA214221DF018830054A13F /* Session+Resource.swift */; };
 		BFA2142B1DF018830054A13F /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA214231DF018830054A13F /* Session.swift */; };
 		BFA2142C1DF018830054A13F /* SessionMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA214241DF018830054A13F /* SessionMessage.swift */; };
-		BFA214321DF0188C0054A13F /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA2142E1DF0188C0054A13F /* Atomic.swift */; };
-		BFA214331DF0188C0054A13F /* Coding.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA2142F1DF0188C0054A13F /* Coding.swift */; };
-		BFA214341DF0188C0054A13F /* Disposable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA214301DF0188C0054A13F /* Disposable.swift */; };
-		BFA214351DF0188C0054A13F /* Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA214311DF0188C0054A13F /* Observer.swift */; };
+		BFE16C7E1E8BB60000E07623 /* MessageSender+NSCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE16C7D1E8BB60000E07623 /* MessageSender+NSCoding.swift */; };
+		BFE16C801E8BB9B000E07623 /* MessageReceiver+JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE16C7F1E8BB9B000E07623 /* MessageReceiver+JSON.swift */; };
+		BFE16C821E8BC1A500E07623 /* MessageReceiver+NSCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE16C811E8BC1A500E07623 /* MessageReceiver+NSCoding.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		BF0EEB4C1E12496A00174E23 /* PeerInvitationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeerInvitationManager.swift; sourceTree = "<group>"; };
+		BF2F4C771E77D9A6006F83F9 /* Message+NSCoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Message+NSCoding.swift"; path = "NSCoding/Message+NSCoding.swift"; sourceTree = "<group>"; };
+		BF2F4C8F1E7A6256006F83F9 /* DataReceiver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataReceiver.swift; sourceTree = "<group>"; };
+		BF2F4C911E7A6290006F83F9 /* DataSender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSender.swift; sourceTree = "<group>"; };
+		BF3BD23A1E8A7682009E27EA /* MessagePacket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagePacket.swift; sourceTree = "<group>"; };
+		BF3BD2461E8A8DB0009E27EA /* MessageSender+JSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MessageSender+JSON.swift"; sourceTree = "<group>"; };
+		BF7FD22F1E8A676700DCD497 /* ReactiveSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveSwift.framework; path = "../../../Library/Developer/Xcode/DerivedData/Tuka-cvxgxqgdfknijscyucdqjomgpsvf/Build/Products/Debug-iphoneos/ReactiveSwift.framework"; sourceTree = "<group>"; };
+		BF7FD2311E8A676D00DCD497 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = "../../../Library/Developer/Xcode/DerivedData/Tuka-cvxgxqgdfknijscyucdqjomgpsvf/Build/Products/Debug-iphoneos/Result.framework"; sourceTree = "<group>"; };
 		BFA213FB1DF018000054A13F /* Tuka.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Tuka.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFA213FE1DF018000054A13F /* Tuka.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Tuka.h; sourceTree = "<group>"; };
 		BFA213FF1DF018000054A13F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -44,18 +54,14 @@
 		BFA2140B1DF018790054A13F /* Peer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Peer.swift; sourceTree = "<group>"; };
 		BFA2140D1DF018790054A13F /* Request.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
 		BFA2140E1DF018790054A13F /* RequestReceipt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestReceipt.swift; sourceTree = "<group>"; };
-		BFA2140F1DF018790054A13F /* RequestResponder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestResponder.swift; sourceTree = "<group>"; };
 		BFA214101DF018790054A13F /* Response.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		BFA2141D1DF018830054A13F /* MCPeerID+Tuka.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MCPeerID+Tuka.swift"; sourceTree = "<group>"; };
-		BFA2141F1DF018830054A13F /* ResourceRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceRequest.swift; sourceTree = "<group>"; };
-		BFA214201DF018830054A13F /* ResourceResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceResponse.swift; sourceTree = "<group>"; };
 		BFA214221DF018830054A13F /* Session+Resource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Session+Resource.swift"; sourceTree = "<group>"; };
 		BFA214231DF018830054A13F /* Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		BFA214241DF018830054A13F /* SessionMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionMessage.swift; sourceTree = "<group>"; };
-		BFA2142E1DF0188C0054A13F /* Atomic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Atomic.swift; sourceTree = "<group>"; };
-		BFA2142F1DF0188C0054A13F /* Coding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coding.swift; sourceTree = "<group>"; };
-		BFA214301DF0188C0054A13F /* Disposable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Disposable.swift; sourceTree = "<group>"; };
-		BFA214311DF0188C0054A13F /* Observer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Observer.swift; sourceTree = "<group>"; };
+		BFE16C7D1E8BB60000E07623 /* MessageSender+NSCoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MessageSender+NSCoding.swift"; sourceTree = "<group>"; };
+		BFE16C7F1E8BB9B000E07623 /* MessageReceiver+JSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MessageReceiver+JSON.swift"; sourceTree = "<group>"; };
+		BFE16C811E8BC1A500E07623 /* MessageReceiver+NSCoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MessageReceiver+NSCoding.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,19 +69,34 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF7FD2301E8A676700DCD497 /* ReactiveSwift.framework in Frameworks */,
+				BF7FD2321E8A676D00DCD497 /* Result.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BF7FD22E1E8A676700DCD497 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BF7FD22F1E8A676700DCD497 /* ReactiveSwift.framework */,
+				BF7FD2311E8A676D00DCD497 /* Result.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		BFA213F11DF017FF0054A13F = {
 			isa = PBXGroup;
 			children = (
 				BFA213FD1DF018000054A13F /* Sources */,
 				BFA213FC1DF018000054A13F /* Products */,
+				BF7FD22E1E8A676700DCD497 /* Frameworks */,
 			);
+			indentWidth = 4;
 			sourceTree = "<group>";
+			tabWidth = 4;
+			usesTabs = 0;
 		};
 		BFA213FC1DF018000054A13F /* Products */ = {
 			isa = PBXGroup;
@@ -89,18 +110,24 @@
 			isa = PBXGroup;
 			children = (
 				BFA213FE1DF018000054A13F /* Tuka.h */,
+				BFA2140B1DF018790054A13F /* Peer.swift */,
+				BF2F4C8F1E7A6256006F83F9 /* DataReceiver.swift */,
+				BF2F4C911E7A6290006F83F9 /* DataSender.swift */,
 				BFA214061DF018790054A13F /* Message.swift */,
+				BF2F4C771E77D9A6006F83F9 /* Message+NSCoding.swift */,
+				BF3BD23A1E8A7682009E27EA /* MessagePacket.swift */,
 				BFA214071DF018790054A13F /* MessageReceiver.swift */,
+				BFE16C811E8BC1A500E07623 /* MessageReceiver+NSCoding.swift */,
+				BFE16C7F1E8BB9B000E07623 /* MessageReceiver+JSON.swift */,
 				BFA214081DF018790054A13F /* MessageReceiver+Request.swift */,
 				BFA214091DF018790054A13F /* MessageSender.swift */,
+				BFE16C7D1E8BB60000E07623 /* MessageSender+NSCoding.swift */,
+				BF3BD2461E8A8DB0009E27EA /* MessageSender+JSON.swift */,
 				BFA2140A1DF018790054A13F /* MessageSender+Request.swift */,
-				BFA2140B1DF018790054A13F /* Peer.swift */,
 				BFA2140D1DF018790054A13F /* Request.swift */,
 				BFA2140E1DF018790054A13F /* RequestReceipt.swift */,
-				BFA2140F1DF018790054A13F /* RequestResponder.swift */,
 				BFA214101DF018790054A13F /* Response.swift */,
 				BFA2141C1DF018830054A13F /* MultipeerConnectivity */,
-				BFA2142D1DF0188C0054A13F /* Utilities */,
 				BFA213FF1DF018000054A13F /* Info.plist */,
 			);
 			path = Sources;
@@ -110,25 +137,12 @@
 			isa = PBXGroup;
 			children = (
 				BFA2141D1DF018830054A13F /* MCPeerID+Tuka.swift */,
-				BFA2141F1DF018830054A13F /* ResourceRequest.swift */,
-				BFA214201DF018830054A13F /* ResourceResponse.swift */,
 				BFA214231DF018830054A13F /* Session.swift */,
 				BFA214221DF018830054A13F /* Session+Resource.swift */,
 				BFA214241DF018830054A13F /* SessionMessage.swift */,
 				BF0EEB4C1E12496A00174E23 /* PeerInvitationManager.swift */,
 			);
 			path = MultipeerConnectivity;
-			sourceTree = "<group>";
-		};
-		BFA2142D1DF0188C0054A13F /* Utilities */ = {
-			isa = PBXGroup;
-			children = (
-				BFA2142E1DF0188C0054A13F /* Atomic.swift */,
-				BFA2142F1DF0188C0054A13F /* Coding.swift */,
-				BFA214301DF0188C0054A13F /* Disposable.swift */,
-				BFA214311DF0188C0054A13F /* Observer.swift */,
-			);
-			path = Utilities;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -211,26 +225,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BFE16C801E8BB9B000E07623 /* MessageReceiver+JSON.swift in Sources */,
 				BFA214141DF018790054A13F /* MessageSender.swift in Sources */,
 				BFA2142B1DF018830054A13F /* Session.swift in Sources */,
 				BFA214151DF018790054A13F /* MessageSender+Request.swift in Sources */,
-				BFA214331DF0188C0054A13F /* Coding.swift in Sources */,
 				BFA214121DF018790054A13F /* MessageReceiver.swift in Sources */,
 				BFA214161DF018790054A13F /* Peer.swift in Sources */,
 				BF0EEB4D1E12496A00174E23 /* PeerInvitationManager.swift in Sources */,
 				BFA2142C1DF018830054A13F /* SessionMessage.swift in Sources */,
-				BFA214321DF0188C0054A13F /* Atomic.swift in Sources */,
+				BF2F4C781E77D9A6006F83F9 /* Message+NSCoding.swift in Sources */,
+				BF3BD23B1E8A7682009E27EA /* MessagePacket.swift in Sources */,
 				BFA2141B1DF018790054A13F /* Response.swift in Sources */,
-				BFA214271DF018830054A13F /* ResourceRequest.swift in Sources */,
 				BFA2142A1DF018830054A13F /* Session+Resource.swift in Sources */,
 				BFA214191DF018790054A13F /* RequestReceipt.swift in Sources */,
 				BFA214251DF018830054A13F /* MCPeerID+Tuka.swift in Sources */,
 				BFA214181DF018790054A13F /* Request.swift in Sources */,
-				BFA214281DF018830054A13F /* ResourceResponse.swift in Sources */,
+				BFE16C821E8BC1A500E07623 /* MessageReceiver+NSCoding.swift in Sources */,
 				BFA214111DF018790054A13F /* Message.swift in Sources */,
-				BFA2141A1DF018790054A13F /* RequestResponder.swift in Sources */,
-				BFA214351DF0188C0054A13F /* Observer.swift in Sources */,
-				BFA214341DF0188C0054A13F /* Disposable.swift in Sources */,
+				BF2F4C901E7A6256006F83F9 /* DataReceiver.swift in Sources */,
+				BF3BD2471E8A8DB0009E27EA /* MessageSender+JSON.swift in Sources */,
+				BFE16C7E1E8BB60000E07623 /* MessageSender+NSCoding.swift in Sources */,
+				BF2F4C921E7A6290006F83F9 /* DataSender.swift in Sources */,
 				BFA214131DF018790054A13F /* MessageReceiver+Request.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
