@@ -66,12 +66,18 @@ extension Session {
         }
     }
 
-    public var incomingResourceEvents: Signal<ResourceTransferEvent, NoError> {
+    public func incomingResourceEvents(forName resourceName: String? = nil, from peers: Set<Peer>? = nil) -> Signal<ResourceTransferEvent, NoError> {
         return Signal.merge([
-            startReceivingResourceEvents.map { name, peer, progress in
+            startReceivingResourceEvents.filterMap { name, peer, progress -> ResourceTransferEvent? in
+                guard (resourceName == nil || resourceName == name) && (peers == nil || peers?.contains(peer) == true) else {
+                    return nil
+                }
                 return .started(name: name, peer: peer, progress: progress)
             },
-            finishReceivingResourceEvents.map { name, peer, url, error in
+            finishReceivingResourceEvents.filterMap { name, peer, url, error -> ResourceTransferEvent? in
+                guard (resourceName == nil || resourceName == name) && (peers == nil || peers?.contains(peer) == true) else {
+                    return nil
+                }
                 if let error = error {
                     return .failed(name: name, peer: peer, error: error)
                 } else {
@@ -83,11 +89,8 @@ extension Session {
 
     public func incomingResources(forName resourceName: String? = nil, from peers: Set<Peer>? = nil) -> Signal<(String, URL, Peer), AnyError> {
         return finishReceivingResourceEvents
-            .filter { name, _, _, _ in
-                return name == resourceName || resourceName == nil
-            }
-            .filter { _, peer, _, _ in
-                return peers?.contains(peer) == true || peers == nil
+            .filter { name, peer, _, _ in
+                return (name == resourceName || resourceName == nil) && (peers?.contains(peer) == true || peers == nil)
             }
             .promoteErrors(AnyError.self)
             .attemptMap { name, peer, url, error -> Result<(String, URL, Peer), AnyError> in
