@@ -80,15 +80,16 @@ extension Session {
             }
         ])
     }
-    
-    public var incomingResources: Signal<(name: String, peer: Peer, localURL: URL), NoError> {
-        return incomingResourceEvents.filterMap { event in
-            switch event {
-            case .completed(let name, let peer, let localURL):
-                return (name, peer, localURL)
-            default:
-                return nil
+
+    public func incomingResources() -> Signal<(String, URL, Peer), AnyError> {
+        return finishReceivingResourceEvents
+            .promoteErrors(AnyError.self)
+            .attemptMap { name, peer, url, error -> Result<(String, URL, Peer), AnyError> in
+                if let error = error {
+                    return Result(error: AnyError(error))
+                } else {
+                    return Result(value: (name, url, peer))
+                }
             }
-        }
     }
 }
