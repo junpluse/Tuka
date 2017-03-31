@@ -90,7 +90,7 @@ extension Session {
     public func incomingResources(forName resourceName: String? = nil, from peers: Set<Peer>? = nil) -> Signal<(String, URL, Peer), AnyError> {
         return finishReceivingResourceEvents
             .filter { name, peer, _, _ in
-                return (name == resourceName || resourceName == nil) && (peers?.contains(peer) == true || peers == nil)
+                return (resourceName == nil || resourceName == name) && (peers == nil || peers?.contains(peer) == true)
             }
             .promoteErrors(AnyError.self)
             .attemptMap { name, peer, url, error -> Result<(String, URL, Peer), AnyError> in
