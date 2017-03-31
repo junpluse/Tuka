@@ -81,29 +81,20 @@ extension Session {
         ])
     }
 
-    public func incomingResources() -> Signal<(String, URL, Peer), AnyError> {
+    public func incomingResources(forName resourceName: String? = nil, from peers: Set<Peer>? = nil) -> Signal<(String, URL, Peer), AnyError> {
         return finishReceivingResourceEvents
+            .filter { name, _, _, _ in
+                return name == resourceName || resourceName == nil
+            }
+            .filter { _, peer, _, _ in
+                return peers?.contains(peer) == true || peers == nil
+            }
             .promoteErrors(AnyError.self)
             .attemptMap { name, peer, url, error -> Result<(String, URL, Peer), AnyError> in
                 if let error = error {
                     return Result(error: AnyError(error))
                 } else {
                     return Result(value: (name, url, peer))
-                }
-            }
-    }
-
-    public func incomingResources(forName resourceName: String) -> Signal<(URL, Peer), AnyError> {
-        return finishReceivingResourceEvents
-            .filter { name, _, _, _ in
-                return name == resourceName
-            }
-            .promoteErrors(AnyError.self)
-            .attemptMap { name, peer, url, error -> Result<(URL, Peer), AnyError> in
-                if let error = error {
-                    return Result(error: AnyError(error))
-                } else {
-                    return Result(value: (url, peer))
                 }
         }
     }
