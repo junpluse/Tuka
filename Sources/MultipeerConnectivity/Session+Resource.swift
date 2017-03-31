@@ -92,4 +92,19 @@ extension Session {
                 }
             }
     }
+
+    public func incomingResources(forName resourceName: String) -> Signal<(URL, Peer), AnyError> {
+        return finishReceivingResourceEvents
+            .filter { name, _, _, _ in
+                return name == resourceName
+            }
+            .promoteErrors(AnyError.self)
+            .attemptMap { name, peer, url, error -> Result<(URL, Peer), AnyError> in
+                if let error = error {
+                    return Result(error: AnyError(error))
+                } else {
+                    return Result(value: (url, peer))
+                }
+        }
+    }
 }
