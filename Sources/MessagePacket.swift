@@ -24,16 +24,16 @@ internal final class MessagePacket: NSObject, NSSecureCoding {
     }
 
     convenience init?(coder aDecoder: NSCoder) {
-        guard let name = aDecoder.decodeObject(of: NSString.self, forKey: CodingKey.name.rawValue) else {
+        guard let name = aDecoder.tuka.decodeString(forKey: CodingKey.name) else {
             return nil
         }
-        let data = aDecoder.decodeObject(of: NSData.self, forKey: CodingKey.data.rawValue)
-        self.init(name: name as String, data: data as Data?)
+        let data = aDecoder.tuka.decodeObject(of: Data.self, forKey: CodingKey.data)
+        self.init(name: name as String, data: data)
     }
 
     func encode(with aCoder: NSCoder) {
-        aCoder.encode(name, forKey: CodingKey.name.rawValue)
-        aCoder.encode(data, forKey: CodingKey.data.rawValue)
+        aCoder.tuka.encode(name, forKey: CodingKey.name)
+        aCoder.tuka.encode(data, forKey: CodingKey.data)
     }
 
     static var supportsSecureCoding: Bool {
