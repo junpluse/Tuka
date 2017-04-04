@@ -61,10 +61,6 @@ public final class Session: NSObject {
     public override convenience init() {
         self.init(mcSession: MCSession(peer: MCPeerID.Tuka.defaultPeer))
     }
-
-    public func send(_ data: Data, to peers: Set<Peer>, with mode: MCSessionSendDataMode) throws {
-        try mcSession.send(data, toPeers: Array(peers), with: mode)
-    }
 }
 
 extension Session: MCSessionDelegate {
@@ -100,20 +96,34 @@ extension Session: MCSessionDelegate {
     }
 }
 
+extension Session {
+    public func send(_ data: Data, to peers: Set<Peer>, mode: MCSessionSendDataMode) throws {
+        try mcSession.send(data, toPeers: Array(peers), with: mode)
+    }
+
+    public func send(name: MessageName, withData data: Data?, to peers: Set<Peer>? = nil, mode: MCSessionSendDataMode) throws {
+        let packet = MessagePacket(name: name.rawValue, data: data)
+        let packetData = NSKeyedArchiver.archivedData(withRootObject: packet)
+        try send(packetData, to: peers ?? connectedPeers.value, mode: mode)
+    }
+
+    public func send<Message: Tuka.Message>(_ message: Message, to peers: Set<Peer>? = nil, mode: MCSessionSendDataMode) throws {
+        let name = Message.messageName
+        let data = try message.serializedData()
+        try send(name: name, withData: data, to: peers, mode: mode)
+    }
+}
+
 extension Session: DataSender {
     public func send(_ data: Data, to peers: Set<Peer>) throws {
-        try send(data, to: peers, with: .reliable)
+        try send(data, to: peers, mode: .reliable)
     }
 }
 
 extension Session: MessageSender {
     public func send<Message: Tuka.Message>(_ message: Message, to peers: Set<Peer>) throws {
-        let name = Message.messageName
-        let data = try message.serializedData()
-        let packet = MessagePacket(name: name.rawValue, data: data)
-        let packetData = NSKeyedArchiver.archivedData(withRootObject: packet)
         let mode = (message as? SessionMessage)?.preferredSendDataMode ?? .reliable
-        try send(packetData, to: peers, with: mode)
+        try send(message, to: peers, mode: mode)
     }
 }
 
