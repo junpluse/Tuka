@@ -18,6 +18,6 @@ extension MessageSender {
     /// - Throws: An `Error` if sending the message could not be completed.
     public func send<Object>(name: MessageName, withObject object: Object, to peers: Set<Peer>) throws where Object: NSObject, Object: NSCoding {
         let data = NSKeyedArchiver.archivedData(withRootObject: object)
-        try send(name: name, with: data, to: peers)
+        try send(name: name, withData: data, to: peers)
     }
 }

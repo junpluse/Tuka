@@ -18,6 +18,6 @@ extension MessageSender {
     /// - Throws: An `Error` if sending the message could not be completed.
     public func send(name: MessageName, withJSONObject jsonObject: Any, to peers: Set<Peer>) throws {
         let data = try JSONSerialization.data(withJSONObject: jsonObject, options: [])
-        try send(name: name, with: data, to: peers)
+        try send(name: name, withData: data, to: peers)
     }
 }
