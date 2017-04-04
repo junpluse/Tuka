@@ -97,21 +97,34 @@ extension Session: MCSessionDelegate {
 }
 
 extension Session {
-    public func send(_ data: Data, to peers: Set<Peer>? = nil, mode: MCSessionSendDataMode) throws {
-        let peers = peers ?? connectedPeers.value
+    public func send(_ data: Data, to peers: Set<Peer>, mode: MCSessionSendDataMode) throws {
         try mcSession.send(data, toPeers: Array(peers), with: mode)
     }
 
-    public func send(name: MessageName, withData data: Data? = nil, to peers: Set<Peer>? = nil, mode: MCSessionSendDataMode) throws {
+    public func send(name: MessageName, withData data: Data? = nil, to peers: Set<Peer>, mode: MCSessionSendDataMode) throws {
         let packet = MessagePacket(name: name.rawValue, data: data)
         let packetData = NSKeyedArchiver.archivedData(withRootObject: packet)
         try send(packetData, to: peers, mode: mode)
     }
 
-    public func send<Message: Tuka.Message>(_ message: Message, to peers: Set<Peer>? = nil, mode: MCSessionSendDataMode) throws {
+    public func send<Message: Tuka.Message>(_ message: Message, to peers: Set<Peer>, mode: MCSessionSendDataMode) throws {
         let name = Message.messageName
         let data = try message.serializedData()
         try send(name: name, withData: data, to: peers, mode: mode)
+    }
+}
+
+extension Session {
+    public func send(_ data: Data, mode: MCSessionSendDataMode = .reliable) throws {
+        try send(data, to: connectedPeers.value, mode: mode)
+    }
+
+    public func send(name: MessageName, withData data: Data? = nil, mode: MCSessionSendDataMode = .reliable) throws {
+        try send(name: name, to: connectedPeers.value, mode: mode)
+    }
+
+    public func send<Message: Tuka.Message>(_ message: Message, mode: MCSessionSendDataMode = .reliable) throws {
+        try send(message, to: connectedPeers.value, mode: mode)
     }
 }
 
@@ -122,9 +135,12 @@ extension Session: DataSender {
 }
 
 extension Session: MessageSender {
+    public func send(name: MessageName, withData data: Data? = nil, to peers: Set<Peer>) throws {
+        try send(name: name, to: peers, mode: .reliable)
+    }
+
     public func send<Message: Tuka.Message>(_ message: Message, to peers: Set<Peer>) throws {
-        let mode = (message as? SessionMessage)?.preferredSendDataMode ?? .reliable
-        try send(message, to: peers, mode: mode)
+        try send(message, to: peers, mode: .reliable)
     }
 }
 
