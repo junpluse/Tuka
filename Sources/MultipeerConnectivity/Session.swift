@@ -97,14 +97,15 @@ extension Session: MCSessionDelegate {
 }
 
 extension Session {
-    public func send(_ data: Data, to peers: Set<Peer>, mode: MCSessionSendDataMode) throws {
+    public func send(_ data: Data, to peers: Set<Peer>? = nil, mode: MCSessionSendDataMode) throws {
+        let peers = peers ?? connectedPeers.value
         try mcSession.send(data, toPeers: Array(peers), with: mode)
     }
 
-    public func send(name: MessageName, withData data: Data?, to peers: Set<Peer>? = nil, mode: MCSessionSendDataMode) throws {
+    public func send(name: MessageName, withData data: Data? = nil, to peers: Set<Peer>? = nil, mode: MCSessionSendDataMode) throws {
         let packet = MessagePacket(name: name.rawValue, data: data)
         let packetData = NSKeyedArchiver.archivedData(withRootObject: packet)
-        try send(packetData, to: peers ?? connectedPeers.value, mode: mode)
+        try send(packetData, to: peers, mode: mode)
     }
 
     public func send<Message: Tuka.Message>(_ message: Message, to peers: Set<Peer>? = nil, mode: MCSessionSendDataMode) throws {
