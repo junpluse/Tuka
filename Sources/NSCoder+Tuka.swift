@@ -53,8 +53,8 @@ extension NSCoder.TukaExtension {
         return coder.decodeObject(of: NSNumber.self, forKey: key.codingKey) as? Value
     }
 
-    public func decodeString(forKey key: CodingKeyRepresentable) -> String? {
-        return coder.decodeObject(of: NSString.self, forKey: key.codingKey) as String?
+    public func decodeValue<Value>(of type: Value.Type, forKey key: CodingKeyRepresentable) -> Value? where Value: ExpressibleByStringLiteral {
+        return coder.decodeObject(of: NSString.self, forKey: key.codingKey) as? Value
     }
 }
 
@@ -72,8 +72,8 @@ extension NSCoder.TukaExtension {
         return Value(rawValue: rawValue)
     }
 
-    public func decodeValue<Value>(of type: Value.Type, forKey key: CodingKeyRepresentable) -> Value? where Value: RawRepresentable, Value.RawValue == String {
-        guard let rawValue = decodeString(forKey: key) else {
+    public func decodeValue<Value>(of type: Value.Type, forKey key: CodingKeyRepresentable) -> Value? where Value: RawRepresentable, Value.RawValue: ExpressibleByStringLiteral {
+        guard let rawValue = decodeValue(of: Value.RawValue.self, forKey: key) else {
             return nil
         }
         return Value(rawValue: rawValue)

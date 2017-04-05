@@ -24,7 +24,7 @@ internal final class MessagePacket: NSObject, NSSecureCoding {
     }
 
     convenience init?(coder aDecoder: NSCoder) {
-        guard let name = aDecoder.tuka.decodeString(forKey: CodingKey.name) else {
+        guard let name = aDecoder.tuka.decodeValue(of: String.self, forKey: CodingKey.name) else {
             return nil
         }
         let data = aDecoder.tuka.decodeObject(of: Data.self, forKey: CodingKey.data)
