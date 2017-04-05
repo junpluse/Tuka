@@ -18,7 +18,7 @@ internal final class MessagePacket: NSObject, NSSecureCoding {
         self.data = data
     }
 
-    private enum CodingKey: String {
+    private enum CodingKey: String, CodingKeyRepresentable {
         case name
         case data
     }
