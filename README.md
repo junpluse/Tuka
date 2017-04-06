@@ -1,5 +1,5 @@
 # Tuka
-Reactive P2P messaging in Swift
+Reactive + protocol-oriented P2P messaging in Swift
 
 ## Requirements
 
