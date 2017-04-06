@@ -12,7 +12,7 @@
  This protocol is a workaround for an incorrect ObjC-Swift bridging of MCSessionDelegate.
 
  The original `session(_:​did​Finish​Receiving​Resource​With​Name:​from​Peer:​at:​with​Error:​)`
- will return **nil** as `localURL` when the operation was cancelled, but the variable
+ will pass **nil** as `localURL` when the operation was cancelled, but the variable
  is labeled as `nonnull` :(
  
  See this StackOverflow post for more details:
