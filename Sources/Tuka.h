@@ -6,7 +6,9 @@
 //  Copyright © 2016 Jun Tanaka. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+
+#import <Tuka/TUKAMCSessionDelegateProxy.h>
 
 //! Project version number for Tuka.
 FOUNDATION_EXPORT double TukaVersionNumber;

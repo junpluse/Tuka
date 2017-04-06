@@ -80,8 +80,10 @@ extension Session {
                 }
                 if let error = error {
                     return .failed(name: name, peer: peer, error: error)
-                } else {
+                } else if let url = url {
                     return .completed(name: name, peer: peer, localURL: url)
+                } else {
+                    fatalError("Received `FinishReceivingResourceEvent` without both `error` and `url`")
                 }
             }
         ])
@@ -96,8 +98,10 @@ extension Session {
             .attemptMap { name, peer, url, error -> Result<(String, URL, Peer), AnyError> in
                 if let error = error {
                     return Result(error: AnyError(error))
-                } else {
+                } else if let url = url {
                     return Result(value: (name, url, peer))
+                } else {
+                    fatalError("Received `FinishReceivingResourceEvent` without both `error` and `url`")
                 }
         }
     }

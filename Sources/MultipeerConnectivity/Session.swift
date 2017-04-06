@@ -15,13 +15,13 @@ public final class Session: NSObject {
 
     public let mcSession: MCSession
 
-    public weak var mcSessionDelegate: MCSessionDelegate?
+    public weak var mcSessionDelegate: TUKAMCSessionDelegate?
 
     public typealias ChangeStateEvent = (peer: MCPeerID, state: MCSessionState)
     public typealias ReceiveDataEvent = (data: Data, from: MCPeerID)
     public typealias ReceiveStreamEvent = (stream: InputStream, name: String, from: MCPeerID)
     public typealias StartReceivingResourceEvent = (name: String, from: MCPeerID, progress: Progress)
-    public typealias FinishReceivingResourceEvent = (name: String, from: MCPeerID, localURL: URL, error: Error?)
+    public typealias FinishReceivingResourceEvent = (name: String, from: MCPeerID, localURL: URL?, error: Error?)
 
     public let changeStateEvents: Signal<ChangeStateEvent, NoError>
     public let receiveDataEvents: Signal<ReceiveDataEvent, NoError>
@@ -34,6 +34,8 @@ public final class Session: NSObject {
     fileprivate let receiveStreamEventsObserver: Observer<ReceiveStreamEvent, NoError>
     fileprivate let startReceivingResourceEventsObserver: Observer<StartReceivingResourceEvent, NoError>
     fileprivate let finishReceivingResourceEventsObserver: Observer<FinishReceivingResourceEvent, NoError>
+
+    private let delegateProxy = TUKAMCSessionDelegateProxy()
 
     public var myPeer: Peer {
         return mcSession.myPeerID
@@ -55,7 +57,8 @@ public final class Session: NSObject {
 
         super.init()
 
-        mcSession.delegate = self
+        mcSession.delegate = delegateProxy
+        delegateProxy.delegte = self
     }
 
     public override convenience init() {
@@ -63,7 +66,7 @@ public final class Session: NSObject {
     }
 }
 
-extension Session: MCSessionDelegate {
+extension Session: TUKAMCSessionDelegate {
     @objc public func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         mcSessionDelegate?.session(session, peer: peerID, didChange: state)
         changeStateEventsObserver.send(value: (peerID, state))
@@ -84,7 +87,7 @@ extension Session: MCSessionDelegate {
         startReceivingResourceEventsObserver.send(value: (resourceName, peerID, progress))
     }
 
-    @objc public func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL, withError error: Error?) {
+    @objc public func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL?, withError error: Error?) {
         mcSessionDelegate?.session(session, didFinishReceivingResourceWithName: resourceName, fromPeer: peerID, at: localURL, withError: error)
         finishReceivingResourceEventsObserver.send(value: (resourceName, peerID, localURL, error))
     }
