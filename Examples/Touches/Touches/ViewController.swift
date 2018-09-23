@@ -75,14 +75,11 @@ final class ViewController: UIViewController {
 
         // send a message to connected peers
         let message = TouchMessage(location: location, radius: radius)
-        let peers = session.connectedPeers.value
-        if peers.count > 0 {
-            do {
-                try session.send(message, to: peers)
-                print("Sent message: \(message)")
-            } catch {
-                print("Failed to send message with error: \(error)")
-            }
+        do {
+            try session.broadcast(message)
+            print("Sent message: \(message)")
+        } catch {
+            print("Failed to send message with error: \(error)")
         }
     }
 
@@ -137,7 +134,6 @@ final class ViewController: UIViewController {
     }
 
     func stopObservingMessages() {
-        messageObservingDisposable?.dispose()
         messageObservingDisposable = nil
     }
 }

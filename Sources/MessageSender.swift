@@ -12,16 +12,7 @@ import Foundation
 public protocol MessageSender {
     associatedtype Peer: Tuka.Peer
 
-    /// Sends a message with data to peers.
-    ///
-    /// - Parameters:
-    ///   - name: A name of message type.
-    ///   - data: A data to be sent.
-    ///   - peers: A set of peers that should receive the message.
-    /// - Throws: An `Error` if sending the message could not be completed.
-    func send(name: MessageName, withData data: Data?, to peers: Set<Peer>) throws
-
-    /// Sends a message to peers.
+    /// Sends the given message, to the given peers.
     ///
     /// - Parameters:
     ///   - message: A message to be sent.
@@ -30,18 +21,9 @@ public protocol MessageSender {
     func send<Message: Tuka.Message>(_ message: Message, to peers: Set<Peer>) throws
 }
 
-extension MessageSender {
+extension MessageSender where Self: DataSender, Self: MessageEncoder {
     public func send<Message: Tuka.Message>(_ message: Message, to peers: Set<Peer>) throws {
-        let name = Message.messageName
-        let data = try message.serializedData()
-        try send(name: name, withData: data, to: peers)
-    }
-}
-
-extension MessageSender where Self: DataSender {
-    public func send(name: MessageName, withData data: Data? = nil, to peers: Set<Peer>) throws {
-        let packet = MessagePacket(name: name.rawValue, data: data)
-        let packetData = NSKeyedArchiver.archivedData(withRootObject: packet)
-        try send(packetData, to: peers)
+        let data = try encodeMessage(message)
+        try send(data, to: peers)
     }
 }

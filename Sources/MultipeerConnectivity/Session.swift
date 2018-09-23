@@ -43,8 +43,16 @@ public final class Session: NSObject {
 
     public let connectedPeers: Property<Set<Peer>>
 
-    public init(mcSession: MCSession) {
+    public enum MessageCodingFormat {
+        case json
+        case propertyList
+    }
+
+    public let messageCodingFormat: MessageCodingFormat
+
+    public init(mcSession: MCSession, messageCodingFormat: MessageCodingFormat = .propertyList) {
         self.mcSession = mcSession
+        self.messageCodingFormat = messageCodingFormat
 
         (changeStateEvents, changeStateEventsObserver) = Signal.pipe()
         (receiveDataEvents, receiveDataEventsObserver) = Signal.pipe()
@@ -103,47 +111,11 @@ extension Session {
     public func send(_ data: Data, to peers: Set<Peer>, mode: MCSessionSendDataMode) throws {
         try mcSession.send(data, toPeers: Array(peers), with: mode)
     }
-
-    public func send(name: MessageName, withData data: Data? = nil, to peers: Set<Peer>, mode: MCSessionSendDataMode) throws {
-        let packet = MessagePacket(name: name.rawValue, data: data)
-        let packetData = NSKeyedArchiver.archivedData(withRootObject: packet)
-        try send(packetData, to: peers, mode: mode)
-    }
-
-    public func send<Message: Tuka.Message>(_ message: Message, to peers: Set<Peer>, mode: MCSessionSendDataMode) throws {
-        let name = Message.messageName
-        let data = try message.serializedData()
-        try send(name: name, withData: data, to: peers, mode: mode)
-    }
-}
-
-extension Session {
-    public func send(_ data: Data, mode: MCSessionSendDataMode = .reliable) throws {
-        try send(data, to: connectedPeers.value, mode: mode)
-    }
-
-    public func send(name: MessageName, withData data: Data? = nil, mode: MCSessionSendDataMode = .reliable) throws {
-        try send(name: name, to: connectedPeers.value, mode: mode)
-    }
-
-    public func send<Message: Tuka.Message>(_ message: Message, mode: MCSessionSendDataMode = .reliable) throws {
-        try send(message, to: connectedPeers.value, mode: mode)
-    }
 }
 
 extension Session: DataSender {
     public func send(_ data: Data, to peers: Set<Peer>) throws {
         try send(data, to: peers, mode: .reliable)
-    }
-}
-
-extension Session: MessageSender {
-    public func send(name: MessageName, withData data: Data? = nil, to peers: Set<Peer>) throws {
-        try send(name: name, to: peers, mode: .reliable)
-    }
-
-    public func send<Message: Tuka.Message>(_ message: Message, to peers: Set<Peer>) throws {
-        try send(message, to: peers, mode: .reliable)
     }
 }
 
@@ -153,4 +125,38 @@ extension Session: DataReceiver {
     }
 }
 
+extension Session: MessageEncoder {
+    public func encodeMessage<Message: Tuka.Message>(_ message: Message) throws -> Data {
+        switch messageCodingFormat {
+        case .json:
+            return try JSONEncoder().encode(message)
+        case .propertyList:
+            return try PropertyListEncoder().encode(message)
+        }
+    }
+}
+
+extension Session: MessageDecoder {
+    public func decodeMessage<Message: Tuka.Message>(of type: Message.Type, from data: Data) throws -> Message {
+        switch messageCodingFormat {
+        case .json:
+            return try JSONDecoder().decode(type, from: data)
+        default:
+            return try PropertyListDecoder().decode(type, from: data)
+        }
+    }
+}
+
+extension Session: MessageSender {}
 extension Session: MessageReceiver {}
+
+extension Session {
+    public func broadcast(_ data: Data, mode: MCSessionSendDataMode = .reliable) throws {
+        try send(data, to: connectedPeers.value, mode: mode)
+    }
+
+    public func broadcast<Message: Tuka.Message>(_ message: Message, mode: MCSessionSendDataMode = .reliable) throws {
+        let data = try encodeMessage(message)
+        try broadcast(data, mode: mode)
+    }
+}

@@ -49,8 +49,8 @@ extension Session {
             return sendResource(at: url, withName: name, to: peer)
         }
 
-        return SignalProducer { observer, disposable in
-            disposable += childProducers
+        return SignalProducer { observer, lifetime in
+            lifetime += childProducers
                 .map { childProducer in
                     return childProducer.on(value: { event in observer.send(value: event) })
                 }
