@@ -12,7 +12,7 @@ import Result
 
 public enum MessageReceiverNSCodingError: Error {
     case nilObject
-    case invalidDecodedObject(AnyObject)
+    case invalidDecodedObject(Any)
     case invalidArchiveFormat(Error)
 }
 
@@ -25,13 +25,13 @@ extension MessageReceiver {
     /// - Returns: A `Signal` sends decoded objects with sender peers.
     public func incomingMessages<Object>(forName name: MessageName, withObjectOf type: Object.Type) -> Signal<(Object, Peer), MessageReceiverNSCodingError> where Object: NSObject, Object: NSCoding {
         return incomingMessages(forName: name)
-            .promoteErrors(MessageReceiverNSCodingError.self)
+            .promoteError(MessageReceiverNSCodingError.self)
             .attemptMap { data, peer in
                 do {
                     guard let data = data else {
                         return Result(error: .nilObject)
                     }
-                    guard let anyObject = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data as NSData) else {
+                    guard let anyObject = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) else {
                         return Result(error: .nilObject)
                     }
                     guard let object = anyObject as? Object else {

@@ -22,7 +22,7 @@ extension MessageReceiver {
     /// - Returns: A `Signal` sends JSON objects with sender peers.
     public func incomingMessagesWithJSONObject(forName name: MessageName) -> Signal<(Any, Peer), MessageReceiverJSONError> {
         return incomingMessages(forName: name)
-            .promoteErrors(MessageReceiverJSONError.self)
+            .promoteError(MessageReceiverJSONError.self)
             .attemptMap { data, peer in
                 guard let data = data else {
                     return Result(error: .nilObject)

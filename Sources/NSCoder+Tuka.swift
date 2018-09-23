@@ -45,7 +45,7 @@ extension NSCoder.TukaExtension {
         return coder.decodeObject(of: Object.self, forKey: key.codingKey)
     }
 
-    public func decodeObject<Object>(of type: Object.Type, forKey key: CodingKeyRepresentable) -> Object? where Object: ReferenceConvertible, Object.ReferenceType: NSObject, Object.ReferenceType: NSCoding {
+    public func decodeObject<Object>(of type: Object.Type, forKey key: CodingKeyRepresentable) -> Object? where Object: ReferenceConvertible, Object.ReferenceType: NSCoding {
         return coder.decodeObject(of: Object.ReferenceType.self, forKey: key.codingKey) as? Object
     }
 

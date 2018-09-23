@@ -18,7 +18,7 @@ extension Session {
     }
 
     public func sendResource(at url: URL, withName name: String, to peer: Peer) -> SignalProducer<ResourceTransferEvent, AnyError> {
-        return SignalProducer<ResourceTransferEvent, AnyError> { [mcSession] observer, disposable in
+        return SignalProducer<ResourceTransferEvent, AnyError> { [mcSession] observer, lifetime in
             let progress = mcSession.sendResource(at: url, withName: name, toPeer: peer) { error in
                 if let error = error {
                     observer.send(value: .failed(name: name, peer: peer, error: error))
@@ -30,11 +30,11 @@ extension Session {
             }
             if let progress = progress {
                 progress.cancellationHandler = {
-                    if disposable.isDisposed == false {
+                    if lifetime.hasEnded == false {
                         observer.sendInterrupted()
                     }
                 }
-                disposable += {
+                lifetime.observeEnded {
                     if progress.isCancelled == false {
                         progress.cancel()
                     }
@@ -94,7 +94,7 @@ extension Session {
             .filter { name, peer, _, _ in
                 return (resourceName == nil || resourceName == name) && (peers == nil || peers?.contains(peer) == true)
             }
-            .promoteErrors(AnyError.self)
+            .promoteError(AnyError.self)
             .attemptMap { name, peer, url, error -> Result<(String, URL, Peer), AnyError> in
                 if let error = error {
                     return Result(error: AnyError(error))
@@ -103,6 +103,6 @@ extension Session {
                 } else {
                     fatalError("Received `FinishReceivingResourceEvent` without both `error` and `url`")
                 }
-        }
+            }
     }
 }
