@@ -73,11 +73,11 @@ final class ViewController: UIViewController {
 
         self.startRippleEffect(at: location, radius: radius)
 
-        // send a message to connected peers
+        // broadcast a message to connected peers
         let message = TouchMessage(location: location, radius: radius)
         do {
             try session.broadcast(message)
-            print("Sent message: \(message)")
+            print("Broadcast message: \(message)")
         } catch {
             print("Failed to send message with error: \(error)")
         }

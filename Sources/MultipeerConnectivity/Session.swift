@@ -149,7 +149,13 @@ extension Session: MessageReceiver {}
 
 extension Session {
     public func broadcast(_ data: Data, mode: MCSessionSendDataMode = .reliable) throws {
-        try send(data, to: connectedPeers.value, mode: mode)
+        let peers = connectedPeers.value
+
+        guard !peers.isEmpty else {
+            return
+        }
+
+        try send(data, to: peers, mode: mode)
     }
 
     public func broadcast<Message: Tuka.Message>(_ message: Message, mode: MCSessionSendDataMode = .reliable) throws {
