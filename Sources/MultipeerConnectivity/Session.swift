@@ -41,6 +41,8 @@ public final class Session: NSObject {
 
     public let connectedPeers: Property<Set<Peer>>
 
+    private var peerInvitationManager: PeerInvitationManager?
+
     public enum MessageCodingFormat {
         case json
         case propertyList
@@ -161,5 +163,19 @@ extension Session {
     public func broadcast<Message: Tuka.Message>(_ message: Message, mode: MCSessionSendDataMode = .reliable) throws {
         let data = try encodeMessage(message)
         try broadcast(data, mode: mode)
+    }
+}
+
+extension Session {
+    public func startAutomaticPeerInvitations(withServiceType serviceType: String) {
+        precondition(peerInvitationManager == nil)
+
+        peerInvitationManager = PeerInvitationManager(session: mcSession, serviceType: serviceType)
+        peerInvitationManager?.start()
+    }
+
+    public func stopAutomaticPeerInvitations() {
+        peerInvitationManager?.stop()
+        peerInvitationManager = nil
     }
 }

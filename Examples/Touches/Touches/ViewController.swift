@@ -15,10 +15,6 @@ final class ViewController: UIViewController {
 
     let session = Session()
 
-    lazy var invitationManager: PeerInvitationManager = {
-        return PeerInvitationManager(session: self.session.mcSession, serviceType: "tuka-touches")
-    }()
-
     var viewBindingDisposable: Disposable?
     var messageObservingDisposable: Disposable?
 
@@ -46,7 +42,7 @@ final class ViewController: UIViewController {
 
         startObservingMessages()
 
-        invitationManager.start() // start automatic peer invitations
+        session.startAutomaticPeerInvitations(withServiceType: "tuka-touches")
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -54,7 +50,7 @@ final class ViewController: UIViewController {
 
         stopObservingMessages()
 
-        invitationManager.stop() // stop automatic peer invitations
+        session.stopAutomaticPeerInvitations()
     }
 
     override func didReceiveMemoryWarning() {
