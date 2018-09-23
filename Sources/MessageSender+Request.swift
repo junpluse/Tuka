@@ -25,7 +25,7 @@ extension MessageSender {
 }
 
 /// Represents a receipt of request submission.
-public final class RequestReceipt<Request: Tuka.Request, Sender: Tuka.MessageSender> {
+public struct RequestReceipt<Request: Tuka.Request, Sender: Tuka.MessageSender> {
     /// The submitted request.
     public let request: Request
 
