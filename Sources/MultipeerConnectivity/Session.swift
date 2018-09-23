@@ -29,11 +29,11 @@ public final class Session: NSObject {
     public let startReceivingResourceEvents: Signal<StartReceivingResourceEvent, NoError>
     public let finishReceivingResourceEvents: Signal<FinishReceivingResourceEvent, NoError>
 
-    fileprivate let changeStateEventsObserver: Signal<ChangeStateEvent, NoError>.Observer
-    fileprivate let receiveDataEventsObserver: Signal<ReceiveDataEvent, NoError>.Observer
-    fileprivate let receiveStreamEventsObserver: Signal<ReceiveStreamEvent, NoError>.Observer
-    fileprivate let startReceivingResourceEventsObserver: Signal<StartReceivingResourceEvent, NoError>.Observer
-    fileprivate let finishReceivingResourceEventsObserver: Signal<FinishReceivingResourceEvent, NoError>.Observer
+    private let changeStateEventsObserver: Signal<ChangeStateEvent, NoError>.Observer
+    private let receiveDataEventsObserver: Signal<ReceiveDataEvent, NoError>.Observer
+    private let receiveStreamEventsObserver: Signal<ReceiveStreamEvent, NoError>.Observer
+    private let startReceivingResourceEventsObserver: Signal<StartReceivingResourceEvent, NoError>.Observer
+    private let finishReceivingResourceEventsObserver: Signal<FinishReceivingResourceEvent, NoError>.Observer
 
     public var myPeer: Peer {
         return mcSession.myPeerID
