@@ -10,12 +10,16 @@ import MultipeerConnectivity
 import ReactiveSwift
 import Result
 
-public final class Session: NSObject {
+public final class Session {
     public typealias Peer = MCPeerID
 
     public let mcSession: MCSession
 
     public weak var mcSessionDelegate: MCSessionDelegate?
+
+    private lazy var mcSessionDelegateProxy: MCSessionDelegateProxy = {
+        return MCSessionDelegateProxy(owner: self)
+    }()
 
     public typealias ChangeStateEvent = (peer: MCPeerID, state: MCSessionState)
     public typealias ReceiveDataEvent = (data: Data, from: MCPeerID)
@@ -63,45 +67,51 @@ public final class Session: NSObject {
         let connectedPeersUpdates = changeStateEvents.map { _ in Set(mcSession.connectedPeers) }
         connectedPeers = Property(initial: Set(mcSession.connectedPeers), then: connectedPeersUpdates).skipRepeats()
 
-        super.init()
-
-        mcSession.delegate = self
+        mcSession.delegate = mcSessionDelegateProxy
     }
 
-    public override convenience init() {
+    public convenience init() {
         self.init(mcSession: MCSession(peer: MCPeerID.Tuka.defaultPeer))
     }
 }
 
-extension Session: MCSessionDelegate {
-    @objc public func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
-        mcSessionDelegate?.session(session, peer: peerID, didChange: state)
-        changeStateEventsObserver.send(value: (peerID, state))
-    }
+extension Session {
+    private final class MCSessionDelegateProxy: NSObject, MCSessionDelegate {
+        unowned let owner: Session
 
-    @objc public func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-        mcSessionDelegate?.session(session, didReceive: data, fromPeer: peerID)
-        receiveDataEventsObserver.send(value: (data, peerID))
-    }
+        init(owner: Session) {
+            self.owner = owner
+        }
 
-    @objc public func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {
-        mcSessionDelegate?.session(session, didReceive: stream, withName: streamName, fromPeer: peerID)
-        receiveStreamEventsObserver.send(value: (stream, streamName, peerID))
-    }
+        @objc func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
+            owner.mcSessionDelegate?.session(session, peer: peerID, didChange: state)
+            owner.changeStateEventsObserver.send(value: (peerID, state))
+        }
 
-    @objc public func session(_ session: MCSession, didStartReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, with progress: Progress) {
-        mcSessionDelegate?.session(session, didStartReceivingResourceWithName: resourceName, fromPeer: peerID, with: progress)
-        startReceivingResourceEventsObserver.send(value: (resourceName, peerID, progress))
-    }
+        @objc func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
+            owner.mcSessionDelegate?.session(session, didReceive: data, fromPeer: peerID)
+            owner.receiveDataEventsObserver.send(value: (data, peerID))
+        }
 
-    @objc public func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL?, withError error: Error?) {
-        mcSessionDelegate?.session(session, didFinishReceivingResourceWithName: resourceName, fromPeer: peerID, at: localURL, withError: error)
-        finishReceivingResourceEventsObserver.send(value: (resourceName, peerID, localURL, error))
-    }
+        @objc func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {
+            owner.mcSessionDelegate?.session(session, didReceive: stream, withName: streamName, fromPeer: peerID)
+            owner.receiveStreamEventsObserver.send(value: (stream, streamName, peerID))
+        }
 
-    @objc public func session(_ session: MCSession, didReceiveCertificate certificate: [Any]?, fromPeer peerID: MCPeerID, certificateHandler: @escaping (Bool) -> Void) {
-        if mcSessionDelegate?.session?(session, didReceiveCertificate: certificate, fromPeer: peerID, certificateHandler: certificateHandler) == nil {
-            certificateHandler(true)
+        @objc func session(_ session: MCSession, didStartReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, with progress: Progress) {
+            owner.mcSessionDelegate?.session(session, didStartReceivingResourceWithName: resourceName, fromPeer: peerID, with: progress)
+            owner.startReceivingResourceEventsObserver.send(value: (resourceName, peerID, progress))
+        }
+
+        @objc func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL?, withError error: Error?) {
+            owner.mcSessionDelegate?.session(session, didFinishReceivingResourceWithName: resourceName, fromPeer: peerID, at: localURL, withError: error)
+            owner.finishReceivingResourceEventsObserver.send(value: (resourceName, peerID, localURL, error))
+        }
+
+        @objc func session(_ session: MCSession, didReceiveCertificate certificate: [Any]?, fromPeer peerID: MCPeerID, certificateHandler: @escaping (Bool) -> Void) {
+            if owner.mcSessionDelegate?.session?(session, didReceiveCertificate: certificate, fromPeer: peerID, certificateHandler: certificateHandler) == nil {
+                certificateHandler(true)
+            }
         }
     }
 }
