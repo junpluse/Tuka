@@ -95,11 +95,11 @@ extension Session {
                 return (resourceName == nil || resourceName == name) && (peers == nil || peers?.contains(peer) == true)
             }
             .promoteError(AnyError.self)
-            .attemptMap { name, peer, url, error -> Result<(String, URL, Peer), AnyError> in
+            .attemptMap { name, peer, url, error in
                 if let error = error {
-                    return Result(error: AnyError(error))
+                    throw AnyError(error)
                 } else if let url = url {
-                    return Result(value: (name, url, peer))
+                    return (name, url, peer)
                 } else {
                     fatalError("Received `FinishReceivingResourceEvent` without both `error` and `url`")
                 }
