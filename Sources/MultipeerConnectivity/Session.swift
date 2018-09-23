@@ -47,16 +47,11 @@ public final class Session {
 
     private var peerInvitationManager: PeerInvitationManager?
 
-    public enum MessageCodingFormat {
-        case json
-        case propertyList
-    }
+    private let messageEncoder = PropertyListEncoder()
+    private let messageDecoder = PropertyListDecoder()
 
-    public let messageCodingFormat: MessageCodingFormat
-
-    public init(mcSession: MCSession, messageCodingFormat: MessageCodingFormat = .propertyList) {
+    public init(mcSession: MCSession) {
         self.mcSession = mcSession
-        self.messageCodingFormat = messageCodingFormat
 
         (changeStateEvents, changeStateEventsObserver) = Signal.pipe()
         (receiveDataEvents, receiveDataEventsObserver) = Signal.pipe()
@@ -136,27 +131,18 @@ extension Session: DataReceiver {
 
 extension Session: MessageEncoder {
     public func encodeMessage<Message: Tuka.Message>(_ message: Message) throws -> Data {
-        switch messageCodingFormat {
-        case .json:
-            return try JSONEncoder().encode(message)
-        case .propertyList:
-            return try PropertyListEncoder().encode(message)
-        }
+        return try messageEncoder.encode(message)
     }
 }
 
 extension Session: MessageDecoder {
     public func decodeMessage<Message: Tuka.Message>(of type: Message.Type, from data: Data) throws -> Message {
-        switch messageCodingFormat {
-        case .json:
-            return try JSONDecoder().decode(type, from: data)
-        default:
-            return try PropertyListDecoder().decode(type, from: data)
-        }
+        return try messageDecoder.decode(type, from: data)
     }
 }
 
 extension Session: MessageSender {}
+
 extension Session: MessageReceiver {}
 
 extension Session {
