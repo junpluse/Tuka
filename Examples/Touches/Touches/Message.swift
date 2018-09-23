@@ -7,6 +7,7 @@
 //
 
 import Tuka
+import CoreGraphics
 
 struct TouchMessage: Tuka.Message {
     let location: CGPoint

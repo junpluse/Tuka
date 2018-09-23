@@ -10,8 +10,6 @@
 		BF0EEB4D1E12496A00174E23 /* PeerInvitationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0EEB4C1E12496A00174E23 /* PeerInvitationManager.swift */; };
 		BF2F4C901E7A6256006F83F9 /* DataReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2F4C8F1E7A6256006F83F9 /* DataReceiver.swift */; };
 		BF2F4C921E7A6290006F83F9 /* DataSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2F4C911E7A6290006F83F9 /* DataSender.swift */; };
-		BF3D793D1E963B810088522D /* TUKAMCSessionDelegateProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = BF3D793B1E963B810088522D /* TUKAMCSessionDelegateProxy.m */; };
-		BF3D793E1E9641800088522D /* TUKAMCSessionDelegateProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = BF3D793A1E963B810088522D /* TUKAMCSessionDelegateProxy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BF7FD2301E8A676700DCD497 /* ReactiveSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF7FD22F1E8A676700DCD497 /* ReactiveSwift.framework */; };
 		BF7FD2321E8A676D00DCD497 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF7FD2311E8A676D00DCD497 /* Result.framework */; };
 		BF8E3DB92157930B00F3365D /* MessageDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8E3DB82157930B00F3365D /* MessageDecoder.swift */; };
@@ -34,8 +32,6 @@
 		BF0EEB4C1E12496A00174E23 /* PeerInvitationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeerInvitationManager.swift; sourceTree = "<group>"; };
 		BF2F4C8F1E7A6256006F83F9 /* DataReceiver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataReceiver.swift; sourceTree = "<group>"; };
 		BF2F4C911E7A6290006F83F9 /* DataSender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSender.swift; sourceTree = "<group>"; };
-		BF3D793A1E963B810088522D /* TUKAMCSessionDelegateProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TUKAMCSessionDelegateProxy.h; sourceTree = "<group>"; };
-		BF3D793B1E963B810088522D /* TUKAMCSessionDelegateProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TUKAMCSessionDelegateProxy.m; sourceTree = "<group>"; };
 		BF7FD22F1E8A676700DCD497 /* ReactiveSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveSwift.framework; path = "../../../Library/Developer/Xcode/DerivedData/Tuka-cvxgxqgdfknijscyucdqjomgpsvf/Build/Products/Debug-iphoneos/ReactiveSwift.framework"; sourceTree = "<group>"; };
 		BF7FD2311E8A676D00DCD497 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = "../../../Library/Developer/Xcode/DerivedData/Tuka-cvxgxqgdfknijscyucdqjomgpsvf/Build/Products/Debug-iphoneos/Result.framework"; sourceTree = "<group>"; };
 		BF8E3DB82157930B00F3365D /* MessageDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDecoder.swift; sourceTree = "<group>"; };
@@ -127,8 +123,6 @@
 				BFA214231DF018830054A13F /* Session.swift */,
 				BFA214221DF018830054A13F /* Session+Resource.swift */,
 				BF0EEB4C1E12496A00174E23 /* PeerInvitationManager.swift */,
-				BF3D793A1E963B810088522D /* TUKAMCSessionDelegateProxy.h */,
-				BF3D793B1E963B810088522D /* TUKAMCSessionDelegateProxy.m */,
 			);
 			path = MultipeerConnectivity;
 			sourceTree = "<group>";
@@ -141,7 +135,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				BFA214001DF018000054A13F /* Tuka.h in Headers */,
-				BF3D793E1E9641800088522D /* TUKAMCSessionDelegateProxy.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -220,7 +213,6 @@
 				BFA214151DF018790054A13F /* MessageSender+Request.swift in Sources */,
 				BFA214121DF018790054A13F /* MessageReceiver.swift in Sources */,
 				BFA214161DF018790054A13F /* Peer.swift in Sources */,
-				BF3D793D1E963B810088522D /* TUKAMCSessionDelegateProxy.m in Sources */,
 				BF0EEB4D1E12496A00174E23 /* PeerInvitationManager.swift in Sources */,
 				BFA2141B1DF018790054A13F /* Response.swift in Sources */,
 				BF8E3DBB2157947C00F3365D /* MessageEncoder.swift in Sources */,

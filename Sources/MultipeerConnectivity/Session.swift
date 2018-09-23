@@ -15,7 +15,7 @@ public final class Session: NSObject {
 
     public let mcSession: MCSession
 
-    public weak var mcSessionDelegate: TUKAMCSessionDelegate?
+    public weak var mcSessionDelegate: MCSessionDelegate?
 
     public typealias ChangeStateEvent = (peer: MCPeerID, state: MCSessionState)
     public typealias ReceiveDataEvent = (data: Data, from: MCPeerID)
@@ -34,8 +34,6 @@ public final class Session: NSObject {
     fileprivate let receiveStreamEventsObserver: Signal<ReceiveStreamEvent, NoError>.Observer
     fileprivate let startReceivingResourceEventsObserver: Signal<StartReceivingResourceEvent, NoError>.Observer
     fileprivate let finishReceivingResourceEventsObserver: Signal<FinishReceivingResourceEvent, NoError>.Observer
-
-    private let delegateProxy = TUKAMCSessionDelegateProxy()
 
     public var myPeer: Peer {
         return mcSession.myPeerID
@@ -65,8 +63,7 @@ public final class Session: NSObject {
 
         super.init()
 
-        mcSession.delegate = delegateProxy
-        delegateProxy.delegte = self
+        mcSession.delegate = self
     }
 
     public override convenience init() {
@@ -74,7 +71,7 @@ public final class Session: NSObject {
     }
 }
 
-extension Session: TUKAMCSessionDelegate {
+extension Session: MCSessionDelegate {
     @objc public func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         mcSessionDelegate?.session(session, peer: peerID, didChange: state)
         changeStateEventsObserver.send(value: (peerID, state))
