@@ -92,16 +92,16 @@ final class ViewController: UIViewController {
         let scaleAnimation = CABasicAnimation(keyPath: "transform.scale")
         scaleAnimation.fromValue = 0.01
         scaleAnimation.toValue = 1
-        scaleAnimation.fillMode = kCAFillModeBoth
+        scaleAnimation.fillMode = .both
 
         let fadeAnimation = CABasicAnimation(keyPath: "opacity")
         fadeAnimation.fromValue = 1
         fadeAnimation.toValue = 0
-        fadeAnimation.fillMode = kCAFillModeBoth
+        fadeAnimation.fillMode = .both
 
         let animationGroup = CAAnimationGroup()
         animationGroup.animations = [scaleAnimation, fadeAnimation]
-        animationGroup.fillMode = kCAFillModeBoth
+        animationGroup.fillMode = .both
         animationGroup.isRemovedOnCompletion = false
 
         CATransaction.begin()
