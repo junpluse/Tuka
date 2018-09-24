@@ -94,10 +94,9 @@ extension Session {
             .filter { name, peer, _, _ in
                 return (resourceName == nil || resourceName == name) && (peers == nil || peers?.contains(peer) == true)
             }
-            .promoteError(AnyError.self)
             .attemptMap { name, peer, url, error in
                 if let error = error {
-                    throw AnyError(error)
+                    throw error
                 } else if let url = url {
                     return (name, url, peer)
                 } else {
