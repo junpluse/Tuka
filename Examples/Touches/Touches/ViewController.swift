@@ -17,6 +17,7 @@ final class ViewController: UIViewController {
 
     var viewBindingDisposable: Disposable?
     var messageObservingDisposable: Disposable?
+    var peerInvitationsDisposable: Disposable?
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -25,10 +26,8 @@ final class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let disposable = CompositeDisposable()
-
         // bind peer count with label
-        disposable += session.connectedPeers.producer
+        let disposable = session.connectedPeers.producer
             .observe(on: UIScheduler())
             .startWithValues { [weak self] peers in
                 self?.peerCountLabel?.text = "connections: \(peers.count)"
@@ -41,16 +40,14 @@ final class ViewController: UIViewController {
         super.viewDidAppear(animated)
 
         startObservingMessages()
-
-        session.startAutomaticPeerInvitations(withServiceType: "tuka-touches")
+        startPeerInvitations()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
+        stopPeerInvitations()
         stopObservingMessages()
-
-        session.stopAutomaticPeerInvitations()
     }
 
     override func didReceiveMemoryWarning() {
@@ -117,19 +114,31 @@ final class ViewController: UIViewController {
     }
 
     func startObservingMessages() {
-        let disposable = CompositeDisposable()
-
         // receive messages from connected peers
-        disposable += session.incomingMessages(of: TouchMessage.self)
+        messageObservingDisposable = session.incomingMessages(of: TouchMessage.self)
             .observe(on: UIScheduler())
             .observeValues { [weak self] message, peer in
                 self?.startRippleEffect(at: message.location, radius: message.radius)
             }
-
-        messageObservingDisposable = ScopedDisposable(disposable)
     }
 
     func stopObservingMessages() {
-        messageObservingDisposable = nil
+        messageObservingDisposable?.dispose()
+    }
+
+    func startPeerInvitations() {
+        // automatically invite nearby peers
+        peerInvitationsDisposable = session.automaticPeerInvitations(withServiceType: "tuka-touches").startWithResult { result in
+            switch result {
+            case .success(let peer):
+                print("Connected: \(peer)")
+            case .failure(let error):
+                print("Peer invitations failed with error: \(error)")
+            }
+        }
+    }
+
+    func stopPeerInvitations() {
+        peerInvitationsDisposable?.dispose()
     }
 }
