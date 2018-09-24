@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		BF0EEB4D1E12496A00174E23 /* PeerInvitationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0EEB4C1E12496A00174E23 /* PeerInvitationManager.swift */; };
+		BF211D8B2158BDAE00BAD461 /* Session+Invitation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF211D8A2158BDAE00BAD461 /* Session+Invitation.swift */; };
 		BF2F4C901E7A6256006F83F9 /* DataReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2F4C8F1E7A6256006F83F9 /* DataReceiver.swift */; };
 		BF2F4C921E7A6290006F83F9 /* DataSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2F4C911E7A6290006F83F9 /* DataSender.swift */; };
 		BF7FD2301E8A676700DCD497 /* ReactiveSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF7FD22F1E8A676700DCD497 /* ReactiveSwift.framework */; };
@@ -30,6 +31,7 @@
 
 /* Begin PBXFileReference section */
 		BF0EEB4C1E12496A00174E23 /* PeerInvitationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeerInvitationManager.swift; sourceTree = "<group>"; };
+		BF211D8A2158BDAE00BAD461 /* Session+Invitation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Session+Invitation.swift"; sourceTree = "<group>"; };
 		BF2F4C8F1E7A6256006F83F9 /* DataReceiver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataReceiver.swift; sourceTree = "<group>"; };
 		BF2F4C911E7A6290006F83F9 /* DataSender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSender.swift; sourceTree = "<group>"; };
 		BF7FD22F1E8A676700DCD497 /* ReactiveSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveSwift.framework; path = "../../../Library/Developer/Xcode/DerivedData/Tuka-cvxgxqgdfknijscyucdqjomgpsvf/Build/Products/Debug-iphoneos/ReactiveSwift.framework"; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 				BFA2141D1DF018830054A13F /* MCPeerID+Tuka.swift */,
 				BFA214231DF018830054A13F /* Session.swift */,
 				BFA214221DF018830054A13F /* Session+Resource.swift */,
+				BF211D8A2158BDAE00BAD461 /* Session+Invitation.swift */,
 				BF0EEB4C1E12496A00174E23 /* PeerInvitationManager.swift */,
 			);
 			path = MultipeerConnectivity;
@@ -208,6 +211,7 @@
 			files = (
 				BFA214141DF018790054A13F /* MessageSender.swift in Sources */,
 				BFA2142B1DF018830054A13F /* Session.swift in Sources */,
+				BF211D8B2158BDAE00BAD461 /* Session+Invitation.swift in Sources */,
 				BF8E3DB92157930B00F3365D /* MessageDecoder.swift in Sources */,
 				BFA214151DF018790054A13F /* MessageSender+Request.swift in Sources */,
 				BFA214121DF018790054A13F /* MessageReceiver.swift in Sources */,
